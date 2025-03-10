@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Ambulance } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface AnimatedLogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -12,11 +13,11 @@ interface AnimatedLogoProps {
 
 const getIconSize = (size: 'sm' | 'md' | 'lg' | 'xl') => {
   switch (size) {
-    case 'sm': return 24;
-    case 'md': return 32;
-    case 'lg': return 48;
-    case 'xl': return 64;
-    default: return 32;
+    case 'sm': return 28;
+    case 'md': return 38;
+    case 'lg': return 54;
+    case 'xl': return 70;
+    default: return 38;
   }
 };
 
@@ -47,28 +48,74 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
     return () => clearInterval(interval);
   }, []);
 
+  const iconVariants = {
+    animate: {
+      x: [-20, 20],
+      transition: {
+        x: {
+          repeat: Infinity,
+          repeatType: "reverse",
+          duration: 2,
+          ease: "easeInOut"
+        }
+      }
+    }
+  };
+
+  const glowVariants = {
+    animate: {
+      opacity: [0.4, 0.7, 0.4],
+      scale: [1, 1.05, 1],
+      transition: {
+        duration: 2,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center">
-      <div className={`relative ${isAnimating ? 'animate-ambulance-move' : 'transition-transform duration-300'}`}>
-        <div className="absolute inset-0 blur-md opacity-20 scale-75 translate-y-1">
-          <Ambulance size={getIconSize(size)} className={darkMode ? "text-white" : "text-medical-600"} />
-        </div>
+      <motion.div 
+        variants={iconVariants}
+        animate="animate"
+        className="relative"
+      >
+        <motion.div 
+          className="absolute inset-0 blur-lg opacity-40 scale-110"
+          variants={glowVariants}
+          animate="animate"
+        >
+          <Ambulance 
+            size={getIconSize(size)} 
+            className={darkMode ? "text-cyan-300" : "text-medical-500"} 
+          />
+        </motion.div>
         <Ambulance 
           size={getIconSize(size)} 
-          className={`${darkMode ? "text-white" : "text-medical-500"} drop-shadow-md`} 
+          className={`${darkMode ? "text-cyan-300" : "text-medical-500"} drop-shadow-lg`} 
         />
-      </div>
+      </motion.div>
       
       {showText && (
-        <div className={`mt-3 font-bold tracking-tight ${getTextClass(textSize)} ${darkMode ? "text-white" : "text-medical-800"}`}>
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className={`mt-4 font-bold tracking-tight ${getTextClass(textSize)} ${
+            darkMode 
+              ? "text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-200 drop-shadow-[0_0_5px_rgba(0,200,255,0.3)]" 
+              : "text-medical-800"
+          }`}
+        >
           {showEmojis ? (
-            <span className="flex items-center justify-center gap-1">
+            <span className="flex items-center justify-center gap-2">
               <span>🚑</span> RAPID AID INNOVATORS <span>🏥</span>
             </span>
           ) : (
             "RAPID AID INNOVATORS"
           )}
-        </div>
+        </motion.div>
       )}
     </div>
   );
