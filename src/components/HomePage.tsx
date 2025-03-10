@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Search, Bell, User, Phone, AlertTriangle } from 'lucide-react';
+import { Search, Bell, User, Phone, AlertTriangle, MapPin } from 'lucide-react';
 import { motion } from 'framer-motion';
 import MapView from './ui/MapView';
 import HospitalCard from './ui/HospitalCard';
@@ -44,6 +44,14 @@ const hospitals = [
   },
 ];
 
+// Mock user data (in a real app, this would come from authentication)
+const userData = {
+  name: "John Doe",
+  email: "john.doe@example.com",
+  avatar: null, // If no avatar, we'll show initials
+  location: "Bangalore, India"
+};
+
 const HomePage: React.FC = () => {
   const [showSosModal, setShowSosModal] = useState(false);
   
@@ -83,6 +91,15 @@ const HomePage: React.FC = () => {
     });
   };
   
+  // Get user initials for the avatar
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(part => part[0])
+      .join('')
+      .toUpperCase();
+  };
+  
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white pb-24">
       {/* Header */}
@@ -90,22 +107,36 @@ const HomePage: React.FC = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="glass-panel sticky top-0 z-20 px-4 py-3 flex justify-between items-center border-b border-gray-200"
+        className="glass-panel sticky top-0 z-20 px-4 py-3 border-b border-gray-200"
       >
-        <div className="flex items-center">
-          <div className="w-8 h-8 rounded-full bg-medical-100 flex items-center justify-center">
-            <User size={18} className="text-medical-600" />
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
+            {userData.avatar ? (
+              <img 
+                src={userData.avatar} 
+                alt={userData.name} 
+                className="w-10 h-10 rounded-full object-cover border-2 border-medical-200"
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-medical-400 to-medical-600 flex items-center justify-center text-white font-medium">
+                {getInitials(userData.name)}
+              </div>
+            )}
+            <div className="ml-3 text-left">
+              <p className="text-base font-medium text-gray-800">Hello, {userData.name.split(' ')[0]}!</p>
+              <div className="flex items-center text-xs text-gray-500">
+                <MapPin size={12} className="mr-1" />
+                {userData.location}
+              </div>
+            </div>
           </div>
-          <div className="ml-2 text-left">
-            <p className="text-sm font-medium text-gray-800">Welcome back,</p>
-            <p className="text-xs text-gray-600">John Doe</p>
+          
+          <div className="flex items-center space-x-3">
+            <button className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 relative">
+              <Bell size={20} className="text-gray-600" />
+              <span className="absolute top-0 right-0 w-2 h-2 rounded-full bg-red-500"></span>
+            </button>
           </div>
-        </div>
-        
-        <div className="flex items-center space-x-3">
-          <button className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100">
-            <Bell size={20} className="text-gray-600" />
-          </button>
         </div>
       </motion.div>
       

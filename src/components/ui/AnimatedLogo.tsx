@@ -7,6 +7,7 @@ interface AnimatedLogoProps {
   showText?: boolean;
   textSize?: 'sm' | 'md' | 'lg' | 'xl';
   darkMode?: boolean;
+  showEmojis?: boolean;
 }
 
 const getIconSize = (size: 'sm' | 'md' | 'lg' | 'xl') => {
@@ -33,7 +34,8 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
   size = 'md', 
   showText = true, 
   textSize = 'md',
-  darkMode = false
+  darkMode = false,
+  showEmojis = false
 }) => {
   const [isAnimating, setIsAnimating] = useState(true);
   
@@ -59,7 +61,13 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
       
       {showText && (
         <div className={`mt-3 font-bold tracking-tight ${getTextClass(textSize)} ${darkMode ? "text-white" : "text-medical-800"}`}>
-          PAID AID INNOVATORS
+          {showEmojis ? (
+            <span className="flex items-center justify-center gap-1">
+              <span>🚑</span> RAPID AID INNOVATORS <span>🏥</span>
+            </span>
+          ) : (
+            "RAPID AID INNOVATORS"
+          )}
         </div>
       )}
     </div>

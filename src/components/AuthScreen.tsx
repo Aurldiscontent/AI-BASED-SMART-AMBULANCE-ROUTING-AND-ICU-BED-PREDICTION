@@ -2,13 +2,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { User, Mail, Phone, Lock, Eye, EyeOff, AlertCircle, ArrowLeft } from 'lucide-react';
+import { User, Mail, Phone, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import ActionButton from './ui/ActionButton';
 import AnimatedLogo from './ui/AnimatedLogo';
 
 const AuthScreen: React.FC = () => {
   const [isSignup, setIsSignup] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -68,8 +69,9 @@ const AuthScreen: React.FC = () => {
     }
   };
   
-  const handleSocialLogin = (provider: 'google' | 'apple') => {
+  const handleGoogleLogin = () => {
     // For demonstration, just navigate to home
+    console.log('Google login clicked');
     navigate('/home');
   };
   
@@ -99,7 +101,7 @@ const AuthScreen: React.FC = () => {
         transition={{ duration: 0.5 }}
         className="flex items-center justify-center mb-8"
       >
-        <AnimatedLogo size="md" />
+        <AnimatedLogo size="md" showEmojis={true} />
       </motion.div>
       
       <motion.div
@@ -244,7 +246,19 @@ const AuthScreen: React.FC = () => {
           )}
           
           {!isSignup && (
-            <motion.div variants={formItemVariants} className="mb-4 text-right">
+            <motion.div variants={formItemVariants} className="mb-4 flex justify-between items-center">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="rememberMe"
+                  checked={rememberMe}
+                  onChange={() => setRememberMe(!rememberMe)}
+                  className="mr-2 h-4 w-4 text-medical-600 focus:ring-medical-500 border-gray-300 rounded"
+                />
+                <label htmlFor="rememberMe" className="text-sm text-gray-600">
+                  Remember me
+                </label>
+              </div>
               <button type="button" className="text-sm text-medical-600 hover:text-medical-700">
                 Forgot Password?
               </button>
@@ -283,11 +297,11 @@ const AuthScreen: React.FC = () => {
             </div>
           </motion.div>
           
-          <motion.div variants={formItemVariants} className="flex gap-4 mb-6">
+          <motion.div variants={formItemVariants} className="mb-6">
             <button
               type="button"
-              onClick={() => handleSocialLogin('google')}
-              className="flex-1 py-2.5 px-4 border border-gray-300 rounded-xl flex justify-center items-center bg-white hover:bg-gray-50 transition-colors"
+              onClick={handleGoogleLogin}
+              className="w-full py-3 px-4 border border-gray-300 rounded-xl flex justify-center items-center bg-white hover:bg-gray-50 transition-colors"
             >
               <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
                 <path
@@ -307,18 +321,7 @@ const AuthScreen: React.FC = () => {
                   d="M12,5.6c1.6,0,3,0.5,4.1,1.6l3-3c-1.9-1.7-4.3-2.8-7.1-2.8c-4.2,0-7.9,2.1-9.5,5.8l3.5,2.6C7,7.4,9.3,5.6,12,5.6z"
                 />
               </svg>
-              Google
-            </button>
-            <button
-              type="button"
-              onClick={() => handleSocialLogin('apple')}
-              className="flex-1 py-2.5 px-4 border border-gray-300 rounded-xl flex justify-center items-center bg-white hover:bg-gray-50 transition-colors"
-            >
-              <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M9 7c-3 0-4 3-4 5.5 0 3 2 7.5 4 7.5 1.088-.046 1.679-.5 3-.5 1.312 0 1.5.5 3 .5s4-3 4-5-3-2-3-2c0-2-2-3-3-3s-1.5 1-3 1z"/>
-                <path d="M12 4a2 2 0 00-2 2c0 .823.443 1.576 1.177 1.885C11.432 8.157 11.716 8.2 12 8.2c.284 0 .568-.043.823-.315A1.995 1.995 0 0014 6a2 2 0 00-2-2z"/>
-              </svg>
-              Apple
+              Continue with Google
             </button>
           </motion.div>
           
