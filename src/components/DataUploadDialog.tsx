@@ -1,8 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/hooks/use-language';
 import { useToast } from '@/hooks/use-toast';
-import { FileSpreadsheet, CheckCircle2, Upload } from 'lucide-react';
+import { FileSpreadsheet, CheckCircle2, Upload, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -15,9 +15,15 @@ import {
 
 interface DataUploadDialogProps {
   onAnalysisReady: () => void;
+  onResetAnalysis: () => void;
+  analysisExists?: boolean;
 }
 
-const DataUploadDialog: React.FC<DataUploadDialogProps> = ({ onAnalysisReady }) => {
+const DataUploadDialog: React.FC<DataUploadDialogProps> = ({ 
+  onAnalysisReady, 
+  onResetAnalysis,
+  analysisExists = false 
+}) => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [isUploading, setIsUploading] = useState(false);
@@ -25,11 +31,9 @@ const DataUploadDialog: React.FC<DataUploadDialogProps> = ({ onAnalysisReady }) 
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
   
   // Check if analysis data already exists
-  React.useEffect(() => {
+  useEffect(() => {
     const hasData = localStorage.getItem('analysisData') === 'true';
-    if (hasData) {
-      setUploadSuccess(true);
-    }
+    setUploadSuccess(hasData);
   }, []);
 
   // Handle CSV upload
@@ -37,7 +41,6 @@ const DataUploadDialog: React.FC<DataUploadDialogProps> = ({ onAnalysisReady }) 
     const file = event.target.files?.[0];
     if (file) {
       setIsUploading(true);
-      setUploadSuccess(false);
       
       // Simulate file processing
       setTimeout(() => {
@@ -51,13 +54,24 @@ const DataUploadDialog: React.FC<DataUploadDialogProps> = ({ onAnalysisReady }) 
           variant: "default",
         });
         
-        // Save to localStorage for persistence
-        localStorage.setItem('analysisData', 'true');
-        
         // Notify parent component
         onAnalysisReady();
       }, 1500);
     }
+  };
+
+  // Handle reset analysis
+  const handleReset = () => {
+    setUploadSuccess(false);
+    onResetAnalysis();
+    
+    toast({
+      title: t("dataset-reset-title"),
+      description: t("dataset-reset-desc"),
+      variant: "default",
+    });
+    
+    setUploadDialogOpen(false);
   };
 
   return (
@@ -88,44 +102,58 @@ const DataUploadDialog: React.FC<DataUploadDialogProps> = ({ onAnalysisReady }) 
       </DialogTrigger>
       <DialogContent className="sm:max-w-md dark:bg-gray-800 dark:text-gray-200">
         <DialogHeader>
-          <DialogTitle>{t("upload-dataset")}</DialogTitle>
+          <DialogTitle>{uploadSuccess ? t("dataset-options") : t("upload-dataset")}</DialogTitle>
           <DialogDescription className="dark:text-gray-400">
-            {t("dataset-instructions")}
+            {uploadSuccess ? t("dataset-options-desc") : t("dataset-instructions")}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <div className="border-2 border-dashed dark:border-gray-600 rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-            {uploadSuccess ? (
-              <div className="flex flex-col items-center justify-center text-green-500">
+          {uploadSuccess ? (
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col items-center justify-center text-green-500 p-6">
                 <CheckCircle2 size={48} className="mb-2" />
-                <p>{t("upload-successful")}</p>
+                <p className="text-center">{t("analysis-active")}</p>
               </div>
-            ) : isUploading ? (
-              <div className="flex flex-col items-center justify-center text-medical-500">
-                <div className="animate-spin mb-2">
-                  <Upload size={48} />
-                </div>
-                <p>{t("uploading")}</p>
+              <Button 
+                variant="destructive" 
+                className="w-full flex items-center justify-center gap-2"
+                onClick={handleReset}
+              >
+                <RefreshCw size={16} />
+                {t("reset-analysis")}
+              </Button>
+            </div>
+          ) : (
+            <>
+              <div className="border-2 border-dashed dark:border-gray-600 rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                {isUploading ? (
+                  <div className="flex flex-col items-center justify-center text-medical-500">
+                    <div className="animate-spin mb-2">
+                      <Upload size={48} />
+                    </div>
+                    <p>{t("uploading")}</p>
+                  </div>
+                ) : (
+                  <label className="flex flex-col items-center justify-center cursor-pointer">
+                    <Upload size={48} className="mb-2 text-gray-400 dark:text-gray-500" />
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {t("drag-drop-csv")}
+                    </p>
+                    <input 
+                      type="file" 
+                      accept=".csv" 
+                      className="hidden" 
+                      onChange={handleFileUpload} 
+                    />
+                  </label>
+                )}
               </div>
-            ) : (
-              <label className="flex flex-col items-center justify-center cursor-pointer">
-                <Upload size={48} className="mb-2 text-gray-400 dark:text-gray-500" />
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {t("drag-drop-csv")}
-                </p>
-                <input 
-                  type="file" 
-                  accept=".csv" 
-                  className="hidden" 
-                  onChange={handleFileUpload} 
-                />
-              </label>
-            )}
-          </div>
-          <div className="text-xs text-gray-500 dark:text-gray-400">
-            <p>{t("supported-format")}: .CSV</p>
-            <p>{t("max-file-size")}: 5MB</p>
-          </div>
+              <div className="text-xs text-gray-500 dark:text-gray-400">
+                <p>{t("supported-format")}: .CSV</p>
+                <p>{t("max-file-size")}: 5MB</p>
+              </div>
+            </>
+          )}
         </div>
       </DialogContent>
     </Dialog>

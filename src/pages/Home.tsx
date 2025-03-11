@@ -18,11 +18,11 @@ const Home = () => {
   // Mock data for geographic distribution - this would normally come from an API
   const [geoDistributionData] = useState({
     regions: [
-      { name: "North Bangalore", incidents: 45, response: 8.3, color: "#8884d8" },
-      { name: "Central Bangalore", incidents: 78, response: 6.2, color: "#82ca9d" },
-      { name: "South Bangalore", incidents: 52, response: 7.5, color: "#ffc658" },
-      { name: "East Bangalore", incidents: 63, response: 8.1, color: "#ff8042" },
-      { name: "West Bangalore", incidents: 41, response: 9.0, color: "#0088fe" },
+      { name: t("north-bangalore"), incidents: 45, response: 8.3, color: "#8884d8" },
+      { name: t("central-bangalore"), incidents: 78, response: 6.2, color: "#82ca9d" },
+      { name: t("south-bangalore"), incidents: 52, response: 7.5, color: "#ffc658" },
+      { name: t("east-bangalore"), incidents: 63, response: 8.1, color: "#ff8042" },
+      { name: t("west-bangalore"), incidents: 41, response: 9.0, color: "#0088fe" },
     ],
     timeData: [
       { time: '00:00', incidents: 12, response: 7.2 },
@@ -42,7 +42,14 @@ const Home = () => {
   
   // Handle when analysis is ready
   const handleAnalysisReady = () => {
+    localStorage.setItem('analysisData', 'true');
     setShowAnalysis(true);
+  };
+
+  // Handle analysis reset
+  const handleResetAnalysis = () => {
+    localStorage.removeItem('analysisData');
+    setShowAnalysis(false);
   };
   
   return (
@@ -68,13 +75,25 @@ const Home = () => {
           >
             <UserProfileBar />
             
-            {/* Dataset Upload Button */}
+            {/* Dataset Upload Button or Reset Button */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3 }}
             >
-              <DataUploadDialog onAnalysisReady={handleAnalysisReady} />
+              {showAnalysis ? (
+                <DataUploadDialog 
+                  onAnalysisReady={handleAnalysisReady} 
+                  onResetAnalysis={handleResetAnalysis}
+                  analysisExists={true}
+                />
+              ) : (
+                <DataUploadDialog 
+                  onAnalysisReady={handleAnalysisReady}
+                  onResetAnalysis={handleResetAnalysis}
+                  analysisExists={false}
+                />
+              )}
             </motion.div>
           </motion.div>
         </div>
