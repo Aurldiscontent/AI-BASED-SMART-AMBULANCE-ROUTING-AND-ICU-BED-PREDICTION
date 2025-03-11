@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Search, MapPin, Mic } from 'lucide-react';
 
 interface SearchBarProps {
@@ -15,6 +15,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
   className = "",
   showVoiceCommand = true
 }) => {
+  const [isVoiceActive, setIsVoiceActive] = useState(false);
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
@@ -23,8 +25,18 @@ const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   const handleVoiceCommand = () => {
+    setIsVoiceActive(true);
+    
     // In a real implementation, this would trigger voice recognition
     console.log('Voice command activated');
+    
+    // Simulate voice recognition completion after 3 seconds
+    setTimeout(() => {
+      setIsVoiceActive(false);
+      
+      // Simulate a voice search result
+      if (onSearch) onSearch("nearest hospital with ICU beds");
+    }, 3000);
   };
 
   return (
@@ -42,7 +54,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
         <button 
           type="button" 
           onClick={handleVoiceCommand}
-          className="absolute right-12 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-medical-500 dark:text-gray-500 dark:hover:text-medical-400 transition-colors"
+          className={`absolute right-12 top-1/2 transform -translate-y-1/2 ${
+            isVoiceActive 
+              ? 'text-medical-500 dark:text-medical-400 animate-pulse' 
+              : 'text-gray-400 hover:text-medical-500 dark:text-gray-500 dark:hover:text-medical-400'
+          } transition-colors`}
         >
           <Mic size={18} />
         </button>

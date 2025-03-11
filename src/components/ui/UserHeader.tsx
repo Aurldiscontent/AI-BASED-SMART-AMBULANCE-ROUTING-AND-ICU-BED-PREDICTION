@@ -1,20 +1,22 @@
 
-import React, { useState } from 'react';
-import { Bell, MapPin, Settings, LogOut, User, HelpCircle } from 'lucide-react';
-import ThemeSwitcher from './ThemeSwitcher';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
+import { Bell, User, Moon, Sun } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useTheme } from '@/hooks/use-theme';
 
 interface UserHeaderProps {
   user: {
     name: string;
-    avatar?: string | null;
-    location?: string;
-    role?: string;
+    email: string;
+    avatar: string | null;
+    location: string;
+    role: string;
   };
+  onProfileClick?: () => void;
 }
 
-const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
+const UserHeader: React.FC<UserHeaderProps> = ({ user, onProfileClick }) => {
+  const { theme, setTheme } = useTheme();
   
   const getInitials = (name: string) => {
     return name
@@ -23,98 +25,60 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
       .join('')
       .toUpperCase();
   };
-
+  
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+  
   return (
-    <div className="flex justify-between items-center">
-      <div className="flex items-center">
-        <div className="mr-3 hidden md:flex">
-          <span className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-medical-400 to-medical-600 dark:from-medical-300 dark:to-medical-500">
-            AI Smart Ambulance Routing
-          </span>
-        </div>
-        <div className="md:hidden text-xl font-bold text-medical-500 dark:text-medical-400">
-          AI-SAR
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-3">
+        <motion.div 
+          whileHover={{ scale: 1.05 }}
+          className="relative"
+          onClick={onProfileClick}
+        >
+          {user.avatar ? (
+            <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full object-cover cursor-pointer" />
+          ) : (
+            <div className="w-10 h-10 rounded-full bg-medical-500 flex items-center justify-center text-white font-semibold cursor-pointer">
+              {getInitials(user.name)}
+            </div>
+          )}
+        </motion.div>
+        <div className="hidden sm:block">
+          <p className="font-medium text-gray-800 dark:text-gray-200">{user.name}</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">{user.role} • {user.location}</p>
         </div>
       </div>
       
-      <div className="flex items-center space-x-3">
-        <ThemeSwitcher />
+      <div className="flex items-center gap-3">
+        <motion.button 
+          className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-700 dark:hover:text-gray-200 relative"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={toggleTheme}
+        >
+          {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+        </motion.button>
         
-        <button className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 relative">
-          <Bell size={20} className="text-gray-600 dark:text-gray-300" />
-          <span className="absolute top-0 right-0 w-2 h-2 rounded-full bg-red-500"></span>
-        </button>
+        <motion.button 
+          className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-700 dark:hover:text-gray-200 relative"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Bell size={20} />
+          <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
+        </motion.button>
         
-        <div className="relative">
-          <button 
-            onClick={() => setShowProfileMenu(!showProfileMenu)}
-            className="flex items-center space-x-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 p-1"
-          >
-            {user.avatar ? (
-              <img 
-                src={user.avatar} 
-                alt={user.name} 
-                className="w-8 h-8 rounded-full object-cover border-2 border-medical-200 dark:border-medical-700"
-              />
-            ) : (
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-medical-400 to-medical-600 dark:from-medical-500 dark:to-medical-700 flex items-center justify-center text-white font-medium">
-                {getInitials(user.name)}
-              </div>
-            )}
-            <div className="hidden md:block text-left">
-              <p className="text-sm font-medium text-gray-800 dark:text-gray-200">{user.name}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">{user.role || "Emergency Responder"}</p>
-            </div>
-          </button>
-          
-          <AnimatePresence>
-            {showProfileMenu && (
-              <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                transition={{ duration: 0.2 }}
-                className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg py-1 z-20 border border-gray-200 dark:border-gray-700"
-              >
-                <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-                  <p className="text-sm font-medium text-gray-800 dark:text-gray-200">{user.name}</p>
-                  {user.location && (
-                    <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 mt-1">
-                      <MapPin size={10} className="mr-1" />
-                      {user.location}
-                    </div>
-                  )}
-                </div>
-                <ul>
-                  <li>
-                    <a href="#profile" className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                      <User size={16} className="mr-2" />
-                      Profile
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#settings" className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                      <Settings size={16} className="mr-2" />
-                      Settings
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#help" className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                      <HelpCircle size={16} className="mr-2" />
-                      Help & Support
-                    </a>
-                  </li>
-                  <li className="border-t border-gray-200 dark:border-gray-700">
-                    <a href="#logout" className="flex items-center px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">
-                      <LogOut size={16} className="mr-2" />
-                      Logout
-                    </a>
-                  </li>
-                </ul>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+        <motion.button 
+          className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-700 dark:hover:text-gray-200"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={onProfileClick}
+        >
+          <User size={20} />
+        </motion.button>
       </div>
     </div>
   );

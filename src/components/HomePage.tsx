@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
-import { Search, Bell, User, Phone, AlertTriangle, MapPin, HeartPulse, Zap, LayoutDashboard, Hospital, Gauge, Map as MapIcon, FileText, Settings, Activity } from 'lucide-react';
+import { Search, Bell, User, Phone, AlertTriangle, MapPin, HeartPulse, Zap, LayoutDashboard, Hospital, Gauge, Map as MapIcon, FileText, Settings, Activity, Mic, Moon, Sun } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import MapView from './ui/MapView';
 import HospitalCard from './ui/HospitalCard';
@@ -12,6 +13,7 @@ import RealtimeMetrics from './ui/RealtimeMetrics';
 import UserHeader from './ui/UserHeader';
 import SearchBar from './ui/SearchBar';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { useTheme } from '@/hooks/use-theme';
 
 const hospitals = [
   {
@@ -208,6 +210,11 @@ const HomePage: React.FC = () => {
   const [showEmergencyPanel, setShowEmergencyPanel] = useState(false);
   const [activeTab, setActiveTab] = useState<'dashboard' | 'live-route' | 'hospitals' | 'reports' | 'settings'>('dashboard');
   const [showHighPriorityAlert, setShowHighPriorityAlert] = useState(false);
+  const [showHospitalDetails, setShowHospitalDetails] = useState<string | null>(null);
+  const [showTrafficDetails, setShowTrafficDetails] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [showUserPanel, setShowUserPanel] = useState(false);
+  const { theme, setTheme } = useTheme();
   
   useEffect(() => {
     const dataInterval = setInterval(() => {
@@ -291,6 +298,40 @@ const HomePage: React.FC = () => {
     });
   };
   
+  const handleVoiceCommand = () => {
+    setIsListening(true);
+    
+    // Simulate voice recognition
+    setTimeout(() => {
+      toast({
+        title: "Voice Command Detected",
+        description: "Finding nearest hospital with available ICU beds",
+      });
+      
+      setTimeout(() => {
+        // Find a hospital with ICU beds
+        const availableHospital = hospitals.find(h => h.icuBeds > 0);
+        if (availableHospital) {
+          setSelectedHospital(availableHospital.id);
+          setIsListening(false);
+          
+          toast({
+            title: "Hospital Found",
+            description: `Navigating to ${availableHospital.name}`,
+          });
+        }
+      }, 2000);
+    }, 2500);
+  };
+  
+  const handleThemeToggle = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+    toast({
+      title: "Theme Changed",
+      description: `Switched to ${theme === 'dark' ? 'light' : 'dark'} mode`,
+    });
+  };
+  
   const getInitials = (name: string) => {
     return name
       .split(' ')
@@ -317,6 +358,10 @@ const HomePage: React.FC = () => {
     return parseFloat(a.distance) - parseFloat(b.distance);
   });
   
+  const selectedHospitalData = selectedHospital 
+    ? hospitals.find(h => h.id === selectedHospital) 
+    : null;
+  
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 dark:text-white pb-24">
       <motion.div 
@@ -325,8 +370,56 @@ const HomePage: React.FC = () => {
         transition={{ duration: 0.5 }}
         className="glass-panel sticky top-0 z-20 px-4 py-3 border-b border-gray-200 dark:border-gray-700"
       >
-        <UserHeader user={userData} />
+        <UserHeader 
+          user={userData} 
+          onProfileClick={() => setShowUserPanel(!showUserPanel)}
+        />
       </motion.div>
+      
+      <AnimatePresence>
+        {showUserPanel && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="absolute top-16 right-4 z-50 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 p-4 w-72"
+          >
+            <div className="flex flex-col space-y-3">
+              <div className="flex items-center gap-3 border-b border-gray-200 dark:border-gray-700 pb-3">
+                <div className="h-10 w-10 rounded-full bg-medical-500 flex items-center justify-center text-white font-semibold">
+                  {getInitials(userData.name)}
+                </div>
+                <div>
+                  <h3 className="font-semibold">{userData.name}</h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{userData.role}</p>
+                </div>
+              </div>
+              
+              <button 
+                onClick={handleThemeToggle}
+                className="flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-md transition-colors"
+              >
+                {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+                <span>Switch to {theme === 'dark' ? 'Light' : 'Dark'} Mode</span>
+              </button>
+              
+              <button className="flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-md transition-colors">
+                <User size={16} />
+                <span>Edit Profile</span>
+              </button>
+              
+              <button className="flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-md transition-colors">
+                <Settings size={16} />
+                <span>Settings</span>
+              </button>
+              
+              <button className="flex items-center gap-2 mt-2 p-2 rounded-md bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-colors">
+                <span>Sign Out</span>
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       
       <AnimatePresence>
         {showHighPriorityAlert && (
@@ -334,7 +427,14 @@ const HomePage: React.FC = () => {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="bg-emergency-500 dark:bg-emergency-600 text-white px-4 py-3"
+            className="bg-emergency-500 dark:bg-emergency-600 text-white px-4 py-3 cursor-pointer"
+            onClick={() => {
+              toast({
+                title: "Emergency Alert Details",
+                description: "Accessing detailed incident report...",
+                variant: "destructive",
+              });
+            }}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center">
@@ -345,7 +445,10 @@ const HomePage: React.FC = () => {
                 </div>
               </div>
               <button 
-                onClick={() => setShowHighPriorityAlert(false)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowHighPriorityAlert(false);
+                }}
                 className="text-white/80 hover:text-white"
               >
                 ✕
@@ -429,16 +532,38 @@ const HomePage: React.FC = () => {
         transition={{ delay: 0.1, duration: 0.5 }}
         className="px-4 py-2"
       >
-        <SearchBar 
-          placeholder="Search hospitals or enter accident location for routing..."
-          onSearch={(query) => {
-            console.log('Searching for:', query);
-            toast({
-              title: "Location Search",
-              description: `Searching for "${query}"`,
-            });
-          }}
-        />
+        <div className="relative">
+          <SearchBar 
+            placeholder="Search hospitals or enter accident location for routing..."
+            onSearch={(query) => {
+              console.log('Searching for:', query);
+              toast({
+                title: "Location Search",
+                description: `Searching for "${query}"`,
+              });
+            }}
+            showVoiceCommand={true}
+          />
+          
+          {isListening && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/10 backdrop-blur-sm rounded-xl">
+              <div className="bg-white dark:bg-gray-800 p-4 rounded-lg flex flex-col items-center">
+                <div className="w-16 h-16 rounded-full bg-medical-100 dark:bg-medical-900/30 flex items-center justify-center mb-2">
+                  <Mic className="text-medical-500 animate-pulse" />
+                </div>
+                <p className="text-sm font-medium">Listening...</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Say "Find nearest hospital" or "Navigate to..."</p>
+                
+                <button 
+                  onClick={() => setIsListening(false)}
+                  className="mt-3 text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </motion.div>
       
       {(activeTab === 'dashboard' || activeTab === 'live-route') && (
@@ -498,6 +623,21 @@ const HomePage: React.FC = () => {
                   onNavigate={handleNavigate}
                   selectedHospitalId={selectedHospital}
                   transportMode={transportMode}
+                  onHospitalClick={(id) => setShowHospitalDetails(id)}
+                  onTrafficClick={() => {
+                    setShowTrafficDetails(true);
+                    toast({
+                      title: "Traffic Alert",
+                      description: "Heavy congestion detected on main route. Alternative routes suggested.",
+                      variant: "warning",
+                    });
+                  }}
+                  onPathClick={() => {
+                    toast({
+                      title: "Route Options",
+                      description: "Showing alternative routes based on traffic conditions.",
+                    });
+                  }}
                 />
               </CardContent>
             </Card>
@@ -512,7 +652,17 @@ const HomePage: React.FC = () => {
               <CardContent>
                 <div className="space-y-3 max-h-60 overflow-y-auto scrollbar-none">
                   {hospitals.slice(0, 5).map(hospital => (
-                    <div key={hospital.id} className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-2">
+                    <div 
+                      key={hospital.id} 
+                      className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 p-1 rounded transition-colors"
+                      onClick={() => {
+                        setShowHospitalDetails(hospital.id);
+                        toast({
+                          title: "Hospital Selected",
+                          description: `Viewing details for ${hospital.name}`,
+                        });
+                      }}
+                    >
                       <div className="text-left">
                         <p className="font-medium text-sm">{hospital.name}</p>
                         <p className="text-xs text-gray-500 dark:text-gray-400">{hospital.distance} away</p>
@@ -556,7 +706,10 @@ const HomePage: React.FC = () => {
                 <Zap size={14} className="mr-1" />
                 Quickest Route
               </div>
-              <div className="bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-md text-blue-800 dark:text-blue-400 font-medium flex items-center">
+              <div 
+                className="bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-md text-blue-800 dark:text-blue-400 font-medium flex items-center cursor-pointer hover:bg-blue-200 transition-colors"
+                onClick={() => setShowTrafficDetails(true)}
+              >
                 <Gauge size={14} className="mr-1" />
                 Live Traffic
               </div>
@@ -569,6 +722,21 @@ const HomePage: React.FC = () => {
               onNavigate={handleNavigate}
               selectedHospitalId={selectedHospital}
               transportMode={transportMode}
+              onHospitalClick={(id) => setShowHospitalDetails(id)}
+              onTrafficClick={() => {
+                setShowTrafficDetails(true);
+                toast({
+                  title: "Traffic Alert",
+                  description: "Heavy congestion detected on main route. Alternative routes suggested.",
+                  variant: "warning",
+                });
+              }}
+              onPathClick={() => {
+                toast({
+                  title: "Route Options",
+                  description: "Showing alternative routes based on traffic conditions.",
+                });
+              }}
             />
             
             {selectedHospital && (
@@ -585,7 +753,9 @@ const HomePage: React.FC = () => {
                   </div>
                   <div>
                     <p className="text-gray-500 dark:text-gray-400">Traffic</p>
-                    <p className="font-medium text-amber-600 dark:text-amber-400">Moderate</p>
+                    <p className="font-medium text-amber-600 dark:text-amber-400 cursor-pointer hover:underline" onClick={() => setShowTrafficDetails(true)}>
+                      Moderate
+                    </p>
                   </div>
                 </div>
               </div>
@@ -638,6 +808,7 @@ const HomePage: React.FC = () => {
               lastUpdated={hospital.lastUpdated}
               trafficCondition={hospital.trafficCondition}
               isRecommended={hospital.id === patientData.aiRecommendedHospital}
+              onClick={() => setShowHospitalDetails(hospital.id)}
             />
           ))}
         </motion.div>
@@ -693,7 +864,7 @@ const HomePage: React.FC = () => {
                     <h3 className="font-medium">Notifications</h3>
                     <p className="text-sm text-gray-500 dark:text-gray-400">Enable alert notifications</p>
                   </div>
-                  <div className="bg-medical-500 h-6 w-12 rounded-full relative">
+                  <div className="bg-medical-500 h-6 w-12 rounded-full relative cursor-pointer hover:bg-medical-600 transition-colors">
                     <div className="absolute right-1 top-1/2 transform -translate-y-1/2 h-4 w-4 bg-white rounded-full"></div>
                   </div>
                 </div>
@@ -703,7 +874,10 @@ const HomePage: React.FC = () => {
                     <h3 className="font-medium">Voice Commands</h3>
                     <p className="text-sm text-gray-500 dark:text-gray-400">Enable voice input for routing</p>
                   </div>
-                  <div className="bg-gray-300 dark:bg-gray-600 h-6 w-12 rounded-full relative">
+                  <div 
+                    className="bg-gray-300 dark:bg-gray-600 h-6 w-12 rounded-full relative cursor-pointer hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
+                    onClick={handleVoiceCommand}
+                  >
                     <div className="absolute left-1 top-1/2 transform -translate-y-1/2 h-4 w-4 bg-white rounded-full"></div>
                   </div>
                 </div>
@@ -718,6 +892,27 @@ const HomePage: React.FC = () => {
                     <option>1 minute</option>
                     <option>5 minutes</option>
                   </select>
+                </div>
+                
+                <div className="flex justify-between items-center p-3 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
+                  <div>
+                    <h3 className="font-medium">Theme</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Choose display mode</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button 
+                      onClick={() => setTheme('light')}
+                      className={`p-2 rounded-md ${theme === 'light' ? 'bg-white border border-gray-300 shadow-sm' : 'bg-gray-200 hover:bg-gray-300'}`}
+                    >
+                      <Sun size={18} className="text-amber-500" />
+                    </button>
+                    <button 
+                      onClick={() => setTheme('dark')}
+                      className={`p-2 rounded-md ${theme === 'dark' ? 'bg-gray-800 border border-gray-700 shadow-sm' : 'bg-gray-200 hover:bg-gray-300'}`}
+                    >
+                      <Moon size={18} className="text-blue-400" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -757,7 +952,7 @@ const HomePage: React.FC = () => {
                 </div>
                 <button
                   onClick={() => setShowEmergencyPanel(false)}
-                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
                 >
                   ✕
                 </button>
@@ -784,6 +979,218 @@ const HomePage: React.FC = () => {
                   <span>SOS</span>
                 </button>
               </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
+      <AnimatePresence>
+        {showHospitalDetails && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 flex items-center justify-center px-4"
+            onClick={() => setShowHospitalDetails(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 50 }}
+              className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-5"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {(() => {
+                const hospital = hospitals.find(h => h.id === showHospitalDetails);
+                if (!hospital) return null;
+                
+                return (
+                  <>
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <h3 className="font-bold text-lg">{hospital.name}</h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{hospital.address}</p>
+                      </div>
+                      <button
+                        onClick={() => setShowHospitalDetails(null)}
+                        className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                      <div className="bg-gray-100 dark:bg-gray-700/40 p-3 rounded-lg">
+                        <p className="text-sm text-gray-500 dark:text-gray-400">ICU Beds</p>
+                        <p className={`text-xl font-bold ${hospital.icuBeds > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                          {hospital.icuBeds} / {hospital.totalBeds}
+                        </p>
+                      </div>
+                      <div className="bg-gray-100 dark:bg-gray-700/40 p-3 rounded-lg">
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Estimated Time</p>
+                        <p className="text-xl font-bold">{hospital.estimatedTime}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Specialties</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {hospital.specialties.map((specialty, idx) => (
+                          <span 
+                            key={idx} 
+                            className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-xs px-2 py-1 rounded-full"
+                          >
+                            {specialty}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">AI Analysis</h4>
+                      <div className="bg-gray-100 dark:bg-gray-700/40 p-3 rounded-lg">
+                        <div className="flex justify-between mb-1">
+                          <span className="text-sm">Survival Rate</span>
+                          <span className="text-sm font-medium">{hospital.aiSurvivalRate}%</span>
+                        </div>
+                        <div className="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
+                          <div 
+                            className={`h-full rounded-full ${
+                              hospital.aiSurvivalRate > 90 
+                                ? 'bg-green-500' 
+                                : hospital.aiSurvivalRate > 80 
+                                  ? 'bg-green-400'
+                                  : 'bg-amber-500'
+                            }`}
+                            style={{ width: `${hospital.aiSurvivalRate}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => {
+                          handleCall(hospital.id);
+                          setShowHospitalDetails(null);
+                        }}
+                        className="flex-1 py-2.5 px-4 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg flex items-center justify-center gap-2 transition-colors"
+                      >
+                        <Phone size={16} />
+                        <span>Call</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          handleNavigate(hospital.id);
+                          setShowHospitalDetails(null);
+                        }}
+                        className="flex-1 py-2.5 px-4 bg-medical-500 hover:bg-medical-600 text-white rounded-lg flex items-center justify-center gap-2 transition-colors"
+                      >
+                        <Navigation size={16} />
+                        <span>Navigate</span>
+                      </button>
+                    </div>
+                  </>
+                );
+              })()}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
+      <AnimatePresence>
+        {showTrafficDetails && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 flex items-center justify-center px-4"
+            onClick={() => setShowTrafficDetails(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 50 }}
+              className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-5"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center">
+                  <Gauge className="text-amber-500 mr-2" size={20} />
+                  <h3 className="font-bold text-lg">Traffic Alert</h3>
+                </div>
+                <button
+                  onClick={() => setShowTrafficDetails(false)}
+                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                >
+                  ✕
+                </button>
+              </div>
+              
+              <div className="mb-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-900/30 p-3 rounded-lg">
+                <h4 className="font-medium text-amber-800 dark:text-amber-300 mb-1 flex items-center">
+                  <AlertTriangle size={16} className="mr-1" />
+                  Heavy Traffic Detected
+                </h4>
+                <p className="text-sm text-amber-700 dark:text-amber-400">
+                  Major congestion on Main Street due to construction work. Estimated delay: 8-12 minutes.
+                </p>
+              </div>
+              
+              <div className="mb-4">
+                <h4 className="font-medium mb-2">Alternative Routes</h4>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center p-2.5 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-900/30 rounded-lg">
+                    <div>
+                      <p className="font-medium flex items-center">
+                        <Zap size={16} className="text-green-500 mr-1" />
+                        Route A (Recommended)
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Via Highland Avenue</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-medium">18 min</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">4.5 km</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-between items-center p-2.5 bg-gray-50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg">
+                    <div>
+                      <p className="font-medium">Route B</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Via Westside Highway</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-medium">22 min</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">5.2 km</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-between items-center p-2.5 bg-gray-50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg">
+                    <div>
+                      <p className="font-medium">Route C</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Via Eastside Bridge</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-medium">24 min</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">4.8 km</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <button
+                onClick={() => {
+                  setShowTrafficDetails(false);
+                  toast({
+                    title: "Route Updated",
+                    description: "Navigating via Highland Avenue to avoid traffic",
+                  });
+                }}
+                className="w-full py-2.5 px-4 bg-medical-500 hover:bg-medical-600 text-white rounded-lg flex items-center justify-center gap-2 transition-colors"
+              >
+                <MapPin size={16} />
+                <span>Use Recommended Route</span>
+              </button>
             </motion.div>
           </motion.div>
         )}
@@ -827,4 +1234,3 @@ const HomePage: React.FC = () => {
 };
 
 export default HomePage;
-
