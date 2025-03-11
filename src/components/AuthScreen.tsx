@@ -53,13 +53,16 @@ const AuthScreen: React.FC = () => {
         <AnimatedLogo size="md" showEmojis={true} darkMode={true} />
       </motion.div>
 
-      {/* Subtitle */}
+      {/* Title with Emojis */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6, duration: 0.5 }}
         className="text-center mb-6"
       >
+        <h1 className="text-2xl md:text-4xl font-extrabold tracking-wide text-white mb-3">
+          🚑 RAPID 🏥 AID 💓 INNOVATORS 🚀
+        </h1>
         <p className="text-lg md:text-xl font-medium text-cyan-300 drop-shadow-lg mt-2 px-2">
           Smart AI Ambulance Routing for Life-Saving Response! ⚡🚑
         </p>
