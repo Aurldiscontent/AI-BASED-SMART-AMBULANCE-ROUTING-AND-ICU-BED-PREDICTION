@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '@/hooks/use-theme';
 import { useLanguage } from '@/hooks/use-language';
@@ -11,6 +10,7 @@ import GeographicDistribution from '@/components/ui/GeographicDistribution';
 import HospitalDashboard from '@/components/ui/HospitalDashboard';
 import Navbar from '@/components/ui/Navbar';
 import EmergencyDashboard from '@/components/ui/EmergencyDashboard';
+import MedicalAnalytics from '@/components/ui/MedicalAnalytics';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Switch } from '@/components/ui/switch';
 import { Wifi, WifiOff, Zap, AlertTriangle, Info, Clock, MapPin, Sun, Moon } from 'lucide-react';
@@ -28,7 +28,6 @@ const Home = () => {
   const [patientSeverity, setPatientSeverity] = useState(5);
   const [selectedAnalyticView, setSelectedAnalyticView] = useState('icu');
   
-  // Mock data for hospitals - extended to 10
   const [hospitals] = useState([
     { id: '1', name: 'City General Hospital', icuBeds: 12, totalBeds: 20, aiSurvivalRate: 92, distance: '2.3 km', waitTime: '5 min', specialties: ['Trauma', 'Cardiac'] },
     { id: '2', name: 'Memorial Care', icuBeds: 8, totalBeds: 15, aiSurvivalRate: 88, distance: '3.6 km', waitTime: '8 min', specialties: ['Pediatric'] },
@@ -42,18 +41,16 @@ const Home = () => {
     { id: '10', name: 'West Valley Medical', icuBeds: 8, totalBeds: 17, aiSurvivalRate: 86, distance: '11.5 km', waitTime: '16 min', specialties: ['Neuro', 'Respiratory'] },
   ]);
   
-  // Mock emergency alerts - added timestamps and categorization
   const [alerts] = useState([
     { id: '1', type: 'critical', message: 'Traffic accident on Main St. - Multiple casualties', timestamp: '3 min ago' },
     { id: '2', type: 'warning', message: 'Heavy traffic on Highway 101 - Potential delays', timestamp: '12 min ago' },
-    { id: '3', type: 'info', message: 'St. Mary\'s Hospital ICU capacity reduced to 60%', timestamp: '27 min ago' },
+    { id: '3', name: 'St. Mary\'s Hospital ICU capacity reduced to 60%', timestamp: '27 min ago' },
     { id: '4', type: 'info', message: 'Air ambulance availability: 2 units on standby', timestamp: '45 min ago' },
     { id: '5', type: 'warning', message: 'Potential mass casualty incident reported downtown', timestamp: '8 min ago' },
     { id: '6', type: 'critical', message: 'Ambulance #243 breakdown - Rerouting required', timestamp: '1 min ago' },
     { id: '7', type: 'info', message: 'System maintenance scheduled for 02:00 AM', timestamp: '1 hr ago' },
   ]);
   
-  // Enhanced analytics data with 10 hospitals and 24-hour entries
   const [analyticData] = useState({
     icu: [
       { time: '00:00', cityGeneral: 75, memorial: 60, community: 80, stMarys: 65, lakeside: 70, universityMed: 82, centralHospital: 68, eastside: 55, northGeneral: 78, westValley: 63 },
@@ -84,7 +81,6 @@ const Home = () => {
     ],
   });
   
-  // Mock data for geographic distribution
   const [geoDistributionData] = useState({
     regions: [
       { id: '1', name: t("north-bangalore"), incidents: 45, response: 8.3, color: "#8884d8" },
@@ -95,7 +91,6 @@ const Home = () => {
     ]
   });
   
-  // Enhanced ICU bed data with more information
   const [icuBedData] = useState([
     { hospital: 'City General', available: 12, total: 20, waitTime: 15, occupancyRate: 65 },
     { hospital: 'Memorial', available: 8, total: 15, waitTime: 22, occupancyRate: 78 },
@@ -109,7 +104,6 @@ const Home = () => {
     { hospital: 'West Valley', available: 8, total: 17, waitTime: 24, occupancyRate: 76 },
   ]);
   
-  // Mock patient data
   const [patientData] = useState({
     id: 'P12345',
     severity: 'Critical',
@@ -118,7 +112,6 @@ const Home = () => {
     location: 'Koramangala, Bangalore'
   });
   
-  // Mock hospital destinations for map
   const [destinations] = useState(
     hospitals.map(h => ({
       id: h.id,
@@ -136,7 +129,6 @@ const Home = () => {
   
   const [selectedHospitalId, setSelectedHospitalId] = useState<string | null>(null);
   
-  // Check if analysis data exists on component mount
   useEffect(() => {
     const checkAnalysisData = () => {
       const hasAnalysisData = localStorage.getItem('analysisData') === 'true';
@@ -146,7 +138,6 @@ const Home = () => {
     checkAnalysisData();
     window.addEventListener('storage', checkAnalysisData);
     
-    // Simulate changing system status
     const statusInterval = setInterval(() => {
       const statuses: Array<'normal' | 'warning' | 'critical'> = ['normal', 'warning', 'critical'];
       const randomIndex = Math.floor(Math.random() * 10);
@@ -165,7 +156,6 @@ const Home = () => {
     };
   }, []);
   
-  // Handle when analysis is ready
   const handleAnalysisReady = () => {
     localStorage.setItem('analysisData', 'true');
     setShowAnalysis(true);
@@ -175,25 +165,21 @@ const Home = () => {
     });
   };
 
-  // Handle analysis reset
   const handleResetAnalysis = () => {
     localStorage.removeItem('analysisData');
     setShowAnalysis(false);
   };
 
-  // Handle severity change
   const handleSeverityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPatientSeverity(parseInt(e.target.value));
   };
 
-  // Get severity label
   const getSeverityLabel = (value: number) => {
     if (value <= 3) return 'Minor';
     if (value <= 7) return 'Moderate';
     return 'Critical';
   };
   
-  // Toggle theme
   const toggleTheme = () => {
     setTheme(isDark ? 'light' : 'dark');
     toast({
@@ -216,7 +202,6 @@ const Home = () => {
           ? 'bg-gradient-to-br from-gray-900/95 via-gray-800/90 to-gray-900/95' 
           : 'bg-gradient-to-br from-white/95 via-blue-50/90 to-white/95'
         } backdrop-blur-sm transition-all duration-500 pb-20`}>
-        {/* Top Header with Smart Ambulance title */}
         <div className="container mx-auto px-4">
           <div className={`py-4 flex flex-col sm:flex-row justify-between items-center border-b ${
             isDark ? 'border-blue-900/30' : 'border-blue-200/80'
@@ -234,10 +219,8 @@ const Home = () => {
               </p>
             </div>
             <div className="flex items-center gap-4">
-              {/* Language Switcher */}
               <LanguageSwitcher />
               
-              {/* Theme toggle switch */}
               <div className="flex items-center gap-2">
                 <Sun size={16} className={isDark ? "text-gray-400" : "text-amber-500"} />
                 <Switch
@@ -264,7 +247,7 @@ const Home = () => {
                 )}
                 <span>
                   {systemStatus === 'normal' 
-                    ? t('receive-live-traffic') 
+                    ? t('network-connection-issues') 
                     : systemStatus === 'warning'
                       ? t('partial-network-connection')
                       : t('network-connection-issues')
@@ -284,7 +267,6 @@ const Home = () => {
             className="w-full"
           >
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mb-6">
-              {/* Left Panel - Data Dashboard */}
               <div className="lg:col-span-3">
                 <div className={`${
                   isDark ? 'bg-gray-800/70 border border-blue-900/30' : 'bg-white/80 border border-blue-100'
@@ -394,17 +376,19 @@ const Home = () => {
                       </div>
                     ))}
                   </div>
+                  
+                  <div className="mt-6">
+                    <MedicalAnalytics theme={theme} />
+                  </div>
                 </div>
               </div>
               
-              {/* Main Content Area - Live Mapping */}
               <div className="lg:col-span-6">
                 <div className={`${
                   isDark ? 'bg-gray-800/70 border border-blue-900/30' : 'bg-white/80 border border-blue-100'
                 } rounded-xl p-4 shadow-md h-full`}>
                   <h2 className={`text-lg font-bold ${isDark ? 'text-blue-400' : 'text-blue-700'} mb-3`}>Live Route Mapping</h2>
                   
-                  {/* Enhanced Map View */}
                   <EnhancedMapView 
                     destinations={destinations}
                     selectedHospitalId={selectedHospitalId}
@@ -465,7 +449,6 @@ const Home = () => {
                     </Tabs>
                   </div>
                   
-                  {/* Hospital Dashboard */}
                   <HospitalDashboard 
                     hospitals={hospitals}
                     patientData={patientData}
@@ -474,7 +457,6 @@ const Home = () => {
                 </div>
               </div>
               
-              {/* Right Sidebar - Patient & Emergency Details */}
               <div className="lg:col-span-3">
                 <div className={`${
                   isDark ? 'bg-gray-800/70 border border-blue-900/30' : 'bg-white/80 border border-blue-100'
@@ -561,76 +543,77 @@ const Home = () => {
                     </div>
                     
                     <div>
-                      <label className={`block text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-2`}>Transport Mode</label>
-                      <div className="grid grid-cols-2 gap-3">
-                        <button
-                          className={`flex items-center justify-center gap-2 py-2 px-3 rounded-lg border ${
-                            transportMode === 'ground'
-                              ? isDark
-                                ? 'bg-blue-900/40 border-blue-500/50 text-blue-300'
-                                : 'bg-blue-100 border-blue-300 text-blue-700'
-                              : isDark
-                                ? 'bg-gray-800/60 border-gray-700 text-gray-400 hover:bg-gray-800'
-                                : 'bg-white/60 border-gray-300 text-gray-500 hover:bg-gray-100'
-                          }`}
-                          onClick={() => setTransportMode('ground')}
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path>
-                            <circle cx="7" cy="17" r="2"></circle>
-                            <path d="M9 17h6"></path>
-                            <circle cx="17" cy="17" r="2"></circle>
-                          </svg>
-                          Ground
-                        </button>
-                        <button
-                          className={`flex items-center justify-center gap-2 py-2 px-3 rounded-lg border ${
-                            transportMode === 'air'
-                              ? isDark
-                                ? 'bg-blue-900/40 border-blue-500/50 text-blue-300'
-                                : 'bg-blue-100 border-blue-300 text-blue-700'
-                              : isDark
-                                ? 'bg-gray-800/60 border-gray-700 text-gray-400 hover:bg-gray-800'
-                                : 'bg-white/60 border-gray-300 text-gray-500 hover:bg-gray-100'
-                          }`}
-                          onClick={() => setTransportMode('air')}
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M8.5 19h-4a1 1 0 0 1-.8-1.6l9.8-13"></path>
-                            <path d="M17 5.5v13a1 1 0 0 0 1.6.8l2.7-2.7"></path>
-                            <path d="M13 1.1l-5.9 5.3a1 1 0 0 0-.3.7v2.9l-3.8 3.4a1 1 0 0 0 .7 1.7h7.5"></path>
-                          </svg>
-                          Air
-                        </button>
-                      </div>
-                      {patientSeverity > 8 && transportMode !== 'air' && (
-                        <div className={`mt-2 text-xs ${isDark ? 'text-amber-400' : 'text-amber-600'} flex items-center`}>
-                          <AlertTriangle size={12} className="mr-1" />
-                          Air transport recommended for critical patients
+                      <div className="flex justify-between mb-1">
+                        <label className={`block text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Transport Mode</label>
+                        <div className="grid grid-cols-2 gap-3">
+                          <button
+                            className={`flex items-center justify-center gap-2 py-2 px-3 rounded-lg border ${
+                              transportMode === 'ground'
+                                ? isDark
+                                  ? 'bg-blue-900/40 border-blue-500/50 text-blue-300'
+                                  : 'bg-blue-100 border-blue-300 text-blue-700'
+                                : isDark
+                                  ? 'bg-gray-800/60 border-gray-700 text-gray-400 hover:bg-gray-800'
+                                  : 'bg-white/60 border-gray-300 text-gray-500 hover:bg-gray-100'
+                            }`}
+                            onClick={() => setTransportMode('ground')}
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path>
+                              <circle cx="7" cy="17" r="2"></circle>
+                              <path d="M9 17h6"></path>
+                              <circle cx="17" cy="17" r="2"></circle>
+                            </svg>
+                            Ground
+                          </button>
+                          <button
+                            className={`flex items-center justify-center gap-2 py-2 px-3 rounded-lg border ${
+                              transportMode === 'air'
+                                ? isDark
+                                  ? 'bg-blue-900/40 border-blue-500/50 text-blue-300'
+                                  : 'bg-blue-100 border-blue-300 text-blue-700'
+                                : isDark
+                                  ? 'bg-gray-800/60 border-gray-700 text-gray-400 hover:bg-gray-800'
+                                  : 'bg-white/60 border-gray-300 text-gray-500 hover:bg-gray-100'
+                            }`}
+                            onClick={() => setTransportMode('air')}
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M8.5 19h-4a1 1 0 0 1-.8-1.6l9.8-13"></path>
+                              <path d="M17 5.5v13a1 1 0 0 0 1.6.8l2.7-2.7"></path>
+                              <path d="M13 1.1l-5.9 5.3a1 1 0 0 0-.3.7v2.9l-3.8 3.4a1 1 0 0 0 .7 1.7h7.5"></path>
+                            </svg>
+                            Air
+                          </button>
                         </div>
-                      )}
-                    </div>
+                        {patientSeverity > 8 && transportMode !== 'air' && (
+                          <div className={`mt-2 text-xs ${isDark ? 'text-amber-400' : 'text-amber-600'} flex items-center`}>
+                            <AlertTriangle size={12} className="mr-1" />
+                            Air transport recommended for critical patients
+                          </div>
+                        )}
+                      </div>
                     
-                    <button 
-                      className={`w-full ${
-                        isDark 
-                          ? 'bg-blue-700 hover:bg-blue-600 text-white' 
-                          : 'bg-blue-600 hover:bg-blue-500 text-white'
-                      } py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 mt-4`}
-                      onClick={() => {
-                        toast({
-                          title: "Emergency Response Dispatched",
-                          description: `Ambulance dispatched to ${patientData.location}. ETA: 8 minutes.`,
-                        });
-                      }}
-                    >
-                      <Zap size={16} />
-                      Dispatch Emergency Response
-                    </button>
+                      <button 
+                        className={`w-full ${
+                          isDark 
+                            ? 'bg-blue-700 hover:bg-blue-600 text-white' 
+                            : 'bg-blue-600 hover:bg-blue-500 text-white'
+                        } py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 mt-4`}
+                        onClick={() => {
+                          toast({
+                            title: "Emergency Response Dispatched",
+                            description: `Ambulance dispatched to ${patientData.location}. ETA: 8 minutes.`,
+                          });
+                        }}
+                      >
+                        <Zap size={16} />
+                        Dispatch Emergency Response
+                      </button>
+                    </div>
                   </div>
                 </div>
                 
-                {/* Enhanced ICU Availability & Geographic Distribution graphs */}
                 <div className="mt-4 space-y-4">
                   <div className={`${
                     isDark ? 'bg-gray-800/70 border border-blue-900/30' : 'bg-white/80 border border-blue-100'
@@ -649,7 +632,6 @@ const Home = () => {
           </motion.div>
         </div>
         
-        {/* Bottom Navigation */}
         <Navbar />
       </div>
     </div>
