@@ -51,6 +51,14 @@ const HospitalDashboard: React.FC<HospitalDashboardProps> = ({ hospitals, patien
     { time: 'Now', occupancy: 92 },
   ];
 
+  // Mock data for incidents by category
+  const incidentsByCategoryData = [
+    { name: 'Trauma', value: 45 },
+    { name: 'Cardiac', value: 30 },
+    { name: 'Respiratory', value: 15 },
+    { name: 'Others', value: 10 },
+  ];
+
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
   
   // Calculate summaries
@@ -153,7 +161,7 @@ const HospitalDashboard: React.FC<HospitalDashboardProps> = ({ hospitals, patien
       </div>
       
       {/* ICU Occupancy Trend */}
-      <div className={`${isDark ? 'bg-gray-900/50' : 'bg-gray-50'} p-3 rounded-lg`}>
+      <div className={`${isDark ? 'bg-gray-900/50' : 'bg-gray-50'} p-3 rounded-lg mb-4`}>
         <h4 className={`text-sm font-semibold mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>ICU Occupancy Trend (24h)</h4>
         <div className="h-40">
           <ResponsiveContainer width="100%" height="100%">
@@ -173,6 +181,55 @@ const HospitalDashboard: React.FC<HospitalDashboardProps> = ({ hospitals, patien
               <Line type="monotone" dataKey="occupancy" stroke={isDark ? "#3b82f6" : "#2563eb"} strokeWidth={2} />
             </LineChart>
           </ResponsiveContainer>
+        </div>
+      </div>
+      
+      {/* Incidents by Category */}
+      <div className={`${isDark ? 'bg-gray-900/50' : 'bg-gray-50'} p-3 rounded-lg`}>
+        <h4 className={`text-sm font-semibold mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Incidents by Category</h4>
+        <div className="h-48">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={incidentsByCategoryData}
+                cx="50%"
+                cy="50%"
+                innerRadius={30}
+                outerRadius={60}
+                paddingAngle={5}
+                dataKey="value"
+                nameKey="name"
+                label={({ name, value }) => `${name}: ${value}%`}
+                labelLine={false}
+              >
+                {incidentsByCategoryData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: isDark ? '#333' : '#fff', 
+                  borderColor: isDark ? '#444' : '#ddd',
+                  color: isDark ? '#eee' : '#333',
+                  fontSize: '12px',
+                  borderRadius: '4px'
+                }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="flex flex-wrap justify-center gap-2 mt-2">
+          {incidentsByCategoryData.map((entry, index) => (
+            <div key={`legend-${index}`} className="flex items-center">
+              <div 
+                className="w-3 h-3 rounded-full mr-1" 
+                style={{ backgroundColor: COLORS[index % COLORS.length] }}
+              />
+              <span className={`text-xs ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                {entry.name}: {entry.value}%
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </div>
