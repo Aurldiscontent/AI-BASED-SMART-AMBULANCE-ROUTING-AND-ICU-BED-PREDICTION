@@ -10,9 +10,9 @@ const Home = () => {
   return (
     <div className={`min-h-screen ${
       isDark 
-        ? 'bg-gradient-to-b from-gray-900 to-gray-800' 
-        : 'bg-gradient-to-b from-blue-50 to-white'
-    }`}>
+        ? 'bg-gradient-to-b from-gray-900 to-gray-800 text-white' 
+        : 'bg-gradient-to-b from-blue-50 to-white text-gray-900'
+    } transition-colors duration-300`}>
       <HomePage />
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Bell, User, Phone, AlertTriangle, MapPin, HeartPulse, Zap, LayoutDashboard, Hospital, Gauge } from 'lucide-react';
+import { Search, Bell, User, Phone, AlertTriangle, MapPin, HeartPulse, Zap, LayoutDashboard, Hospital, Gauge, Map as MapIcon, FileText, Settings, Activity } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import MapView from './ui/MapView';
 import HospitalCard from './ui/HospitalCard';
@@ -9,7 +9,9 @@ import HospitalDashboard from './ui/HospitalDashboard';
 import SeverityDetector from './ui/SeverityDetector';
 import TransportOptions from './ui/TransportOptions';
 import RealtimeMetrics from './ui/RealtimeMetrics';
-import ThemeSwitcher from './ui/ThemeSwitcher';
+import UserHeader from './ui/UserHeader';
+import SearchBar from './ui/SearchBar';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 
 const hospitals = [
   {
@@ -193,7 +195,8 @@ const userData = {
   name: "John Doe",
   email: "john.doe@example.com",
   avatar: null,
-  location: "Bangalore, India"
+  location: "Bangalore, India",
+  role: "Emergency Responder"
 };
 
 const HomePage: React.FC = () => {
@@ -203,13 +206,26 @@ const HomePage: React.FC = () => {
   const [severityLevel, setSeverityLevel] = useState<'Low' | 'Moderate' | 'High' | 'Critical'>('Moderate');
   const [transportMode, setTransportMode] = useState<'ground' | 'air'>('ground');
   const [showEmergencyPanel, setShowEmergencyPanel] = useState(false);
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'live-route' | 'hospitals' | 'reports' | 'settings'>('dashboard');
+  const [showHighPriorityAlert, setShowHighPriorityAlert] = useState(false);
   
   useEffect(() => {
     const dataInterval = setInterval(() => {
       console.log('Refreshing real-time data...');
     }, 30000);
     
-    return () => clearInterval(dataInterval);
+    const alertTimeout = setTimeout(() => {
+      setShowHighPriorityAlert(true);
+      
+      setTimeout(() => {
+        setShowHighPriorityAlert(false);
+      }, 10000);
+    }, 5000);
+    
+    return () => {
+      clearInterval(dataInterval);
+      clearTimeout(alertTimeout);
+    };
   }, []);
   
   const handleNavigate = (hospitalId: string) => {
@@ -309,37 +325,35 @@ const HomePage: React.FC = () => {
         transition={{ duration: 0.5 }}
         className="glass-panel sticky top-0 z-20 px-4 py-3 border-b border-gray-200 dark:border-gray-700"
       >
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            {userData.avatar ? (
-              <img 
-                src={userData.avatar} 
-                alt={userData.name} 
-                className="w-10 h-10 rounded-full object-cover border-2 border-medical-200 dark:border-medical-700"
-              />
-            ) : (
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-medical-400 to-medical-600 flex items-center justify-center text-white font-medium">
-                {getInitials(userData.name)}
-              </div>
-            )}
-            <div className="ml-3 text-left">
-              <p className="text-base font-medium text-gray-800 dark:text-gray-200">Hello, {userData.name.split(' ')[0]}!</p>
-              <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
-                <MapPin size={12} className="mr-1" />
-                {userData.location}
-              </div>
-            </div>
-          </div>
-          
-          <div className="flex items-center space-x-3">
-            <ThemeSwitcher />
-            <button className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 relative">
-              <Bell size={20} className="text-gray-600 dark:text-gray-300" />
-              <span className="absolute top-0 right-0 w-2 h-2 rounded-full bg-red-500"></span>
-            </button>
-          </div>
-        </div>
+        <UserHeader user={userData} />
       </motion.div>
+      
+      <AnimatePresence>
+        {showHighPriorityAlert && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="bg-emergency-500 dark:bg-emergency-600 text-white px-4 py-3"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <AlertTriangle size={20} className="mr-2 animate-pulse" />
+                <div>
+                  <p className="font-semibold">HIGH PRIORITY ALERT</p>
+                  <p className="text-sm">Multiple vehicle accident reported on Highway 101. 5 critical patients.</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setShowHighPriorityAlert(false)}
+                className="text-white/80 hover:text-white"
+              >
+                ✕
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       
       <motion.div
         initial={{ opacity: 0, y: -10 }}
@@ -348,23 +362,34 @@ const HomePage: React.FC = () => {
         className="px-4 pt-3 pb-1"
       >
         <div className="flex items-center justify-between mb-2">
-          <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200">Emergency Medical Services</h2>
+          <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200">AI Smart Ambulance Routing</h2>
           <div className="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
             <button 
-              onClick={() => setViewMode('map')}
+              onClick={() => setActiveTab('dashboard')}
               className={`px-3 py-1.5 text-sm font-medium rounded-md transition ${
-                viewMode === 'map' 
+                activeTab === 'dashboard' 
                   ? 'bg-white dark:bg-gray-800 shadow-sm text-medical-800 dark:text-medical-300' 
                   : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100'
               }`}
             >
-              <MapPin size={16} className="inline-block mr-1 -mt-0.5" />
-              Map
+              <LayoutDashboard size={16} className="inline-block mr-1 -mt-0.5" />
+              Dashboard
             </button>
             <button 
-              onClick={() => setViewMode('list')}
+              onClick={() => setActiveTab('live-route')}
               className={`px-3 py-1.5 text-sm font-medium rounded-md transition ${
-                viewMode === 'list' 
+                activeTab === 'live-route' 
+                  ? 'bg-white dark:bg-gray-800 shadow-sm text-medical-800 dark:text-medical-300' 
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100'
+              }`}
+            >
+              <MapIcon size={16} className="inline-block mr-1 -mt-0.5" />
+              Live Route
+            </button>
+            <button 
+              onClick={() => setActiveTab('hospitals')}
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition ${
+                activeTab === 'hospitals' 
                   ? 'bg-white dark:bg-gray-800 shadow-sm text-medical-800 dark:text-medical-300' 
                   : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100'
               }`}
@@ -373,15 +398,26 @@ const HomePage: React.FC = () => {
               Hospitals
             </button>
             <button 
-              onClick={() => setViewMode('dashboard')}
+              onClick={() => setActiveTab('reports')}
               className={`px-3 py-1.5 text-sm font-medium rounded-md transition ${
-                viewMode === 'dashboard' 
+                activeTab === 'reports' 
                   ? 'bg-white dark:bg-gray-800 shadow-sm text-medical-800 dark:text-medical-300' 
                   : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100'
               }`}
             >
-              <LayoutDashboard size={16} className="inline-block mr-1 -mt-0.5" />
-              Dashboard
+              <FileText size={16} className="inline-block mr-1 -mt-0.5" />
+              Reports
+            </button>
+            <button 
+              onClick={() => setActiveTab('settings')}
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition ${
+                activeTab === 'settings' 
+                  ? 'bg-white dark:bg-gray-800 shadow-sm text-medical-800 dark:text-medical-300' 
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100'
+              }`}
+            >
+              <Settings size={16} className="inline-block mr-1 -mt-0.5" />
+              Settings
             </button>
           </div>
         </div>
@@ -393,52 +429,120 @@ const HomePage: React.FC = () => {
         transition={{ delay: 0.1, duration: 0.5 }}
         className="px-4 py-2"
       >
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search hospitals or enter accident location"
-            className="input-field w-full pl-10 pr-4 py-3 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-          />
-          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
-            <Search size={18} />
-          </div>
-        </div>
+        <SearchBar 
+          placeholder="Search hospitals or enter accident location for routing..."
+          onSearch={(query) => {
+            console.log('Searching for:', query);
+            toast({
+              title: "Location Search",
+              description: `Searching for "${query}"`,
+            });
+          }}
+        />
       </motion.div>
       
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.5 }}
-        className="px-4 py-2"
-      >
-        <div className="glass-card rounded-2xl p-4 mb-4 dark:bg-gray-800/70 dark:border-gray-700">
-          <div className="flex justify-between items-center mb-2">
-            <div className="flex items-center">
-              <HeartPulse size={18} className="text-emergency-500 mr-2" />
-              <h3 className="font-semibold text-gray-800 dark:text-gray-200">Patient Status</h3>
-            </div>
-            {severityLevel === 'Critical' && (
-              <div className="bg-emergency-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">
-                CRITICAL
+      {(activeTab === 'dashboard' || activeTab === 'live-route') && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="px-4 py-2"
+        >
+          <div className="glass-card rounded-2xl p-4 mb-4 dark:bg-gray-800/70 dark:border-gray-700">
+            <div className="flex justify-between items-center mb-2">
+              <div className="flex items-center">
+                <HeartPulse size={18} className="text-emergency-500 mr-2" />
+                <h3 className="font-semibold text-gray-800 dark:text-gray-200">Patient Status</h3>
               </div>
-            )}
+              {severityLevel === 'Critical' && (
+                <div className="bg-emergency-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">
+                  CRITICAL
+                </div>
+              )}
+            </div>
+            
+            <div className="grid grid-cols-2 gap-3">
+              <SeverityDetector 
+                currentSeverity={severityLevel} 
+                onSeverityChange={handleSeverityChange}
+              />
+              <TransportOptions 
+                currentMode={transportMode}
+                onModeChange={handleTransportChange}
+                isAirRecommended={severityLevel === 'Critical'}
+              />
+            </div>
+          </div>
+        </motion.div>
+      )}
+      
+      {activeTab === 'dashboard' && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="px-4 py-3"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <Card className="col-span-1 md:col-span-2 dark:bg-gray-800/50 dark:border-gray-700">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg flex items-center">
+                  <Activity size={18} className="text-medical-500 mr-2" />
+                  Live Emergency Overview
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <MapView 
+                  userLocation={patientData.location} 
+                  destinations={getMapDestinations()} 
+                  onNavigate={handleNavigate}
+                  selectedHospitalId={selectedHospital}
+                  transportMode={transportMode}
+                />
+              </CardContent>
+            </Card>
+            
+            <Card className="dark:bg-gray-800/50 dark:border-gray-700">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg flex items-center">
+                  <Hospital size={18} className="text-green-500 mr-2" />
+                  ICU Availability
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 max-h-60 overflow-y-auto scrollbar-none">
+                  {hospitals.slice(0, 5).map(hospital => (
+                    <div key={hospital.id} className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-2">
+                      <div className="text-left">
+                        <p className="font-medium text-sm">{hospital.name}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{hospital.distance} away</p>
+                      </div>
+                      <div className={`px-2 py-1 rounded text-xs font-medium ${
+                        hospital.icuBeds > 0 
+                          ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' 
+                          : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+                      }`}>
+                        {hospital.icuBeds} ICU {hospital.icuBeds === 1 ? 'Bed' : 'Beds'}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <button 
+                  className="w-full mt-3 text-sm text-medical-600 dark:text-medical-400 hover:text-medical-700 dark:hover:text-medical-300"
+                  onClick={() => setActiveTab('hospitals')}
+                >
+                  View All Hospitals
+                </button>
+              </CardContent>
+            </Card>
           </div>
           
-          <div className="grid grid-cols-2 gap-3">
-            <SeverityDetector 
-              currentSeverity={severityLevel} 
-              onSeverityChange={handleSeverityChange}
-            />
-            <TransportOptions 
-              currentMode={transportMode}
-              onModeChange={handleTransportChange}
-              isAirRecommended={severityLevel === 'Critical'}
-            />
-          </div>
-        </div>
-      </motion.div>
+          <HospitalDashboard hospitals={hospitals} patientData={patientData} />
+          <RealtimeMetrics />
+        </motion.div>
+      )}
       
-      {viewMode === 'map' && (
+      {activeTab === 'live-route' && (
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -448,27 +552,49 @@ const HomePage: React.FC = () => {
           <div className="flex justify-between items-center mb-2">
             <h2 className="font-semibold text-gray-800 dark:text-gray-200">Emergency Route</h2>
             <div className="flex items-center text-xs">
-              <div className="bg-green-100 px-2 py-1 rounded-md text-green-800 font-medium flex items-center mr-2">
+              <div className="bg-green-100 dark:bg-green-900/30 px-2 py-1 rounded-md text-green-800 dark:text-green-400 font-medium flex items-center mr-2">
                 <Zap size={14} className="mr-1" />
                 Quickest Route
               </div>
-              <div className="bg-blue-100 px-2 py-1 rounded-md text-blue-800 font-medium flex items-center">
+              <div className="bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-md text-blue-800 dark:text-blue-400 font-medium flex items-center">
                 <Gauge size={14} className="mr-1" />
                 Live Traffic
               </div>
             </div>
           </div>
-          <MapView 
-            userLocation={patientData.location} 
-            destinations={getMapDestinations()} 
-            onNavigate={handleNavigate}
-            selectedHospitalId={selectedHospital}
-            transportMode={transportMode}
-          />
+          <div className="glass-card rounded-2xl p-4 dark:bg-gray-800/50 dark:border-gray-700">
+            <MapView 
+              userLocation={patientData.location} 
+              destinations={getMapDestinations()} 
+              onNavigate={handleNavigate}
+              selectedHospitalId={selectedHospital}
+              transportMode={transportMode}
+            />
+            
+            {selectedHospital && (
+              <div className="mt-4 p-3 bg-gray-100 dark:bg-gray-700/50 rounded-xl">
+                <h3 className="font-medium text-gray-800 dark:text-gray-200 mb-1">Route Details</h3>
+                <div className="grid grid-cols-3 gap-2 text-sm">
+                  <div>
+                    <p className="text-gray-500 dark:text-gray-400">Distance</p>
+                    <p className="font-medium">3.2 km</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 dark:text-gray-400">ETA</p>
+                    <p className="font-medium">12 min</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 dark:text-gray-400">Traffic</p>
+                    <p className="font-medium text-amber-600 dark:text-amber-400">Moderate</p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </motion.div>
       )}
       
-      {viewMode === 'list' && (
+      {activeTab === 'hospitals' && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -479,7 +605,24 @@ const HomePage: React.FC = () => {
             <h2 className="font-semibold text-gray-800 dark:text-gray-200">Nearby Hospitals</h2>
             <div className="flex items-center">
               <div className="h-2 w-2 rounded-full bg-green-500 mr-1"></div>
-              <span className="text-xs text-gray-600">Live Updates</span>
+              <span className="text-xs text-gray-600 dark:text-gray-400">Live Updates</span>
+            </div>
+          </div>
+          
+          <div className="space-y-1 mb-4">
+            <div className="flex space-x-2">
+              <button className="px-3 py-1 text-xs rounded-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                All
+              </button>
+              <button className="px-3 py-1 text-xs rounded-full bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400">
+                ICU Available
+              </button>
+              <button className="px-3 py-1 text-xs rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400">
+                Nearest
+              </button>
+              <button className="px-3 py-1 text-xs rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-400">
+                Trauma Center
+              </button>
             </div>
           </div>
           
@@ -500,15 +643,85 @@ const HomePage: React.FC = () => {
         </motion.div>
       )}
       
-      {viewMode === 'dashboard' && (
+      {activeTab === 'reports' && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.5 }}
           className="px-4 py-3"
         >
-          <HospitalDashboard hospitals={hospitals} patientData={patientData} />
-          <RealtimeMetrics />
+          <Card className="dark:bg-gray-800/50 dark:border-gray-700">
+            <CardHeader>
+              <CardTitle>Emergency Response Reports</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-500 dark:text-gray-400 mb-4">
+                View and analyze performance metrics and response times.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 bg-gray-100 dark:bg-gray-700/50 rounded-xl">
+                  <h3 className="font-medium mb-2">Average Response Time</h3>
+                  <div className="text-2xl font-bold text-medical-600 dark:text-medical-400">12.3 minutes</div>
+                  <p className="text-xs text-green-600 dark:text-green-400">↓ 5% from last month</p>
+                </div>
+                <div className="p-4 bg-gray-100 dark:bg-gray-700/50 rounded-xl">
+                  <h3 className="font-medium mb-2">Emergency Calls</h3>
+                  <div className="text-2xl font-bold text-medical-600 dark:text-medical-400">342</div>
+                  <p className="text-xs text-red-600 dark:text-red-400">↑ 8% from last month</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
+      
+      {activeTab === 'settings' && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="px-4 py-3"
+        >
+          <Card className="dark:bg-gray-800/50 dark:border-gray-700">
+            <CardHeader>
+              <CardTitle>System Settings</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center p-3 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
+                  <div>
+                    <h3 className="font-medium">Notifications</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Enable alert notifications</p>
+                  </div>
+                  <div className="bg-medical-500 h-6 w-12 rounded-full relative">
+                    <div className="absolute right-1 top-1/2 transform -translate-y-1/2 h-4 w-4 bg-white rounded-full"></div>
+                  </div>
+                </div>
+                
+                <div className="flex justify-between items-center p-3 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
+                  <div>
+                    <h3 className="font-medium">Voice Commands</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Enable voice input for routing</p>
+                  </div>
+                  <div className="bg-gray-300 dark:bg-gray-600 h-6 w-12 rounded-full relative">
+                    <div className="absolute left-1 top-1/2 transform -translate-y-1/2 h-4 w-4 bg-white rounded-full"></div>
+                  </div>
+                </div>
+                
+                <div className="flex justify-between items-center p-3 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
+                  <div>
+                    <h3 className="font-medium">Auto-Refresh Data</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Refresh interval for live data</p>
+                  </div>
+                  <select className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm">
+                    <option>30 seconds</option>
+                    <option>1 minute</option>
+                    <option>5 minutes</option>
+                  </select>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </motion.div>
       )}
       
@@ -597,8 +810,21 @@ const HomePage: React.FC = () => {
           </div>
         </div>
       )}
+      
+      <div className="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md py-2 px-4 text-xs text-gray-600 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700 z-10">
+        <div className="flex justify-between items-center">
+          <div>© 2023 AI Smart Ambulance Routing</div>
+          <div className="flex space-x-3">
+            <a href="#support" className="hover:text-medical-600 dark:hover:text-medical-400">Support</a>
+            <a href="#faq" className="hover:text-medical-600 dark:hover:text-medical-400">FAQs</a>
+            <a href="#contact" className="hover:text-medical-600 dark:hover:text-medical-400">Contact</a>
+          </div>
+          <div>Powered by AI & Smart Routing Technology</div>
+        </div>
+      </div>
     </div>
   );
 };
 
 export default HomePage;
+
