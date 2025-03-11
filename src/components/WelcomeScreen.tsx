@@ -139,7 +139,7 @@ const WelcomeScreen: React.FC = () => {
             delay: 0.2,
             duration: 0.8 
           }}
-          className="mb-6"
+          className="mb-2"
         >
           <AnimatedLogo size="xl" textSize="xl" showEmojis={true} darkMode={true} />
         </motion.div>
@@ -148,40 +148,62 @@ const WelcomeScreen: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.5 }}
-          className="mt-2 text-white text-center"
+          className="mt-0 text-white text-center"
         >
-          <p className="text-xl font-medium text-cyan-300 drop-shadow-lg mb-4">
-            <span className="inline-block mr-2">🚑</span>
+          <h1 className="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-200 drop-shadow-[0_0_8px_rgba(0,200,255,0.5)] tracking-wide mb-2">
+            <span className="inline-block mr-1">🚑</span>
+            RAPID AID INNOVATORS
+            <span className="inline-block ml-1">🚀</span>
+          </h1>
+          
+          <p className="text-lg md:text-xl font-medium text-cyan-300 drop-shadow-lg mb-6 mt-2 px-2">
             Smart AI Ambulance Routing for Life-Saving Response!
-            <span className="inline-block ml-2">🚀</span>
           </p>
           
-          <motion.p
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.9, duration: 0.6 }}
-            className="text-blue-100 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 mb-6"
+            className="text-blue-100 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-5 mb-6 shadow-lg"
           >
-            <span className="text-cyan-300 font-medium">💡 What We Do:</span> Our AI-powered system finds the fastest routes for ambulances through traffic, connects with hospitals for real-time bed availability, and helps save precious minutes during emergencies. Because every second counts when saving lives! 💓
-          </motion.p>
+            <h2 className="text-cyan-300 font-medium text-lg mb-2">💡 What We Do</h2>
+            <ul className="text-left space-y-2 pl-1">
+              <li className="flex items-start">
+                <span className="text-cyan-300 mr-2">•</span>
+                <span>AI-powered system finds the fastest routes for ambulances through traffic</span>
+              </li>
+              <li className="flex items-start">
+                <span className="text-cyan-300 mr-2">•</span>
+                <span>Real-time hospital bed availability tracking</span>
+              </li>
+              <li className="flex items-start">
+                <span className="text-cyan-300 mr-2">•</span>
+                <span>Helps save precious minutes during emergencies</span>
+              </li>
+              <li className="flex items-start">
+                <span className="text-cyan-300 mr-2">💓</span>
+                <span>Because every second counts when saving lives!</span>
+              </li>
+            </ul>
+          </motion.div>
           
           <div className="mt-5 flex flex-wrap justify-center gap-3">
-            <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20">
+            <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
               🚨 Emergency Response
             </span>
-            <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20">
+            <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
               🗺️ Smart AI Routing
             </span>
-            <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20">
+            <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
               🏥 Hospital Network
             </span>
-            <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20">
+            <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
               ⏱️ Real-time Updates
             </span>
-            <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20">
+            <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
               💯 Accuracy Focused
             </span>
-            <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20">
+            <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
               🧠 AI Powered
             </span>
           </div>
@@ -195,10 +217,10 @@ const WelcomeScreen: React.FC = () => {
         >
           <Button 
             onClick={handleGetStarted}
-            className="w-full py-7 px-6 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_0_15px_rgba(0,168,232,0.5)] hover:shadow-[0_0_25px_rgba(0,168,232,0.7)] group text-lg tracking-wide border border-cyan-400/30"
+            className="w-full py-7 px-6 bg-gradient-to-r from-cyan-500 via-blue-500 to-blue-600 hover:from-cyan-600 hover:via-blue-600 hover:to-blue-700 text-white rounded-xl font-bold transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_4px_20px_rgba(0,168,232,0.5)] hover:shadow-[0_4px_25px_rgba(0,168,232,0.7)] group text-xl tracking-wide border border-cyan-400/30"
           >
             Get Started
-            <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
           </Button>
         </motion.div>
         
@@ -206,9 +228,11 @@ const WelcomeScreen: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.4, duration: 0.5 }}
-          className="mt-12 text-sm text-cyan-100/80"
+          className="mt-10 text-sm text-cyan-100/80 flex flex-wrap justify-center gap-x-3"
         >
-          Powered by 🧠 AI Technology • Saving Lives Together ❤️ • Fast & Reliable 🚀
+          <span className="flex items-center">🧠 AI Technology</span>
+          <span className="flex items-center">❤️ Saving Lives Together</span>
+          <span className="flex items-center">🚀 Fast & Reliable</span>
         </motion.div>
       </div>
     </motion.div>
