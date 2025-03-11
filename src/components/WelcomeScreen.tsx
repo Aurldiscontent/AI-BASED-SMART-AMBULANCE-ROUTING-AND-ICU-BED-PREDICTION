@@ -151,9 +151,9 @@ const WelcomeScreen: React.FC = () => {
           className="mt-0 text-white text-center"
         >
           <h1 className="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-200 drop-shadow-[0_0_8px_rgba(0,200,255,0.5)] tracking-wide mb-2">
-            <span className="inline-block mr-1">🚑</span>
+            <span className="inline-block mr-1 p-1 bg-white/20 rounded-lg backdrop-blur-sm">🚑</span>
             RAPID AID INNOVATORS
-            <span className="inline-block ml-1">🚀</span>
+            <span className="inline-block ml-1 p-1 bg-white/20 rounded-lg backdrop-blur-sm">🚀</span>
           </h1>
           
           <p className="text-lg md:text-xl font-medium text-cyan-300 drop-shadow-lg mb-6 mt-2 px-2">
@@ -181,7 +181,7 @@ const WelcomeScreen: React.FC = () => {
                 <span>Helps save precious minutes during emergencies</span>
               </li>
               <li className="flex items-start">
-                <span className="text-cyan-300 mr-2">💓</span>
+                <span className="text-white bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full px-1.5 mr-2">💓</span>
                 <span>Because every second counts when saving lives!</span>
               </li>
             </ul>
@@ -189,22 +189,22 @@ const WelcomeScreen: React.FC = () => {
           
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
-              🚨 Emergency Response
+              <span className="bg-white/20 rounded-full p-0.5 mr-1">🚨</span> Emergency Response
             </span>
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
-              🗺️ Smart AI Routing
+              <span className="bg-white/20 rounded-full p-0.5 mr-1">🗺️</span> Smart AI Routing
             </span>
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
-              🏥 Hospital Network
+              <span className="bg-white/20 rounded-full p-0.5 mr-1">🏥</span> Hospital Network
             </span>
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
-              ⏱️ Real-time Updates
+              <span className="bg-white/20 rounded-full p-0.5 mr-1">⏱️</span> Real-time Updates
             </span>
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
-              💯 Accuracy Focused
+              <span className="bg-white/20 rounded-full p-0.5 mr-1">💯</span> Accuracy Focused
             </span>
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
-              🧠 AI Powered
+              <span className="bg-white/20 rounded-full p-0.5 mr-1">🧠</span> AI Powered
             </span>
           </div>
         </motion.div>
