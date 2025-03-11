@@ -18,21 +18,36 @@ const ThemeSwitcher = () => {
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       whileHover={{ scale: 1.05 }}
-      className="glass-card p-2 rounded-full shadow-lg"
+      transition={{ type: "spring", stiffness: 400, damping: 10 }}
+      className={`p-2 rounded-full shadow-lg ${
+        isDark 
+          ? 'bg-gray-800/70 border border-purple-700/40' 
+          : 'bg-white/70 border border-purple-200/40'
+      } backdrop-blur-md`}
     >
       <Toggle 
         pressed={isDark}
         onPressedChange={toggleTheme}
-        className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-300/30 to-purple-500/20 dark:from-purple-800/30 dark:to-purple-900/20 border border-purple-200/50 dark:border-purple-700/50"
+        className={`w-10 h-10 rounded-full ${
+          isDark 
+            ? 'bg-gradient-to-br from-purple-900/50 to-purple-800/30 border border-purple-700/50' 
+            : 'bg-gradient-to-br from-purple-300/50 to-purple-200/30 border border-purple-200/50'
+        }`}
         aria-label="Toggle theme"
       >
         <motion.div
-          animate={{ rotate: isDark ? 0 : 180 }}
-          transition={{ duration: 0.5 }}
+          animate={{ 
+            rotate: isDark ? 0 : 180,
+            scale: [1, 1.15, 1]
+          }}
+          transition={{ 
+            duration: 0.5,
+            scale: { times: [0, 0.5, 1], duration: 0.5 }
+          }}
           className="flex items-center justify-center"
         >
           {isDark ? (
-            <Moon size={18} className="text-purple-200" />
+            <Moon size={18} className="text-purple-300" />
           ) : (
             <Sun size={18} className="text-amber-500" />
           )}

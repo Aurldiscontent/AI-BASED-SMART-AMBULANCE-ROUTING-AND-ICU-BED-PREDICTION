@@ -6,7 +6,7 @@ import ThemeSwitcher from '@/components/ui/ThemeSwitcher';
 import { motion } from 'framer-motion';
 import UserProfileBar from '@/components/ui/UserProfileBar';
 import { Button } from '@/components/ui/button';
-import { Upload } from 'lucide-react';
+import { Upload, FileSpreadsheet, CheckCircle2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 const Home = () => {
@@ -14,41 +14,49 @@ const Home = () => {
   const isDark = theme === 'dark';
   const { toast } = useToast();
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
   
   // Handle CSV upload
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       setIsUploading(true);
+      setUploadSuccess(false);
+      
       // Simulate file upload
       setTimeout(() => {
         setIsUploading(false);
+        setUploadSuccess(true);
+        
         toast({
-          title: "Dataset Uploaded",
-          description: `Successfully uploaded ${file.name}`,
+          title: "Dataset Uploaded Successfully",
+          description: `File "${file.name}" has been processed and is ready for analysis`,
           variant: "default",
         });
+        
+        // Reset success indicator after 3 seconds
+        setTimeout(() => {
+          setUploadSuccess(false);
+        }, 3000);
       }, 1500);
     }
   };
   
   return (
     <div 
-      className={`min-h-screen bg-cover bg-center transition-colors duration-300 ${
-        isDark ? 'text-white' : 'text-gray-900'
-      }`}
+      className="min-h-screen w-full bg-cover bg-center transition-all duration-500"
       style={{ 
         backgroundImage: `url('/lovable-uploads/7c8af1f3-722f-4ce8-a1f9-aa995983760e.png')`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat'
       }}
     >
-      <div className={`min-h-screen ${
+      <div className={`min-h-screen w-full ${
         isDark 
-          ? 'bg-gradient-to-b from-gray-900/80 via-gray-800/70 to-gray-900/80' 
-          : 'bg-gradient-to-b from-blue-50/80 via-white/70 to-blue-50/80'
-      }`}>
-        <div className="container mx-auto px-4 py-2">
+          ? 'bg-gradient-to-br from-gray-900/90 via-purple-900/70 to-gray-900/90' 
+          : 'bg-gradient-to-br from-blue-50/90 via-purple-100/70 to-blue-50/90'
+      } backdrop-blur-sm transition-all duration-500`}>
+        <div className="container mx-auto px-4 py-3">
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -70,26 +78,52 @@ const Home = () => {
                 accept=".csv"
                 className="hidden"
                 onChange={handleFileUpload}
+                disabled={isUploading}
               />
               <label htmlFor="csv-upload">
                 <Button 
-                  variant="outline" 
+                  variant={uploadSuccess ? "default" : "outline"} 
                   className={`flex items-center gap-2 ${
                     isDark 
-                      ? 'bg-gray-800/60 hover:bg-gray-700/60 border-gray-700' 
-                      : 'bg-white/60 hover:bg-white/80 border-gray-200'
-                  } backdrop-blur-sm`}
+                      ? uploadSuccess 
+                        ? 'bg-green-600 hover:bg-green-700' 
+                        : 'bg-gray-800/70 hover:bg-gray-700/70 border-gray-700'
+                      : uploadSuccess 
+                        ? 'bg-green-500 hover:bg-green-600' 
+                        : 'bg-white/70 hover:bg-white/90 border-gray-200'
+                  } backdrop-blur-sm transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md`}
                   disabled={isUploading}
                 >
-                  <Upload size={16} /> 
-                  {isUploading ? 'Uploading...' : 'Upload Dataset'}
+                  {isUploading ? (
+                    <>
+                      <div className="animate-spin mr-2 h-4 w-4 border-2 border-current border-t-transparent rounded-full"></div>
+                      Uploading...
+                    </>
+                  ) : uploadSuccess ? (
+                    <>
+                      <CheckCircle2 size={16} className="text-white" /> 
+                      Dataset Ready
+                    </>
+                  ) : (
+                    <>
+                      <FileSpreadsheet size={16} /> 
+                      Upload Dataset
+                    </>
+                  )}
                 </Button>
               </label>
             </motion.div>
           </motion.div>
         </div>
         
-        <HomePage />
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="w-full"
+        >
+          <HomePage />
+        </motion.div>
         
         <div className="fixed top-5 right-5 z-50">
           <ThemeSwitcher />
