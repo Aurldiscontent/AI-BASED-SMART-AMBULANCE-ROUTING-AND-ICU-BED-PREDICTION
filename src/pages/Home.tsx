@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import HomePage from '@/components/HomePage';
 import { useTheme } from '@/hooks/use-theme';
 import { useLanguage } from '@/hooks/use-language';
@@ -7,7 +7,14 @@ import ThemeSwitcher from '@/components/ui/ThemeSwitcher';
 import { motion } from 'framer-motion';
 import UserProfileBar from '@/components/ui/UserProfileBar';
 import { Button } from '@/components/ui/button';
-import { Upload, FileSpreadsheet, CheckCircle2, MapPin, BarChart } from 'lucide-react';
+import { 
+  FileSpreadsheet, 
+  CheckCircle2, 
+  MapPin, 
+  BarChart,
+  AlertCircle,
+  Upload
+} from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useUnits } from '@/hooks/use-units';
@@ -20,6 +27,19 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Progress } from '@/components/ui/progress';
+import { 
+  AreaChart, 
+  Area, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  BarChart as RechartsBarChart,
+  Bar,
+  Cell,
+  Legend
+} from 'recharts';
 
 const Home = () => {
   const { theme } = useTheme();
@@ -31,17 +51,36 @@ const Home = () => {
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [activeTab, setActiveTab] = useState("map");
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
   
   // Mock data for geographic distribution
   const [geoDistributionData, setGeoDistributionData] = useState({
     regions: [
-      { name: "North Bangalore", incidents: 45, response: 8.3 },
-      { name: "Central Bangalore", incidents: 78, response: 6.2 },
-      { name: "South Bangalore", incidents: 52, response: 7.5 },
-      { name: "East Bangalore", incidents: 63, response: 8.1 },
-      { name: "West Bangalore", incidents: 41, response: 9.0 },
+      { name: "North Bangalore", incidents: 45, response: 8.3, color: "#8884d8" },
+      { name: "Central Bangalore", incidents: 78, response: 6.2, color: "#82ca9d" },
+      { name: "South Bangalore", incidents: 52, response: 7.5, color: "#ffc658" },
+      { name: "East Bangalore", incidents: 63, response: 8.1, color: "#ff8042" },
+      { name: "West Bangalore", incidents: 41, response: 9.0, color: "#0088fe" },
+    ],
+    timeData: [
+      { time: '00:00', incidents: 12, response: 7.2 },
+      { time: '04:00', incidents: 8, response: 6.5 },
+      { time: '08:00', incidents: 25, response: 9.1 },
+      { time: '12:00', incidents: 35, response: 8.3 },
+      { time: '16:00', incidents: 42, response: 7.8 },
+      { time: '20:00', incidents: 30, response: 6.9 },
     ]
   });
+  
+  // Load analysis data from localStorage if available
+  useEffect(() => {
+    const savedAnalysis = localStorage.getItem('analysisData');
+    if (savedAnalysis) {
+      setShowAnalysis(true);
+      setUploadSuccess(true);
+      // You could also parse and set the geoDistributionData here
+    }
+  }, []);
   
   // Handle CSV upload
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,12 +94,16 @@ const Home = () => {
       setTimeout(() => {
         setIsUploading(false);
         setUploadSuccess(true);
+        setUploadDialogOpen(false);
         
         toast({
           title: t("dataset-uploaded-title"),
           description: `${t("dataset-uploaded-desc")}: "${file.name}"`,
           variant: "default",
         });
+        
+        // Save to localStorage for persistence
+        localStorage.setItem('analysisData', 'true');
         
         // Show analysis after a short delay
         setTimeout(() => {
@@ -94,7 +137,7 @@ const Home = () => {
             <UserProfileBar />
             
             {/* Dataset Upload Button */}
-            <Dialog>
+            <Dialog open={uploadDialogOpen} onOpenChange={setUploadDialogOpen}>
               <DialogTrigger asChild>
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -206,16 +249,46 @@ const Home = () => {
                     <TabsTrigger value="stats">{t("response-metrics")}</TabsTrigger>
                   </TabsList>
                   <TabsContent value="map" className="mt-4">
-                    <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 h-64 flex items-center justify-center mb-4">
-                      <div className="text-center">
-                        <MapPin size={32} className="mx-auto mb-2 text-medical-500" />
-                        <p className="text-sm text-gray-600 dark:text-gray-300">
-                          {t("interactive-map-placeholder")}
-                        </p>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                      <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 flex flex-col h-64">
+                        <h3 className="text-md font-semibold mb-2 flex items-center">
+                          <MapPin size={16} className="mr-1 text-medical-500" />
+                          {t("incident-distribution-map")}
+                        </h3>
+                        <div className="flex-1 flex items-center justify-center">
+                          {/* This could be replaced with an actual map component */}
+                          <div className="text-center">
+                            <MapPin size={32} className="mx-auto mb-2 text-medical-500" />
+                            <p className="text-sm text-gray-600 dark:text-gray-300">
+                              {t("interactive-map-placeholder")}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 h-64">
+                        <h3 className="text-md font-semibold mb-2">{t("incident-by-region")}</h3>
+                        <ResponsiveContainer width="100%" height="90%">
+                          <RechartsBarChart
+                            data={geoDistributionData.regions}
+                            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                          >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend />
+                            <Bar dataKey="incidents" name={t("incidents")}>
+                              {geoDistributionData.regions.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={entry.color} />
+                              ))}
+                            </Bar>
+                          </RechartsBarChart>
+                        </ResponsiveContainer>
                       </div>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                       <div className="space-y-4">
                         <h3 className="text-lg font-medium">{t("incident-hotspots")}</h3>
                         <div className="space-y-3">
@@ -225,7 +298,8 @@ const Home = () => {
                                 <span>{region.name}</span>
                                 <span>{region.incidents} {t("incidents")}</span>
                               </div>
-                              <Progress value={(region.incidents / 100) * 100} className="h-2" />
+                              <Progress value={(region.incidents / 100) * 100} className="h-2" 
+                                style={{ backgroundColor: 'rgba(0,0,0,0.1)', '--tw-progress-fill': region.color } as any} />
                             </div>
                           ))}
                         </div>
@@ -276,6 +350,23 @@ const Home = () => {
                           <span className="ml-1">{t("from-previous")}</span>
                         </p>
                       </div>
+                    </div>
+                    
+                    <div className="mt-4 bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
+                      <h3 className="text-lg font-medium mb-3">{t("incident-trends")}</h3>
+                      <ResponsiveContainer width="100%" height={200}>
+                        <AreaChart
+                          data={geoDistributionData.timeData}
+                          margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                        >
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="time" />
+                          <YAxis />
+                          <Tooltip />
+                          <Area type="monotone" dataKey="incidents" stroke="#8884d8" fill="#8884d8" name={t("incidents")} />
+                          <Area type="monotone" dataKey="response" stroke="#82ca9d" fill="#82ca9d" name={t("response-time")} />
+                        </AreaChart>
+                      </ResponsiveContainer>
                     </div>
                     
                     <div className="mt-4 bg-white dark:bg-gray-700 p-4 rounded-lg shadow">

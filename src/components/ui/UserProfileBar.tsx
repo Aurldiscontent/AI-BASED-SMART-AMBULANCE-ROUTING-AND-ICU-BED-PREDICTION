@@ -1,21 +1,44 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { User } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/hooks/use-language';
+import { useToast } from '@/components/ui/use-toast';
 
 const UserProfileBar = () => {
   const { t } = useLanguage();
+  const { toast } = useToast();
+  const [open, setOpen] = useState(false);
   
-  // Get user data from localStorage (this would normally come from your auth context)
-  // In a real implementation, this would be replaced with actual user data from authentication
+  // Get user data from localStorage (stored during authentication)
   const userData = {
-    name: localStorage.getItem('userName') || 'John Doe',
-    email: localStorage.getItem('userEmail') || 'john.doe@example.com',
-    role: localStorage.getItem('userRole') || 'Paramedic',
-    location: localStorage.getItem('userLocation') || 'Central Hospital',
+    name: localStorage.getItem('userName') || 'Guest User',
+    email: localStorage.getItem('userEmail') || 'guest@example.com',
+    role: localStorage.getItem('userRole') || 'User',
+    location: localStorage.getItem('userLocation') || 'Not specified',
+  };
+  
+  const handleSignOut = () => {
+    // Clear user data from localStorage
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userLocation');
+    
+    // Show toast notification
+    toast({
+      title: t("signed-out"),
+      description: t("signed-out-success"),
+      variant: "default",
+    });
+    
+    // Close the dialog
+    setOpen(false);
+    
+    // Redirect to auth page (this will be caught by RouteGuard)
+    window.location.href = '/auth';
   };
   
   return (
@@ -35,7 +58,12 @@ const UserProfileBar = () => {
         </div>
       </motion.div>
       
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <button className="ml-auto text-sm text-primary hover:underline">
+            {t("profile")}
+          </button>
+        </DialogTrigger>
         <DialogContent className="sm:max-w-md dark:bg-gray-800 dark:text-gray-200">
           <DialogHeader>
             <DialogTitle>{t("edit-profile")}</DialogTitle>
@@ -55,7 +83,7 @@ const UserProfileBar = () => {
                 <p className="text-sm">{t("location")}: {userData.location}</p>
               </div>
               
-              <Button variant="outline" className="w-full" onClick={() => console.log("Sign out clicked")}>
+              <Button variant="outline" className="w-full" onClick={handleSignOut}>
                 {t("sign-out")}
               </Button>
             </div>
