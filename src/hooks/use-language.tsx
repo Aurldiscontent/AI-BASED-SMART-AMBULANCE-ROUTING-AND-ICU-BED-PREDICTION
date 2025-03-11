@@ -359,6 +359,7 @@ export const translations: Record<Language, Record<string, string>> = {
     "signed-out": "साइन आउट",
     "signed-out-success": "आप सफलतापूर्वक साइन आउट हो गए हैं",
     "profile": "प्रोफाइल",
+    // Geo regions
     "north-bangalore": "उत्तर बैंगलोर",
     "central-bangalore": "मध्य बैंगलोर",
     "south-bangalore": "दक्षिण बैंगलोर",
@@ -407,15 +408,6 @@ export const translations: Record<Language, Record<string, string>> = {
     "switch-themes": "लाइट और डार्क थीम के बीच स्विच करें",
     "enable-voice": "हैंड्स-फ्री वॉइस कंट्रोल सक्षम करें",
     "sync-data": "डिवाइसों के बीच डेटा सिंक करें",
-    "dataset-reset-title": "डेटासेट रीसेट",
-    "dataset-reset-desc": "विश्लेषण डेटा रीसेट किया गया है",
-    "dataset-options": "डेटासेट विकल्प",
-    "dataset-options-desc": "अपने अपलोड किए गए डेटासेट का प्रबंधन करें",
-    "analysis-active": "विश्लेषण वर्तमान में सक्रिय है",
-    "reset-analysis": "विश्लेषण रीसेट करें",
-    "signed-out": "साइन आउट",
-    "signed-out-success": "आप सफलतापूर्वक साइन आउट हो गए हैं",
-    "profile": "प्रोफाइल",
     "incident-by-region": "क्षेत्र के अनुसार घटनाएँ",
     "incident-trends": "घटना रुझान",
     "response-time": "प्रतिक्रिया समय",
@@ -495,6 +487,7 @@ export const translations: Record<Language, Record<string, string>> = {
     "signed-out": "வெளியேறியுள்ளீர்கள்",
     "signed-out-success": "நீங்கள் வெற்றிகரமாக வெளியேறியுள்ளீர்கள்",
     "profile": "சுயவிவரம்",
+    // Geo regions
     "north-bangalore": "வடக்கு பெங்களூரு",
     "central-bangalore": "மத்திய பெங்களூரு",
     "south-bangalore": "தெற்கு பெங்களூரு",
@@ -543,15 +536,6 @@ export const translations: Record<Language, Record<string, string>> = {
     "switch-themes": "லைட் மற்றும் டார்க் தீம்களுக்கு இடையே மாறவும்",
     "enable-voice": "ஹேண்ட்ஸ்-ஃப்ரீ குரல் கட்டுப்பாட்டை இயக்கவும்",
     "sync-data": "சாதனங்களுக்கு இடையில் தரவை ஒத்திசைக்கவும்",
-    "dataset-reset-title": "தரவுத்தொகுப்பு மீட்டமைக்கப்பட்டது",
-    "dataset-reset-desc": "பகுப்பாய்வு தரவு மீட்டமைக்கப்பட்டது",
-    "dataset-options": "தரவுத்தொகுப்பு விருப்பங்கள்",
-    "dataset-options-desc": "பதிவேற்றிய தரவுத்தொகுப்பை நிர்வகிக்கவும்",
-    "analysis-active": "பகுப்பாய்வு தற்போது செயலில் உள்ளது",
-    "reset-analysis": "பகுப்பாய்வை மீட்டமைக்கவும்",
-    "signed-out": "வெளியேறியுள்ளீர்கள்",
-    "signed-out-success": "நீங்கள் வெற்றிகரமாக வெளியேறியுள்ளீர்கள்",
-    "profile": "சுயவிவரம்",
     "incident-by-region": "பகுதி வாரியாக சம்பவங்கள்",
     "incident-trends": "சம்பவ போக்குகள்",
     "response-time": "பதிலளிப்பு நேரம்",
@@ -751,3 +735,4 @@ export const useLanguage = (): LanguageContextType => {
   
   return context;
 };
+
