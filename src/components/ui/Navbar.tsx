@@ -1,8 +1,7 @@
 
 import React from 'react';
-import { Home, Search, User, Settings, Bell } from 'lucide-react';
+import { Home, Search, Bell, User, Settings, Upload, Map } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import ThemeSwitcher from './ThemeSwitcher';
 
 const Navbar: React.FC = () => {
   const location = useLocation();
@@ -47,8 +46,8 @@ const Navbar: React.FC = () => {
         <div className="flex justify-around items-center">
           {renderNavItem('/home', 'Home', <Home size={22} />, isActive('/home'))}
           {renderNavItem('/search', 'Search', <Search size={22} />, isActive('/search'))}
+          {renderNavItem('/map', 'Map', <Map size={22} />, isActive('/map'))}
           {renderNavItem('/profile', 'Profile', <User size={22} />, isActive('/profile'))}
-          {renderNavItem('/settings', 'Settings', <Settings size={22} />, isActive('/settings'))}
         </div>
       </div>
     </div>
