@@ -172,7 +172,7 @@ const HospitalCard: React.FC<HospitalCardProps> = ({
             size="sm"
             icon={<Phone size={16} />}
             onClick={(e) => {
-              e.stopPropagation();
+              e?.stopPropagation();
               onCall();
             }}
           >
@@ -184,7 +184,7 @@ const HospitalCard: React.FC<HospitalCardProps> = ({
             size="sm"
             icon={<Navigation size={16} />}
             onClick={(e) => {
-              e.stopPropagation();
+              e?.stopPropagation();
               onNavigate();
             }}
           >

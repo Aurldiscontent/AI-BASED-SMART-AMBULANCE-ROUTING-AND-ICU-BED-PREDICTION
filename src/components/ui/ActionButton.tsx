@@ -9,7 +9,7 @@ interface ActionButtonProps {
   size?: 'sm' | 'default' | 'lg' | 'icon' | 'xl';
   fullWidth?: boolean;
   icon?: React.ReactNode;
-  onClick?: () => void;
+  onClick?: (event?: React.MouseEvent<HTMLButtonElement>) => void;
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
   className?: string;
