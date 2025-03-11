@@ -150,15 +150,15 @@ const WelcomeScreen: React.FC = () => {
           transition={{ delay: 0.6, duration: 0.5 }}
           className="mt-0 text-white text-center"
         >
-          <h1 className="text-2xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-200 drop-shadow-[0_0_8px_rgba(0,200,255,0.5)] tracking-wide mb-2">
-            <div className="flex items-center justify-center flex-wrap gap-x-2 gap-y-1">
-              <span className="inline-flex text-3xl p-1.5 bg-white/30 rounded-lg backdrop-blur-sm shadow-lg">🚑</span>
+          <h1 className="text-2xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-200 drop-shadow-[0_0_8px_rgba(0,200,255,0.5)] tracking-wide mb-3">
+            <div className="flex items-center justify-center flex-wrap gap-x-3 gap-y-2">
+              <span className="inline-flex items-center justify-center text-3xl p-2.5 bg-white/40 rounded-lg backdrop-blur-sm shadow-lg">🚑</span>
               <span>RAPID</span>
-              <span className="inline-flex text-3xl p-1.5 bg-white/30 rounded-lg backdrop-blur-sm shadow-lg">🏥</span>
+              <span className="inline-flex items-center justify-center text-3xl p-2.5 bg-white/40 rounded-lg backdrop-blur-sm shadow-lg">🏥</span>
               <span>AID</span>
-              <span className="inline-flex text-3xl p-1.5 bg-white/30 rounded-lg backdrop-blur-sm shadow-lg">💓</span>
+              <span className="inline-flex items-center justify-center text-3xl p-2.5 bg-white/40 rounded-lg backdrop-blur-sm shadow-lg">💓</span>
               <span>INNOVATORS</span>
-              <span className="inline-flex text-3xl p-1.5 bg-white/30 rounded-lg backdrop-blur-sm shadow-lg">🚀</span>
+              <span className="inline-flex items-center justify-center text-3xl p-2.5 bg-white/40 rounded-lg backdrop-blur-sm shadow-lg">🚀</span>
             </div>
           </h1>
           

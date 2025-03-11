@@ -17,7 +17,7 @@ const ThemeSwitcher = () => {
     <Toggle 
       pressed={isDark}
       onPressedChange={toggleTheme}
-      className="w-9 h-9 rounded-full"
+      className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-100/30 to-blue-300/20 dark:from-blue-900/30 dark:to-purple-900/20 border border-blue-200/50 dark:border-blue-700/50"
       aria-label="Toggle theme"
     >
       <motion.div
