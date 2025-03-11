@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -23,7 +22,6 @@ const AuthScreen: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear error when user types
     if (errors[name]) {
       setErrors(prev => {
         const newErrors = { ...prev };
@@ -64,13 +62,11 @@ const AuthScreen: React.FC = () => {
     e.preventDefault();
     
     if (validateForm()) {
-      // For demonstration, just navigate to home
       navigate('/home');
     }
   };
   
   const handleGoogleLogin = () => {
-    // For demonstration, just navigate to home
     console.log('Google login clicked');
     navigate('/home');
   };
@@ -95,7 +91,6 @@ const AuthScreen: React.FC = () => {
   
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#0c1e3e] to-[#4c2a85] py-8 px-6 relative overflow-hidden">
-      {/* Background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB4PSIwIiB5PSIwIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSgzMCkiPjxjaXJjbGUgY3g9IjIiIGN5PSIyIiByPSIxIiBmaWxsPSJyZ2JhKDI1NSwgMjU1LCAyNTUsIDAuMDUpIiAvPjwvcGF0dGVybj48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIgLz48L3N2Zz4=')]"></div>
         
@@ -144,12 +139,38 @@ const AuthScreen: React.FC = () => {
       >
         <motion.div variants={formItemVariants} className="mb-6 text-center">
           <h1 className="text-2xl font-bold text-white">
-            {isSignup ? '✨ Create an Account' : '👋 Welcome Back'}
+            {isSignup ? (
+              <span className="flex items-center justify-center gap-2">
+                <div className="emoji-container w-8 h-8 flex items-center justify-center">
+                  <span className="emoji">✨</span>
+                </div> 
+                Create an Account
+              </span>
+            ) : (
+              <span className="flex items-center justify-center gap-2">
+                <div className="emoji-container w-8 h-8 flex items-center justify-center">
+                  <span className="emoji">👋</span>
+                </div> 
+                Welcome Back
+              </span>
+            )}
           </h1>
           <p className="text-blue-100 mt-2">
-            {isSignup 
-              ? 'Sign up to access emergency services 🚑' 
-              : 'Sign in to continue to your account 🔐'}
+            {isSignup ? (
+              <span className="flex items-center justify-center gap-2">
+                Sign up to access emergency services 
+                <div className="emoji-container w-6 h-6 flex items-center justify-center">
+                  <span className="emoji" style={{ fontSize: "1.2rem" }}>🚑</span>
+                </div>
+              </span>
+            ) : (
+              <span className="flex items-center justify-center gap-2">
+                Sign in to continue to your account 
+                <div className="emoji-container w-6 h-6 flex items-center justify-center">
+                  <span className="emoji" style={{ fontSize: "1.2rem" }}>🔐</span>
+                </div>
+              </span>
+            )}
           </p>
         </motion.div>
         
@@ -287,12 +308,18 @@ const AuthScreen: React.FC = () => {
                   onChange={() => setRememberMe(!rememberMe)}
                   className="mr-2 h-4 w-4 text-cyan-500 focus:ring-cyan-400 border-white/30 rounded bg-white/5"
                 />
-                <label htmlFor="rememberMe" className="text-sm text-blue-100">
-                  Remember me 🔒
+                <label htmlFor="rememberMe" className="text-sm text-blue-100 flex items-center">
+                  Remember me 
+                  <div className="emoji-container ml-1 w-5 h-5 flex items-center justify-center">
+                    <span className="emoji" style={{ fontSize: "0.9rem" }}>🔒</span>
+                  </div>
                 </label>
               </div>
-              <button type="button" className="text-sm text-cyan-300 hover:text-cyan-200 transition-colors">
-                Forgot Password? 🤔
+              <button type="button" className="text-sm text-cyan-300 hover:text-cyan-200 transition-colors flex items-center">
+                Forgot Password? 
+                <div className="emoji-container ml-1 w-5 h-5 flex items-center justify-center">
+                  <span className="emoji" style={{ fontSize: "0.9rem" }}>🤔</span>
+                </div>
               </button>
             </motion.div>
           )}
@@ -315,7 +342,21 @@ const AuthScreen: React.FC = () => {
               type="submit"
               className={`w-full py-3 px-6 ${isSignup ? 'bg-gradient-to-r from-purple-600 to-violet-500' : 'bg-gradient-to-r from-cyan-500 to-blue-600'} text-white rounded-xl font-medium transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl`}
             >
-              {isSignup ? '✨ Create Account' : '🔐 Sign In'}
+              {isSignup ? (
+                <>
+                  <div className="emoji-container w-6 h-6 flex items-center justify-center">
+                    <span className="emoji" style={{ fontSize: "1rem" }}>✨</span>
+                  </div>
+                  Create Account
+                </>
+              ) : (
+                <>
+                  <div className="emoji-container w-6 h-6 flex items-center justify-center">
+                    <span className="emoji" style={{ fontSize: "1rem" }}>🔐</span>
+                  </div>
+                  Sign In
+                </>
+              )}
             </button>
           </motion.div>
           

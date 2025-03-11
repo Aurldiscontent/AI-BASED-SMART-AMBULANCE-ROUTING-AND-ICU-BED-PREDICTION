@@ -141,7 +141,7 @@ const WelcomeScreen: React.FC = () => {
           }}
           className="mb-2"
         >
-          {/* AnimatedLogo removed to avoid duplication */}
+          <AnimatedLogo size="lg" showText={false} />
         </motion.div>
         
         <motion.div
@@ -152,13 +152,21 @@ const WelcomeScreen: React.FC = () => {
         >
           <h1 className="text-2xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-200 drop-shadow-[0_0_8px_rgba(0,200,255,0.5)] tracking-wide mb-3">
             <div className="flex items-center justify-center flex-wrap gap-x-3 gap-y-2">
-              <span className="inline-flex items-center justify-center text-3xl p-2.5 bg-white/40 rounded-lg backdrop-blur-sm shadow-lg">🚑</span>
+              <div className="emoji-container">
+                <span className="emoji">🚑</span>
+              </div>
               <span>RAPID</span>
-              <span className="inline-flex items-center justify-center text-3xl p-2.5 bg-white/40 rounded-lg backdrop-blur-sm shadow-lg">🏥</span>
+              <div className="emoji-container">
+                <span className="emoji">🏥</span>
+              </div>
               <span>AID</span>
-              <span className="inline-flex items-center justify-center text-3xl p-2.5 bg-white/40 rounded-lg backdrop-blur-sm shadow-lg">💓</span>
+              <div className="emoji-container">
+                <span className="emoji">💓</span>
+              </div>
               <span>INNOVATORS</span>
-              <span className="inline-flex items-center justify-center text-3xl p-2.5 bg-white/40 rounded-lg backdrop-blur-sm shadow-lg">🚀</span>
+              <div className="emoji-container">
+                <span className="emoji">🚀</span>
+              </div>
             </div>
           </h1>
           
@@ -187,7 +195,9 @@ const WelcomeScreen: React.FC = () => {
                 <span>Helps save precious minutes during emergencies</span>
               </li>
               <li className="flex items-start">
-                <span className="text-white bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full px-1.5 mr-2">💓</span>
+                <div className="emoji-container mr-2 w-6 h-6 flex items-center justify-center">
+                  <span className="emoji" style={{ fontSize: "1.2rem" }}>💓</span>
+                </div>
                 <span>Because every second counts when saving lives!</span>
               </li>
             </ul>
@@ -195,22 +205,40 @@ const WelcomeScreen: React.FC = () => {
           
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
-              <span className="bg-white/20 rounded-full p-0.5 mr-1">🚨</span> Emergency Response
+              <div className="emoji-container mr-1 w-6 h-6 flex items-center justify-center">
+                <span className="emoji" style={{ fontSize: "1rem" }}>🚨</span>
+              </div>
+              Emergency Response
             </span>
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
-              <span className="bg-white/20 rounded-full p-0.5 mr-1">🗺️</span> Smart AI Routing
+              <div className="emoji-container mr-1 w-6 h-6 flex items-center justify-center">
+                <span className="emoji" style={{ fontSize: "1rem" }}>🗺️</span>
+              </div>
+              Smart AI Routing
             </span>
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
-              <span className="bg-white/20 rounded-full p-0.5 mr-1">🏥</span> Hospital Network
+              <div className="emoji-container mr-1 w-6 h-6 flex items-center justify-center">
+                <span className="emoji" style={{ fontSize: "1rem" }}>🏥</span>
+              </div>
+              Hospital Network
             </span>
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
-              <span className="bg-white/20 rounded-full p-0.5 mr-1">⏱️</span> Real-time Updates
+              <div className="emoji-container mr-1 w-6 h-6 flex items-center justify-center">
+                <span className="emoji" style={{ fontSize: "1rem" }}>⏱️</span>
+              </div>
+              Real-time Updates
             </span>
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
-              <span className="bg-white/20 rounded-full p-0.5 mr-1">💯</span> Accuracy Focused
+              <div className="emoji-container mr-1 w-6 h-6 flex items-center justify-center">
+                <span className="emoji" style={{ fontSize: "1rem" }}>💯</span>
+              </div>
+              Accuracy Focused
             </span>
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
-              <span className="bg-white/20 rounded-full p-0.5 mr-1">🧠</span> AI Powered
+              <div className="emoji-container mr-1 w-6 h-6 flex items-center justify-center">
+                <span className="emoji" style={{ fontSize: "1rem" }}>🧠</span>
+              </div>
+              AI Powered
             </span>
           </div>
         </motion.div>

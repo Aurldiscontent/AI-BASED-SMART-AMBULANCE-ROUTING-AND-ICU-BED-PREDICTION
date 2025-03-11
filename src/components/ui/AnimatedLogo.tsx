@@ -121,38 +121,38 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
           }`}
         >
           {showEmojis ? (
-            <div className="flex items-center justify-center flex-wrap gap-x-1 gap-y-1 px-2">
-              <motion.span
+            <div className="flex items-center justify-center flex-wrap gap-x-2 gap-y-2 px-2">
+              <motion.div
                 variants={emojiVariants}
                 animate="animate"
-                className="inline-flex text-2xl p-1 bg-white/25 rounded-md shadow-sm"
+                className="emoji-container"
               >
-                🚑
-              </motion.span>
+                <span className="emoji">🚑</span>
+              </motion.div>
               <span className="inline-flex font-extrabold">RAPID</span>
-              <motion.span
+              <motion.div
                 variants={emojiVariants}
                 animate="animate"
-                className="inline-flex text-2xl p-1 bg-white/25 rounded-md shadow-sm"
+                className="emoji-container"
               >
-                🏥
-              </motion.span>
+                <span className="emoji">🏥</span>
+              </motion.div>
               <span className="inline-flex font-extrabold">AID</span>
-              <motion.span
+              <motion.div
                 variants={emojiVariants}
                 animate="animate" 
-                className="inline-flex text-2xl p-1 bg-white/25 rounded-md shadow-sm"
+                className="emoji-container"
               >
-                💓
-              </motion.span>
+                <span className="emoji">💓</span>
+              </motion.div>
               <span className="inline-flex font-extrabold">INNOVATORS</span>
-              <motion.span
+              <motion.div
                 variants={emojiVariants}
                 animate="animate"
-                className="inline-flex text-2xl p-1 bg-white/25 rounded-md shadow-sm"
+                className="emoji-container"
               >
-                🚀
-              </motion.span>
+                <span className="emoji">🚀</span>
+              </motion.div>
             </div>
           ) : (
             "RAPID AID INNOVATORS"
