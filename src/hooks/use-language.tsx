@@ -46,7 +46,6 @@ export const translations: Record<Language, Record<string, string>> = {
     "imperial": "Imperial",
     "map-navigation-settings": "Map & Navigation Settings",
     "real-time-traffic-updates": "Real-time Traffic Updates",
-    "receive-live-traffic": "Receive live traffic updates for faster routes",
     "smart-rerouting": "Smart Rerouting",
     "auto-reroute": "Automatically reroute around traffic and closures",
     "road-closure-alerts": "Road Closure Alerts",
@@ -104,6 +103,13 @@ export const translations: Record<Language, Record<string, string>> = {
     // Network status
     "partial-network-connection": "Partial Network Connection",
     "network-connection-issues": "Network Connection Issues",
+    
+    // Chart titles and labels
+    "geographic-incident-distribution": "Geographic Incident Distribution",
+    "icu-bed-occupancy": "ICU Bed Occupancy",
+    "hospital-wait-times": "Hospital Wait Times",
+    "available-beds": "Available Beds",
+    "total-beds": "Total Beds",
   },
   
   kannada: {
@@ -205,6 +211,13 @@ export const translations: Record<Language, Record<string, string>> = {
     // Network status
     "partial-network-connection": "ಭಾಗಶಃ ನೆಟ್‌ವರ್ಕ್ ಸಂಪರ್ಕ",
     "network-connection-issues": "ನೆಟ್‌ವರ್ಕ್ ಸಂಪರ್ಕ ಸಮಸ್ಯೆಗಳು",
+    
+    // Chart titles and labels
+    "geographic-incident-distribution": "ಭೌಗೋಳಿಕ ಘಟನೆ ವಿತರಣೆ",
+    "icu-bed-occupancy": "ಐಸಿಯು ಹಾಸಿಗೆ ಆಕ್ರಮಣ",
+    "hospital-wait-times": "ಆಸ್ಪತ್ರೆ ಕಾಯುವ ಸಮಯಗಳು",
+    "available-beds": "ಲಭ್ಯವಿರುವ ಹಾಸಿಗೆಗಳು",
+    "total-beds": "ಒಟ್ಟು ಹಾಸಿಗೆಗಳು",
   },
   
   hindi: {
@@ -306,6 +319,13 @@ export const translations: Record<Language, Record<string, string>> = {
     // Network status
     "partial-network-connection": "आंशिक नेटवर्क कनेक्शन",
     "network-connection-issues": "नेटवर्क कनेक्शन समस्याएं",
+    
+    // Chart titles and labels
+    "geographic-incident-distribution": "भौगोलिक घटना वितरण",
+    "icu-bed-occupancy": "आईसीयू बेड का कब्जा",
+    "hospital-wait-times": "अस्पताल प्रतीक्षा समय",
+    "available-beds": "उपलब्ध बिस्तर",
+    "total-beds": "कुल बिस्तर",
   },
   
   tamil: {
@@ -407,6 +427,13 @@ export const translations: Record<Language, Record<string, string>> = {
     // Network status
     "partial-network-connection": "பகுதி நெட்வொர்க் இணைப்பு",
     "network-connection-issues": "நெட்வொர்க் இணைப்பு சிக்கல்கள்",
+    
+    // Chart titles and labels
+    "geographic-incident-distribution": "புவியியல் சம்பவ பகிர்வு",
+    "icu-bed-occupancy": "ICU படுக்கை நிரப்புதல்",
+    "hospital-wait-times": "மருத்துவமனை காத்திருப்பு நேரங்கள்",
+    "available-beds": "கிடைக்கக்கூடிய படுக்கைகள்",
+    "total-beds": "மொத்த படுக்கைகள்",
   },
   
   telugu: {
@@ -508,6 +535,13 @@ export const translations: Record<Language, Record<string, string>> = {
     // Network status
     "partial-network-connection": "పాక్షిక నెట్‌వర్క్ కనెక్షన్",
     "network-connection-issues": "నెట్‌వర్క్ కనెక్షన్ సమస్యలు",
+    
+    // Chart titles and labels
+    "geographic-incident-distribution": "భౌగోళిక సంఘటన పంపిణీ",
+    "icu-bed-occupancy": "ICU బెడ్ ఆక్రమణ",
+    "hospital-wait-times": "ఆసుపత్రి వేచి ఉండే సమయాలు",
+    "available-beds": "అందుబాటులో ఉన్న పడకలు",
+    "total-beds": "మొత్తం పడకలు",
   }
 };
 
@@ -573,3 +607,4 @@ export const useLanguage = () => {
 
   return context;
 };
+</

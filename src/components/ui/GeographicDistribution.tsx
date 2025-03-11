@@ -1,7 +1,9 @@
+
 import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { motion } from 'framer-motion';
 import { Theme } from '@/hooks/use-theme';
+import { useLanguage } from '@/hooks/use-language';
 
 export interface DistributionProps {
   regions: {
@@ -16,6 +18,7 @@ export interface DistributionProps {
 
 const GeographicDistribution: React.FC<DistributionProps> = ({ regions, theme }) => {
   const isDark = theme === 'dark';
+  const { t } = useLanguage();
 
   return (
     <motion.div
@@ -24,7 +27,7 @@ const GeographicDistribution: React.FC<DistributionProps> = ({ regions, theme })
       transition={{ duration: 0.5 }}
     >
       <h2 className={`text-lg font-bold ${isDark ? 'text-blue-400' : 'text-blue-700'} mb-4`}>
-        Geographic Incident Distribution
+        {t('geographic-incident-distribution')}
       </h2>
       <ResponsiveContainer width="100%" height={300}>
         <PieChart>
@@ -52,7 +55,7 @@ const GeographicDistribution: React.FC<DistributionProps> = ({ regions, theme })
             }}
             labelStyle={{ fontWeight: 'bold', color: isDark ? '#fff' : '#374151' }}
             itemStyle={{ color: isDark ? '#fff' : '#374151' }}
-            formatter={(value: any, name: string) => [`Incidents: ${value}`, name]}
+            formatter={(value: any, name: string) => [`Incidents: ${value}`, t(name.toLowerCase().replace(/\s+/g, '-'))]}
           />
         </PieChart>
       </ResponsiveContainer>
@@ -64,7 +67,7 @@ const GeographicDistribution: React.FC<DistributionProps> = ({ regions, theme })
               style={{ backgroundColor: region.color }}
             ></div>
             <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-              {region.name}
+              {t(region.name.toLowerCase().replace(/\s+/g, '-'))}
             </span>
           </div>
         ))}

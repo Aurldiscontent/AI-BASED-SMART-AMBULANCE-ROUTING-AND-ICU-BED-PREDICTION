@@ -1,8 +1,10 @@
+
 import React from 'react';
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { motion } from 'framer-motion';
 import { PieChart, Pie, Cell } from 'recharts';
 import { Theme } from '@/hooks/use-theme';
+import { useLanguage } from '@/hooks/use-language';
 
 export interface EnhancedICUAvailabilityProps {
   data: {
@@ -17,6 +19,7 @@ export interface EnhancedICUAvailabilityProps {
 
 const EnhancedICUAvailability: React.FC<EnhancedICUAvailabilityProps> = ({ data, theme }) => {
   const isDark = theme === 'dark';
+  const { t } = useLanguage();
 
   const COLORS = isDark
     ? ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d', '#FFBB28', '#FF8042', '#0088FE', '#00C49F']
@@ -42,7 +45,7 @@ const EnhancedICUAvailability: React.FC<EnhancedICUAvailabilityProps> = ({ data,
       transition={{ duration: 0.5 }}
     >
       <h3 className={`text-md font-semibold ${isDark ? 'text-gray-300' : 'text-gray-700'} mb-3`}>
-        ICU Bed Occupancy
+        {t('icu-bed-occupancy')}
       </h3>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data}>
@@ -65,13 +68,13 @@ const EnhancedICUAvailability: React.FC<EnhancedICUAvailabilityProps> = ({ data,
             itemStyle={{ color: isDark ? '#fff' : '#374151' }}
           />
           <Legend wrapperStyle={{ color: isDark ? '#fff' : '#374151' }} />
-          <Bar dataKey="available" name="Available Beds" fill="#82ca9d" />
-          <Bar dataKey="total" name="Total Beds" fill="#8884d8" />
+          <Bar dataKey="available" name={t('available-beds')} fill="#82ca9d" />
+          <Bar dataKey="total" name={t('total-beds')} fill="#8884d8" />
         </BarChart>
       </ResponsiveContainer>
 
       <h3 className={`text-md font-semibold ${isDark ? 'text-gray-300' : 'text-gray-700'} mt-6 mb-3`}>
-        Hospital Wait Times
+        {t('hospital-wait-times')}
       </h3>
       <ResponsiveContainer width="100%" height={250}>
         <PieChart>
