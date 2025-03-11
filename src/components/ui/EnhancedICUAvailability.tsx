@@ -3,7 +3,7 @@ import React from 'react';
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { motion } from 'framer-motion';
 import { PieChart, Pie, Cell } from 'recharts';
-import { Theme } from '@/hooks/use-theme';
+import { useTheme } from '@/hooks/use-theme';
 import { useLanguage } from '@/hooks/use-language';
 
 export interface EnhancedICUAvailabilityProps {
@@ -14,11 +14,12 @@ export interface EnhancedICUAvailabilityProps {
     waitTime: number;
     occupancyRate: number;
   }[];
-  theme?: Theme;
+  theme?: string;
 }
 
-const EnhancedICUAvailability: React.FC<EnhancedICUAvailabilityProps> = ({ data, theme }) => {
-  const isDark = theme === 'dark';
+const EnhancedICUAvailability: React.FC<EnhancedICUAvailabilityProps> = ({ data, theme: propTheme }) => {
+  const { theme: contextTheme } = useTheme();
+  const isDark = (propTheme || contextTheme) === 'dark';
   const { t } = useLanguage();
 
   const COLORS = isDark

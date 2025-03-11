@@ -2,7 +2,7 @@
 import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { motion } from 'framer-motion';
-import { Theme } from '@/hooks/use-theme';
+import { useTheme } from '@/hooks/use-theme';
 import { useLanguage } from '@/hooks/use-language';
 
 export interface DistributionProps {
@@ -13,11 +13,12 @@ export interface DistributionProps {
     response: number;
     color: string;
   }[];
-  theme?: Theme;
+  theme?: string;
 }
 
-const GeographicDistribution: React.FC<DistributionProps> = ({ regions, theme }) => {
-  const isDark = theme === 'dark';
+const GeographicDistribution: React.FC<DistributionProps> = ({ regions, theme: propTheme }) => {
+  const { theme: contextTheme } = useTheme();
+  const isDark = (propTheme || contextTheme) === 'dark';
   const { t } = useLanguage();
 
   return (

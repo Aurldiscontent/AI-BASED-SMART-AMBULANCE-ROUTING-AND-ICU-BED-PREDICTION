@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Define available languages
@@ -607,4 +608,3 @@ export const useLanguage = () => {
 
   return context;
 };
-</
