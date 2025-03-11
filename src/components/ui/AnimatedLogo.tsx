@@ -114,42 +114,42 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.5 }}
-          className={`mt-4 font-bold tracking-tight ${getTextClass(textSize)} ${
+          className={`mt-3 font-bold tracking-tight ${getTextClass(textSize)} ${
             darkMode 
               ? "text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-200 drop-shadow-[0_0_5px_rgba(0,200,255,0.3)]" 
               : "text-medical-800"
           }`}
         >
           {showEmojis ? (
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center flex-wrap gap-x-1 gap-y-1 px-2">
               <motion.span
                 variants={emojiVariants}
                 animate="animate"
-                className="mx-1 text-2xl"
+                className="inline-flex text-2xl"
               >
                 🚑
               </motion.span>
-              <span className="mx-1">RAPID</span>
+              <span className="inline-flex font-extrabold">RAPID</span>
               <motion.span
                 variants={emojiVariants}
                 animate="animate"
-                className="mx-1 text-2xl"
+                className="inline-flex text-2xl"
               >
                 🏥
               </motion.span>
-              <span className="mx-1">AID</span>
+              <span className="inline-flex font-extrabold">AID</span>
               <motion.span
                 variants={emojiVariants}
                 animate="animate" 
-                className="mx-1 text-2xl"
+                className="inline-flex text-2xl"
               >
                 💓
               </motion.span>
-              <span className="mx-1">INNOVATORS</span>
+              <span className="inline-flex font-extrabold">INNOVATORS</span>
               <motion.span
                 variants={emojiVariants}
                 animate="animate"
-                className="mx-1 text-2xl"
+                className="inline-flex text-2xl"
               >
                 🚀
               </motion.span>

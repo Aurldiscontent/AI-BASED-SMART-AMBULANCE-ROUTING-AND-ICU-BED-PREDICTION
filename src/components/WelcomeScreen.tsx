@@ -139,7 +139,7 @@ const WelcomeScreen: React.FC = () => {
             delay: 0.2,
             duration: 0.8 
           }}
-          className="mb-8"
+          className="mb-6"
         >
           <AnimatedLogo size="xl" textSize="xl" showEmojis={true} darkMode={true} />
         </motion.div>
@@ -148,7 +148,7 @@ const WelcomeScreen: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.5 }}
-          className="mt-4 text-white text-center"
+          className="mt-2 text-white text-center"
         >
           <p className="text-xl font-medium text-cyan-300 drop-shadow-lg mb-4">
             <span className="inline-block mr-2">🚑</span>
@@ -191,7 +191,7 @@ const WelcomeScreen: React.FC = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.5 }}
-          className="mt-10 w-full"
+          className="mt-8 w-full"
         >
           <Button 
             onClick={handleGetStarted}
