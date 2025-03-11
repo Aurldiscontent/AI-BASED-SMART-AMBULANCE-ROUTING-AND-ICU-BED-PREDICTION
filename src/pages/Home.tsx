@@ -7,16 +7,41 @@ import ThemeSwitcher from '@/components/ui/ThemeSwitcher';
 import { motion } from 'framer-motion';
 import UserProfileBar from '@/components/ui/UserProfileBar';
 import { Button } from '@/components/ui/button';
-import { Upload, FileSpreadsheet, CheckCircle2 } from 'lucide-react';
+import { Upload, FileSpreadsheet, CheckCircle2, MapPin, BarChart } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useUnits } from '@/hooks/use-units';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Progress } from '@/components/ui/progress';
 
 const Home = () => {
   const { theme } = useTheme();
   const { t } = useLanguage();
+  const { convertDistance } = useUnits();
   const isDark = theme === 'dark';
   const { toast } = useToast();
   const [isUploading, setIsUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [showAnalysis, setShowAnalysis] = useState(false);
+  const [activeTab, setActiveTab] = useState("map");
+  
+  // Mock data for geographic distribution
+  const [geoDistributionData, setGeoDistributionData] = useState({
+    regions: [
+      { name: "North Bangalore", incidents: 45, response: 8.3 },
+      { name: "Central Bangalore", incidents: 78, response: 6.2 },
+      { name: "South Bangalore", incidents: 52, response: 7.5 },
+      { name: "East Bangalore", incidents: 63, response: 8.1 },
+      { name: "West Bangalore", incidents: 41, response: 9.0 },
+    ]
+  });
   
   // Handle CSV upload
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,8 +49,9 @@ const Home = () => {
     if (file) {
       setIsUploading(true);
       setUploadSuccess(false);
+      setShowAnalysis(false);
       
-      // Simulate file upload
+      // Simulate file processing
       setTimeout(() => {
         setIsUploading(false);
         setUploadSuccess(true);
@@ -36,10 +62,10 @@ const Home = () => {
           variant: "default",
         });
         
-        // Reset success indicator after 3 seconds
+        // Show analysis after a short delay
         setTimeout(() => {
-          setUploadSuccess(false);
-        }, 3000);
+          setShowAnalysis(true);
+        }, 500);
       }, 1500);
     }
   };
@@ -67,54 +93,89 @@ const Home = () => {
           >
             <UserProfileBar />
             
-            {/* CSV Upload Button */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3 }}
-              className="flex items-center"
-            >
-              <input
-                type="file"
-                id="csv-upload"
-                accept=".csv"
-                className="hidden"
-                onChange={handleFileUpload}
-                disabled={isUploading}
-              />
-              <label htmlFor="csv-upload">
-                <Button 
-                  variant={uploadSuccess ? "default" : "outline"} 
-                  className={`flex items-center gap-2 ${
-                    isDark 
-                      ? uploadSuccess 
-                        ? 'bg-green-600 hover:bg-green-700' 
-                        : 'bg-gray-800/70 hover:bg-gray-700/70 border-gray-700'
-                      : uploadSuccess 
-                        ? 'bg-green-500 hover:bg-green-600' 
-                        : 'bg-white/70 hover:bg-white/90 border-gray-200'
-                  } backdrop-blur-sm transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md`}
-                  disabled={isUploading}
+            {/* Dataset Upload Button */}
+            <Dialog>
+              <DialogTrigger asChild>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.3 }}
                 >
-                  {isUploading ? (
-                    <>
-                      <div className="animate-spin mr-2 h-4 w-4 border-2 border-current border-t-transparent rounded-full"></div>
-                      {t("uploading")}
-                    </>
-                  ) : uploadSuccess ? (
-                    <>
-                      <CheckCircle2 size={16} className="text-white" /> 
-                      {t("dataset-ready")}
-                    </>
-                  ) : (
-                    <>
-                      <FileSpreadsheet size={16} /> 
-                      {t("upload-dataset")}
-                    </>
-                  )}
-                </Button>
-              </label>
-            </motion.div>
+                  <Button 
+                    variant={uploadSuccess ? "default" : "outline"} 
+                    className={`flex items-center gap-2 ${
+                      isDark 
+                        ? uploadSuccess 
+                          ? 'bg-green-600 hover:bg-green-700' 
+                          : 'bg-gray-800/70 hover:bg-gray-700/70 border-gray-700'
+                        : uploadSuccess 
+                          ? 'bg-green-500 hover:bg-green-600' 
+                          : 'bg-white/70 hover:bg-white/90 border-gray-200'
+                    } backdrop-blur-sm transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md`}
+                    disabled={isUploading}
+                  >
+                    {isUploading ? (
+                      <>
+                        <div className="animate-spin mr-2 h-4 w-4 border-2 border-current border-t-transparent rounded-full"></div>
+                        {t("uploading")}
+                      </>
+                    ) : uploadSuccess ? (
+                      <>
+                        <CheckCircle2 size={16} className="text-white" /> 
+                        {t("dataset-ready")}
+                      </>
+                    ) : (
+                      <>
+                        <FileSpreadsheet size={16} /> 
+                        {t("upload-dataset")}
+                      </>
+                    )}
+                  </Button>
+                </motion.div>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md dark:bg-gray-800 dark:text-gray-200">
+                <DialogHeader>
+                  <DialogTitle>{t("upload-dataset")}</DialogTitle>
+                  <DialogDescription className="dark:text-gray-400">
+                    {t("dataset-instructions")}
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="border-2 border-dashed dark:border-gray-600 rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                    {uploadSuccess ? (
+                      <div className="flex flex-col items-center justify-center text-green-500">
+                        <CheckCircle2 size={48} className="mb-2" />
+                        <p>{t("upload-successful")}</p>
+                      </div>
+                    ) : isUploading ? (
+                      <div className="flex flex-col items-center justify-center text-medical-500">
+                        <div className="animate-spin mb-2">
+                          <Upload size={48} />
+                        </div>
+                        <p>{t("uploading")}</p>
+                      </div>
+                    ) : (
+                      <label className="flex flex-col items-center justify-center cursor-pointer">
+                        <Upload size={48} className="mb-2 text-gray-400 dark:text-gray-500" />
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          {t("drag-drop-csv")}
+                        </p>
+                        <input 
+                          type="file" 
+                          accept=".csv" 
+                          className="hidden" 
+                          onChange={handleFileUpload} 
+                        />
+                      </label>
+                    )}
+                  </div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                    <p>{t("supported-format")}: .CSV</p>
+                    <p>{t("max-file-size")}: 5MB</p>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
           </motion.div>
         </div>
         
@@ -124,6 +185,131 @@ const Home = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="w-full"
         >
+          {showAnalysis && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="container mx-auto px-4 mb-6"
+            >
+              <div className={`rounded-lg ${
+                isDark ? 'bg-gray-800/80' : 'bg-white/80'
+              } backdrop-blur-sm p-4 shadow-lg`}>
+                <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                  <BarChart size={20} />
+                  {t("data-analysis")}
+                </h2>
+                
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                  <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="map">{t("geographic-distribution")}</TabsTrigger>
+                    <TabsTrigger value="stats">{t("response-metrics")}</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="map" className="mt-4">
+                    <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 h-64 flex items-center justify-center mb-4">
+                      <div className="text-center">
+                        <MapPin size={32} className="mx-auto mb-2 text-medical-500" />
+                        <p className="text-sm text-gray-600 dark:text-gray-300">
+                          {t("interactive-map-placeholder")}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-medium">{t("incident-hotspots")}</h3>
+                        <div className="space-y-3">
+                          {geoDistributionData.regions.map((region, index) => (
+                            <div key={index}>
+                              <div className="flex justify-between text-sm mb-1">
+                                <span>{region.name}</span>
+                                <span>{region.incidents} {t("incidents")}</span>
+                              </div>
+                              <Progress value={(region.incidents / 100) * 100} className="h-2" />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-medium">{t("avg-response-time")}</h3>
+                        <div className="space-y-3">
+                          {geoDistributionData.regions.map((region, index) => (
+                            <div key={index}>
+                              <div className="flex justify-between text-sm mb-1">
+                                <span>{region.name}</span>
+                                <span>{region.response} {t("minutes")}</span>
+                              </div>
+                              <Progress value={(region.response / 15) * 100} className="h-2" />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="stats" className="mt-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
+                        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">{t("total-incidents")}</h3>
+                        <p className="text-2xl font-bold">279</p>
+                        <p className="text-xs text-green-500 flex items-center mt-1">
+                          <span>↑ 12%</span>
+                          <span className="ml-1">{t("from-previous")}</span>
+                        </p>
+                      </div>
+                      
+                      <div className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
+                        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">{t("avg-response-time")}</h3>
+                        <p className="text-2xl font-bold">7.5 {t("minutes")}</p>
+                        <p className="text-xs text-green-500 flex items-center mt-1">
+                          <span>↓ 1.2</span>
+                          <span className="ml-1">{t("from-previous")}</span>
+                        </p>
+                      </div>
+                      
+                      <div className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
+                        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">{t("survival-rate")}</h3>
+                        <p className="text-2xl font-bold">94.3%</p>
+                        <p className="text-xs text-green-500 flex items-center mt-1">
+                          <span>↑ 2.1%</span>
+                          <span className="ml-1">{t("from-previous")}</span>
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-4 bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
+                      <h3 className="text-lg font-medium mb-3">{t("response-statistics")}</h3>
+                      <div className="space-y-4">
+                        <div>
+                          <div className="flex justify-between text-sm mb-1">
+                            <span>{t("critical-cases")}</span>
+                            <span>82%</span>
+                          </div>
+                          <Progress value={82} className="h-2" />
+                        </div>
+                        <div>
+                          <div className="flex justify-between text-sm mb-1">
+                            <span>{t("moderate-cases")}</span>
+                            <span>65%</span>
+                          </div>
+                          <Progress value={65} className="h-2" />
+                        </div>
+                        <div>
+                          <div className="flex justify-between text-sm mb-1">
+                            <span>{t("mild-cases")}</span>
+                            <span>91%</span>
+                          </div>
+                          <Progress value={91} className="h-2" />
+                        </div>
+                      </div>
+                    </div>
+                  </TabsContent>
+                </Tabs>
+              </div>
+            </motion.div>
+          )}
+          
           <HomePage />
         </motion.div>
         

@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Define available languages
@@ -69,13 +68,39 @@ export const translations: Record<Language, Record<string, string>> = {
     "switch-to-dark": "Switch to Dark Mode",
     "change": "Change",
     
+    // Profile
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "location": "Location",
+    "edit-profile": "Edit Profile",
+    "sign-out": "Sign Out",
+    
+    // Analysis section
+    "data-analysis": "Data Analysis",
+    "geographic-distribution": "Geographic Distribution",
+    "response-metrics": "Response Metrics",
+    "interactive-map-placeholder": "Interactive map visualization (click regions to view details)",
+    "incident-hotspots": "Incident Hotspots",
+    "avg-response-time": "Average Response Time",
+    "incidents": "incidents",
+    "minutes": "min",
+    "total-incidents": "Total Incidents",
+    "from-previous": "from previous period",
+    "survival-rate": "Survival Rate",
+    "response-statistics": "Response Success Rate by Case Severity",
+    "critical-cases": "Critical Cases",
+    "moderate-cases": "Moderate Cases",
+    "mild-cases": "Mild Cases",
+    "dataset-instructions": "Upload your CSV dataset containing emergency data for analysis",
+    "drag-drop-csv": "Drag and drop your CSV file here, or click to browse",
+    "supported-format": "Supported format",
+    "max-file-size": "Maximum file size",
+    "upload-successful": "Upload successful!",
+    
     // Themes
     "light": "Light",
     "dark": "Dark",
-    
-    // Profile
-    "edit-profile": "Edit Profile",
-    "sign-out": "Sign Out",
     
     // Common actions
     "search-hospitals": "Search hospitals or enter accident location for routing...",
@@ -160,14 +185,40 @@ export const translations: Record<Language, Record<string, string>> = {
     "switch-to-light": "ಲೈಟ್ ಮೋಡ್‌ಗೆ ಬದಲಾಯಿಸಿ",
     "switch-to-dark": "ಡಾರ್ಕ್ ಮೋಡ್‌ಗೆ ಬದಲಾಯಿಸಿ",
     "change": "ಬದಲಾಯಿಸಿ",
-
+    
+    // Profile
+    "name": "ಹೆಸರು",
+    "email": "ಇಮೇಲ್",
+    "role": "ಪಾತ್ರ",
+    "location": "ಸ್ಥಳ",
+    "edit-profile": "ಪ್ರೊಫೈಲ್ ಎಡಿಟ್ ಮಾಡಿ",
+    "sign-out": "ಸೈನ್ ಔಟ್",
+    
+    // Analysis section
+    "data-analysis": "ಡೇಟಾ ವಿಶ್ಲೇಷಣೆ",
+    "geographic-distribution": "ಭೌಗೋಳಿಕ ವಿತರಣೆ",
+    "response-metrics": "ಪ್ರತಿಕ್ರಿಯೆ ಮೆಟ್ರಿಕ್ಸ್",
+    "interactive-map-placeholder": "ಇಂಟರಾಕ್ಟಿವ್ ನಕ್ಷೆ ದೃಶ್ಯೀಕರಣ (ವಿವರಗಳನ್ನು ವೀಕ್ಷಿಸಲು ಪ್ರದೇಶಗಳನ್ನು ಕ್ಲಿಕ್ ಮಾಡಿ)",
+    "incident-hotspots": "ಘಟನೆ ಹಾಟ್‌ಸ್ಪಾಟ್‌ಗಳು",
+    "avg-response-time": "ಸರಾಸರಿ ಪ್ರತಿಕ್ರಿಯೆ ಸಮಯ",
+    "incidents": "ಘಟನೆಗಳು",
+    "minutes": "ನಿಮಿಷಗಳು",
+    "total-incidents": "ಒಟ್ಟು ಘಟನೆಗಳು",
+    "from-previous": "ಹಿಂದಿನ ಅವಧಿಯಿಂದ",
+    "survival-rate": "ಬದುಕುಳಿಯುವ ದರ",
+    "response-statistics": "ಪ್ರಕರಣದ ತೀವ್ರತೆಯ ಪ್ರಕಾರ ಪ್ರತಿಕ್ರಿಯೆ ಯಶಸ್ಸಿನ ದರ",
+    "critical-cases": "ಗಂಭೀರ ಪ್ರಕರಣಗಳು",
+    "moderate-cases": "ಮಧ್ಯಮ ಪ್ರಕರಣಗಳು",
+    "mild-cases": "ಸೌಮ್ಯ ಪ್ರಕರಣಗಳು",
+    "dataset-instructions": "ವಿಶ್ಲೇಷಣೆಗಾಗಿ ತುರ್ತು ಡೇಟಾವನ್ನು ಒಳಗೊಂಡಿರುವ ನಿಮ್ಮ CSV ಡೇಟಾಸೆಟ್ ಅನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
+    "drag-drop-csv": "ನಿಮ್ಮ CSV ಫೈಲ್ ಅನ್ನು ಇಲ್ಲಿ ಎಳೆದು ಬಿಡಿ, ಅಥವಾ ಬ್ರೌಸ್ ಮಾಡಲು ಕ್ಲಿಕ್ ಮಾಡಿ",
+    "supported-format": "ಬೆಂಬಲಿತ ಫಾರ್ಮ್ಯಾಟ್",
+    "max-file-size": "ಗರಿಷ್ಠ ಫೈಲ್ ಗಾತ್ರ",
+    "upload-successful": "ಅಪ್ಲೋಡ್ ಯಶಸ್ವಿಯಾಗಿದೆ!",
+    
     // Themes
     "light": "ಬೆಳಕು",
     "dark": "ಕತ್ತಲೆ",
-    
-    // Profile
-    "edit-profile": "ಪ್ರೊಫೈಲ್ ಎಡಿಟ್ ಮಾಡಿ",
-    "sign-out": "ಸೈನ್ ಔಟ್",
     
     // Common actions
     "search-hospitals": "ಆಸ್ಪತ್ರೆಗಳನ್ನು ಹುಡುಕಿ ಅಥವಾ ಮಾರ್ಗದರ್ಶನಕ್ಕಾಗಿ ಅಪಘಾತ ಸ್ಥಳವನ್ನು ನಮೂದಿಸಿ...",
@@ -253,13 +304,39 @@ export const translations: Record<Language, Record<string, string>> = {
     "switch-to-dark": "डार्क मोड में स्विच करें",
     "change": "बदलें",
     
+    // Profile
+    "name": "नाम",
+    "email": "ईमेल",
+    "role": "भूमिका",
+    "location": "स्थान",
+    "edit-profile": "प्रोफाइल एडिट करें",
+    "sign-out": "साइन आउट",
+    
+    // Analysis section
+    "data-analysis": "डेटा विश्लेषण",
+    "geographic-distribution": "भौगोलिक वितरण",
+    "response-metrics": "प्रतिक्रिया मेट्रिक्स",
+    "interactive-map-placeholder": "इंटरैक्टिव मैप विज़ुअलाइज़ेशन (विवरण देखने के लिए क्षेत्रों पर क्लिक करें)",
+    "incident-hotspots": "घटना हॉटस्पॉट",
+    "avg-response-time": "औसत प्रतिक्रिया समय",
+    "incidents": "घटनाएँ",
+    "minutes": "मिनट",
+    "total-incidents": "कुल घटनाएँ",
+    "from-previous": "पिछली अवधि से",
+    "survival-rate": "जीवित रहने की दर",
+    "response-statistics": "केस गंभीरता के अनुसार प्रतिक्रिया सफलता दर",
+    "critical-cases": "गंभीर मामले",
+    "moderate-cases": "मध्यम मामले",
+    "mild-cases": "हल्के मामले",
+    "dataset-instructions": "विश्लेषण के लिए आपातकालीन डेटा वाला अपना CSV डेटासेट अपलोड करें",
+    "drag-drop-csv": "अपनी CSV फ़ाइल यहां खींचें और छोड़ें, या ब्राउज़ करने के लिए क्लिक करें",
+    "supported-format": "समर्थित प्रारूप",
+    "max-file-size": "अधिकतम फ़ाइल आकार",
+    "upload-successful": "अपलोड सफल!",
+    
     // Themes
     "light": "लाइट",
     "dark": "डार्क",
-    
-    // Profile
-    "edit-profile": "प्रोफाइल एडिट करें",
-    "sign-out": "साइन आउट",
     
     // Common actions
     "search-hospitals": "अस्पतालों को खोजें या रूटिंग के लिए दुर्घटना स्थान दर्ज करें...",
@@ -345,13 +422,39 @@ export const translations: Record<Language, Record<string, string>> = {
     "switch-to-dark": "டார்க் மோடுக்கு மாறவும்",
     "change": "மாற்று",
     
+    // Profile
+    "name": "பெயர்",
+    "email": "மின்னஞ்சல்",
+    "role": "பாத்திரம்",
+    "location": "இடம்",
+    "edit-profile": "சுயவிவரத்தைத் திருத்து",
+    "sign-out": "வெளியேறு",
+    
+    // Analysis section
+    "data-analysis": "தரவு பகுப்பாய்வு",
+    "geographic-distribution": "புவியியல் பரவல்",
+    "response-metrics": "பதில் அளவீடுகள்",
+    "interactive-map-placeholder": "ஊடாடும் வரைபட காட்சிப்படுத்தல் (விவரங்களைக் காண பகுதிகளைக் கிளிக் செய்யவும்)",
+    "incident-hotspots": "சம்பவ ஹாட்ஸ்பாட்கள்",
+    "avg-response-time": "சராசரி பதில் நேரம்",
+    "incidents": "சம்பவங்கள்",
+    "minutes": "நிமிடங்கள்",
+    "total-incidents": "மொத்த சம்பவங்கள்",
+    "from-previous": "முந்தைய காலத்திலிருந்து",
+    "survival-rate": "உயிர்வாழும் விகிதம்",
+    "response-statistics": "வழக்கின் தீவிரத்தன்மை வாரியாக பதில் வெற்றி விகிதம்",
+    "critical-cases": "நெருக்கடி வழக்குகள்",
+    "moderate-cases": "மிதமான வழக்குகள்",
+    "mild-cases": "லேசான வழக்குகள்",
+    "dataset-instructions": "பகுப்பாய்வுக்கு அவசர தரவு கொண்ட உங்கள் CSV தரவுத்தொகுப்பை பதிவேற்றவும்",
+    "drag-drop-csv": "உங்கள் CSV கோப்பை இங்கே இழுத்து விடவும், அல்லது உலாவ கிளிக் செய்யவும்",
+    "supported-format": "ஆதரிக்கப்படும் வடிவம்",
+    "max-file-size": "அதிகபட்ச கோப்பு அளவு",
+    "upload-successful": "பதிவேற்றம் வெற்றிகரமாக முடிந்தது!",
+    
     // Themes
     "light": "வெளிச்சம்",
     "dark": "இருள்",
-    
-    // Profile
-    "edit-profile": "சுயவிவரத்தைத் திருத்து",
-    "sign-out": "வெளியேறு",
     
     // Common actions
     "search-hospitals": "மருத்துவமனைகளைத் தேடுங்கள் அல்லது வழிசெலுத்துவதற்கு விபத்து இடத்தை உள்ளிடவும்...",
@@ -437,13 +540,39 @@ export const translations: Record<Language, Record<string, string>> = {
     "switch-to-dark": "డార్క్ మోడ్‌కి మారండి",
     "change": "మార్చు",
     
+    // Profile
+    "name": "పేరు",
+    "email": "ఇమెయిల్",
+    "role": "పాత్ర",
+    "location": "స్థానం",
+    "edit-profile": "ప్రొఫైల్‌ని సవరించండి",
+    "sign-out": "సైన్ అవుట్",
+    
+    // Analysis section
+    "data-analysis": "డేటా విశ్లేషణ",
+    "geographic-distribution": "భౌగోళిక పంపిణీ",
+    "response-metrics": "ప్రతిస్పందన మెట్రిక్స్",
+    "interactive-map-placeholder": "ఇంటరాక్టివ్ మ్యాప్ విజువలైజేషన్ (వివరాలను చూడటానికి ప్రాంతాలపై క్లిక్ చేయండి)",
+    "incident-hotspots": "ఘటన హాట్‌స్పాట్‌లు",
+    "avg-response-time": "సగటు ప్రతిస్పందన సమయం",
+    "incidents": "సంఘటనలు",
+    "minutes": "నిమిషాలు",
+    "total-incidents": "మొత్తం సంఘటనలు",
+    "from-previous": "మునుపటి కాలం నుండి",
+    "survival-rate": "మనుగడ రేటు",
+    "response-statistics": "కేసు తీవ్రత ద్వారా ప్రతిస్పందన విజయ రేటు",
+    "critical-cases": "క్రిటికల్ కేసులు",
+    "moderate-cases": "మోస్తరు కేసులు",
+    "mild-cases": "తేలికపాటి కేసులు",
+    "dataset-instructions": "విశ్లేషణ కోసం అత్యవసర డేటాను కలిగి ఉన్న మీ CSV డేటాసెట్‌ను అప్‌లోడ్ చేయండి",
+    "drag-drop-csv": "మీ CSV ఫైల్‌ను ఇక్కడ డ్రాగ్ చేసి డ్రాప్ చేయండి, లేదా బ్రౌజ్ చేయడానికి క్లిక్ చేయండి",
+    "supported-format": "మద్దతు ఉన్న ఫార్మాట్",
+    "max-file-size": "గరిష్ట ఫైల్ పరిమాణం",
+    "upload-successful": "అప్‌లోడ్ విజయవంతంగా పూర్తయింది!",
+    
     // Themes
     "light": "లైట్",
     "dark": "డార్క్",
-    
-    // Profile
-    "edit-profile": "ప్రొఫైల్‌ని సవరించండి",
-    "sign-out": "సైన్ అవుట్",
     
     // Common actions
     "search-hospitals": "ఆసుపత్రులను శోధించండి లేదా రూటింగ్ కోసం ప్రమాద స్థలాన్ని నమోదు చేయండి...",
@@ -455,79 +584,3 @@ export const translations: Record<Language, Record<string, string>> = {
     "critical-alerts": "క్రిటికల్ పేషెంట్ మరియు అధిక ప్రాధాన్యత అలర్ట్‌లు",
     "bed-availability": "బెడ్ లభ్యత మరియు వేచి ఉండే సమయాల్లో మార్పులు",
     "traffic-alerts": "ట్రాఫిక్ పరిస్థితుల్లో గణనీయమైన మార్పులు",
-    "mobile-alerts": "మొబైల్ పరికరాలలో అలర్ట్‌లను స్వీకరించండి",
-    "voice-announcements": "కీలక అప్‌డేట్‌ల కోసం వాయిస్ ప్రకటనలు",
-    "smart-hospital": "పేషెంట్ డేటా ఆధారంగా స్మార్ట్ ఆసుపత్రి ఎంపిక",
-    "show-survival": "ఆసుపత్రుల కోసం అంచనా వేయబడిన సర్వైవల్ రేట్‌లను చూపించండి",
-    "share-data": "సిస్టమ్‌ను మెరుగుపరచడానికి అనానిమస్ డేటాను షేర్ చేయండి",
-    "performance-metrics": "సమగ్ర పనితీరు కొలమానాలను వీక్షించండి",
-    "switch-themes": "లైట్ మరియు డార్క్ థీమ్‌ల మధ్య మారండి",
-    "enable-voice": "హ్యాండ్స్-ఫ్రీ వాయిస్ కంట్రోల్‌ను ప్రారంభించండి",
-    "sync-data": "పరికరాల మధ్య డేటాను సింక్ చేయండి",
-  }
-};
-
-// Define context type
-type LanguageContextType = {
-  language: Language;
-  setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
-};
-
-// Create language context
-const LanguageContext = createContext<LanguageContextType>({
-  language: "english",
-  setLanguage: () => {},
-  t: (key: string) => key,
-});
-
-// Language provider component
-export function LanguageProvider({
-  children,
-  defaultLanguage = "english",
-  storageKey = "app-language",
-}: {
-  children: React.ReactNode;
-  defaultLanguage?: Language;
-  storageKey?: string;
-}) {
-  const [language, setLanguage] = useState<Language>(
-    () => (localStorage.getItem(storageKey) as Language) || defaultLanguage
-  );
-
-  // Save language preference to localStorage
-  useEffect(() => {
-    localStorage.setItem(storageKey, language);
-  }, [language, storageKey]);
-
-  // Translate function
-  const t = (key: string): string => {
-    return translations[language][key] || key;
-  };
-
-  // Context value
-  const value = {
-    language,
-    setLanguage: (lang: Language) => {
-      setLanguage(lang);
-    },
-    t,
-  };
-
-  return (
-    <LanguageContext.Provider value={value}>
-      {children}
-    </LanguageContext.Provider>
-  );
-}
-
-// Hook to use the language context
-export const useLanguage = () => {
-  const context = useContext(LanguageContext);
-
-  if (context === undefined) {
-    throw new Error("useLanguage must be used within a LanguageProvider");
-  }
-
-  return context;
-};
