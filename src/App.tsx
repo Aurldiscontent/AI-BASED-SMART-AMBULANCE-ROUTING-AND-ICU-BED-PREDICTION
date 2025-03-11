@@ -13,13 +13,17 @@ import Index from "./pages/Index";
 import Welcome from "./pages/Welcome";
 import Auth from "./pages/Auth";
 import Home from "./pages/Home";
+import Search from "./pages/Search";
+import Map from "./pages/Map";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 // Initialize mock user data for demo purposes
 const initializeUserData = () => {
   if (!localStorage.getItem('userName')) {
-    localStorage.setItem('userName', 'Emma Thompson');
-    localStorage.setItem('userEmail', 'emma.thompson@medresponse.org');
+    localStorage.setItem('userName', 'SREEJITH S, 3rd YEAR STUDENT');
+    localStorage.setItem('userEmail', 'sreejith.s@medresponse.org');
     localStorage.setItem('userRole', 'First Responder');
     localStorage.setItem('userLocation', 'Central EMS');
   }
@@ -33,7 +37,7 @@ const RouteGuard = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     // For demo purposes, we're checking if the user is on a protected route
     // In a real app, you would check if the user is authenticated
-    const protectedRoutes = ['/home', '/search', '/profile', '/settings'];
+    const protectedRoutes = ['/home', '/search', '/map', '/profile', '/settings'];
     const isProtectedRoute = protectedRoutes.includes(location.pathname);
     
     if (isProtectedRoute && !localStorage.getItem('userName')) {
@@ -56,7 +60,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="system">
-        <LanguageProvider defaultLanguage="english">
+        <LanguageProvider>
           <UnitsProvider defaultUnitSystem="metric">
             <SettingsProvider>
               <TooltipProvider>
@@ -69,9 +73,10 @@ const App = () => {
                       <Route path="/welcome" element={<Welcome />} />
                       <Route path="/auth" element={<Auth />} />
                       <Route path="/home" element={<Home />} />
-                      <Route path="/search" element={<Home />} /> {/* Placeholder */}
-                      <Route path="/profile" element={<Home />} /> {/* Placeholder */}
-                      <Route path="/settings" element={<Home />} /> {/* Placeholder */}
+                      <Route path="/search" element={<Search />} />
+                      <Route path="/map" element={<Map />} />
+                      <Route path="/profile" element={<Profile />} />
+                      <Route path="/settings" element={<Settings />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </RouteGuard>

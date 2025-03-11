@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Define available languages
@@ -13,16 +12,13 @@ export const translations: Record<Language, Record<string, string>> = {
     "hospitals": "Hospitals",
     "reports": "Reports",
     "settings": "Settings",
-    
     // Page Titles
     "ai-smart-ambulance-routing": "AI Smart Ambulance Routing",
     "emergency-route": "Emergency Route",
     "hospitals-near-you": "Hospitals Near You",
-    
     // Patient Status
     "patient-status": "Patient Status",
-    "critical": "CRITICAL",
-    
+    "critical": "Critical",
     // Hospital Info
     "icu-availability": "ICU Availability",
     "total-icu-beds": "Total ICU Beds",
@@ -30,53 +26,57 @@ export const translations: Record<Language, Record<string, string>> = {
     "navigate-to": "Navigate to",
     "calling-hospital": "Calling Hospital",
     "connecting-to": "Connecting to",
-    
     // Upload Dataset
     "upload-dataset": "Upload Dataset",
     "dataset-ready": "Dataset Ready",
     "uploading": "Uploading...",
     "dataset-uploaded-title": "Dataset Uploaded Successfully",
-    "dataset-uploaded-desc": "File has been processed and is ready for analysis",
+    "dataset-uploaded-desc": "File processed and ready for analysis",
     "dataset-reset-title": "Dataset Reset",
     "dataset-reset-desc": "Analysis data has been reset",
     "dataset-options": "Dataset Options",
     "dataset-options-desc": "Manage your uploaded dataset",
     "analysis-active": "Analysis is currently active",
     "reset-analysis": "Reset Analysis",
-    
-    // Settings
-    "map-navigation-settings": "Map & Navigation Settings",
-    "notifications-alerts": "Notifications & Alerts",
-    "performance-data": "Performance & Data",
+    // Settings Page
     "system-preferences": "System Preferences",
-    "real-time-traffic-updates": "Real-time Traffic Updates",
-    "smart-rerouting": "Smart Rerouting",
-    "road-closure-alerts": "Road Closure Alerts",
-    "3d-map-visualization": "3D Map Visualization",
-    "lane-guidance": "Lane Guidance",
-    "emergency-alerts": "Emergency Alerts",
-    "hospital-status-updates": "Hospital Status Updates",
-    "traffic-condition-alerts": "Traffic Condition Alerts",
-    "push-notifications": "Push Notifications",
-    "audio-alerts": "Audio Alerts",
-    "ai-powered-recommendations": "AI-Powered Recommendations",
-    "survival-rate-prediction": "Survival Rate Prediction",
-    "anonymous-data-sharing": "Anonymous Data Sharing",
-    "detailed-analytics": "Detailed Analytics",
-    "dark-mode": "Dark Mode",
-    "voice-commands": "Voice Commands",
-    "data-sync": "Data Sync",
     "language": "Language",
-    "current-language": "Current",
     "units": "Units",
     "metric": "Metric",
     "imperial": "Imperial",
-    "switch-to-light": "Switch to Light Mode",
-    "switch-to-dark": "Switch to Dark Mode",
-    "change": "Change",
-    
-    // Profile
-    "name": "Name",
+    "map-navigation-settings": "Map & Navigation Settings",
+    "real-time-traffic-updates": "Real-time Traffic Updates",
+    "receive-live-traffic": "Receive live traffic updates for faster routes",
+    "smart-rerouting": "Smart Rerouting",
+    "auto-reroute": "Automatically reroute around traffic and closures",
+    "road-closure-alerts": "Road Closure Alerts",
+    "get-road-closure": "Get notified about road closures and incidents",
+    "3d-map-visualization": "3D Map Visualization",
+    "show-3d-buildings": "Show 3D buildings and landmarks on the map",
+    "lane-guidance": "Lane Guidance",
+    "show-lanes": "Show lane guidance during navigation",
+    "notifications-alerts": "Notifications & Alerts",
+    "emergency-alerts": "Emergency Alerts",
+    "critical-alerts": "Receive critical emergency alerts",
+    "hospital-status-updates": "Hospital Status Updates",
+    "bed-availability": "Get updates on bed availability",
+    "traffic-condition-alerts": "Traffic Condition Alerts",
+    "traffic-alerts": "Receive alerts about traffic conditions",
+    "push-notifications": "Push Notifications",
+    "mobile-alerts": "Receive alerts on your mobile device",
+    "audio-alerts": "Audio Alerts",
+    "voice-announcements": "Enable voice announcements for alerts",
+    "performance-data": "Performance & Data",
+    "ai-powered-recommendations": "AI-Powered Recommendations",
+    "smart-hospital": "Get smart hospital recommendations",
+    "survival-rate-prediction": "Survival Rate Prediction",
+    "show-survival": "Show survival rate predictions",
+    "anonymous-data-sharing": "Anonymous Data Sharing",
+    "share-data": "Share anonymous data to improve the app",
+    "detailed-analytics": "Detailed Analytics",
+    "performance-metrics": "Track performance metrics",
+    // Profile Page
+    "profile": "Profile",
     "email": "Email",
     "role": "Role",
     "location": "Location",
@@ -84,66 +84,25 @@ export const translations: Record<Language, Record<string, string>> = {
     "sign-out": "Sign Out",
     "signed-out": "Signed Out",
     "signed-out-success": "You have been successfully signed out",
-    "profile": "Profile",
-    
-    // Analysis section
-    "data-analysis": "Data Analysis",
-    "geographic-distribution": "Geographic Distribution",
-    "response-metrics": "Response Metrics",
-    "interactive-map-placeholder": "Interactive map visualization (click regions to view details)",
-    "incident-hotspots": "Incident Hotspots",
-    "avg-response-time": "Average Response Time",
-    "incidents": "incidents",
-    "minutes": "min",
-    "total-incidents": "Total Incidents",
-    "from-previous": "from previous period",
-    "survival-rate": "Survival Rate",
-    "response-statistics": "Response Success Rate by Case Severity",
-    "critical-cases": "Critical Cases",
-    "moderate-cases": "Moderate Cases",
-    "mild-cases": "Mild Cases",
-    "dataset-instructions": "Upload your CSV dataset containing emergency data for analysis",
-    "drag-drop-csv": "Drag and drop your CSV file here, or click to browse",
-    "supported-format": "Supported format",
-    "max-file-size": "Maximum file size",
-    "upload-successful": "Upload successful!",
-    
-    // Themes
-    "light": "Light",
-    "dark": "Dark",
-    
-    // Common actions
-    "search-hospitals": "Search hospitals or enter accident location for routing...",
-    "receive-live-traffic": "Receive live traffic data for optimal routing",
-    "auto-reroute": "Automatically reroute when faster paths are available",
-    "get-road-closure": "Get notified of closed roads along your route",
-    "show-3d-buildings": "Show buildings and landmarks in 3D",
-    "show-lanes": "Show recommended lanes for faster navigation",
-    "critical-alerts": "Critical patient and high priority alerts",
-    "bed-availability": "Changes in bed availability and wait times",
-    "traffic-alerts": "Significant changes in traffic conditions",
-    "mobile-alerts": "Receive alerts on mobile devices",
-    "voice-announcements": "Voice announcements for critical updates",
-    "smart-hospital": "Smart hospital selection based on patient data",
-    "show-survival": "Show predicted survival rates for hospitals",
-    "share-data": "Share anonymized data to improve the system",
-    "performance-metrics": "View comprehensive performance metrics",
-    "switch-themes": "Switch between light and dark themes",
-    "enable-voice": "Enable hands-free voice control",
-    "sync-data": "Sync data across devices",
-    
-    // Geo regions
+    // Search Page
+    "search-hospitals": "Search Hospitals...",
+    // Map Page
+    "navigate-to": "Navigate to",
+    "calling-hospital": "Calling Hospital",
+    "connecting-to": "Connecting to",
+    // Welcome Page
+    "welcome-title": "Welcome to MedResponse",
+    "welcome-description": "Your AI-powered emergency response assistant",
+    "get-started": "Get Started",
+    // Not Found Page
+    "page-not-found": "Page Not Found",
+    "go-home": "Go Home",
+    // Regions
     "north-bangalore": "North Bangalore",
-    "central-bangalore": "Central Bangalore", 
+    "central-bangalore": "Central Bangalore",
     "south-bangalore": "South Bangalore",
     "east-bangalore": "East Bangalore",
     "west-bangalore": "West Bangalore",
-    
-    // Analysis section
-    "incident-by-region": "Incidents by Region",
-    "incident-trends": "Incident Trends",
-    "response-time": "Response Time",
-    "incident-distribution-map": "Incident Distribution Map"
   },
   
   kannada: {
@@ -153,137 +112,97 @@ export const translations: Record<Language, Record<string, string>> = {
     "hospitals": "ಆಸ್ಪತ್ರೆಗಳು",
     "reports": "ವರದಿಗಳು",
     "settings": "ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
-    
     // Page Titles
-    "ai-smart-ambulance-routing": "AI ಸ್ಮಾರ್ಟ್ ಆಂಬುಲೆನ್ಸ್ ಮಾರ್ಗದರ್ಶನ",
+    "ai-smart-ambulance-routing": "AI ಸ್ಮಾರ್ಟ್ ಅಂಬುಲೆನ್ಸ್ ರೂಟಿಂಗ್",
     "emergency-route": "ತುರ್ತು ಮಾರ್ಗ",
     "hospitals-near-you": "ನಿಮ್ಮ ಹತ್ತಿರದ ಆಸ್ಪತ್ರೆಗಳು",
-    
     // Patient Status
     "patient-status": "ರೋಗಿಯ ಸ್ಥಿತಿ",
-    "critical": "ಗಂಭೀರ",
-    
+    "critical": "ನಿರ್ಣಾಯಕ",
     // Hospital Info
-    "icu-availability": "ICU ಲಭ್ಯತೆ",
-    "total-icu-beds": "ಒಟ್ಟು ICU ಹಾಸಿಗೆಗಳು",
-    "view-all-hospitals": "ಎಲ್ಲ ಆಸ್ಪತ್ರೆಗಳನ್ನು ವೀಕ್ಷಿಸಿ",
-    "navigate-to": "ನ್ಯಾವಿಗೇಟ್ ಮಾಡಿ",
-    "calling-hospital": "ಆಸ್ಪತ್ರೆಗೆ ಕರೆ ಮಾಡುತ್ತಿದೆ",
+    "icu-availability": "ಐಸಿಯು ಲಭ್ಯತೆ",
+    "total-icu-beds": "ಒಟ್ಟು ಐಸಿಯು ಹಾಸಿಗೆಗಳು",
+    "view-all-hospitals": "ಎಲ್ಲಾ ಆಸ್ಪತ್ರೆಗಳನ್ನು ವೀಕ್ಷಿಸಿ",
+    "navigate-to": "ನ್ಯಾವಿಗೇಟ್ ಮಾಡಲು",
+    "calling-hospital": "ಆಸ್ಪತ್ರೆಗೆ ಕರೆ ಮಾಡಲಾಗುತ್ತಿದೆ",
     "connecting-to": "ಸಂಪರ್ಕಿಸಲಾಗುತ್ತಿದೆ",
-    
     // Upload Dataset
     "upload-dataset": "ಡೇಟಾಸೆಟ್ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
     "dataset-ready": "ಡೇಟಾಸೆಟ್ ಸಿದ್ಧವಾಗಿದೆ",
-    "uploading": "ಅಪ್‌ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
-    "dataset-uploaded-title": "ಡೇಟಾಸೆಟ್ ಯಶಸ್ವಿಯಾಗಿ ಅಪ್‌ಲೋಡ್ ಆಗಿದೆ",
+    "uploading": "ಅಪ್‌ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
+    "dataset-uploaded-title": "ಡೇಟಾಸೆಟ್ ಯಶಸ್ವಿಯಾಗಿ ಅಪ್‌ಲೋಡ್ ಮಾಡಲಾಗಿದೆ",
     "dataset-uploaded-desc": "ಫೈಲ್ ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಲಾಗಿದೆ ಮತ್ತು ವಿಶ್ಲೇಷಣೆಗೆ ಸಿದ್ಧವಾಗಿದೆ",
-    "dataset-reset-title": "ಡೇಟಾಸೆಟ್ ರೀಸೆಟ್",
-    "dataset-reset-desc": "ವಿಶ್ಲೇಷಣಾ ಡೇಟಾವನ್ನು ರೀಸೆಟ್ ಮಾಡಲಾಗಿದೆ",
+    "dataset-reset-title": "ಡೇಟಾಸೆಟ್ ಮರುಹೊಂದಿಸಿ",
+    "dataset-reset-desc": "ವಿಶ್ಲೇಷಣೆ ಡೇಟಾವನ್ನು ಮರುಹೊಂದಿಸಲಾಗಿದೆ",
     "dataset-options": "ಡೇಟಾಸೆಟ್ ಆಯ್ಕೆಗಳು",
-    "dataset-options-desc": "ನಿಮ್ಮ ಅಪ್ಲೋಡ್ ಮಾಡಿದ ಡೇಟಾಸೆಟ್ ನಿರ್ವಹಿಸಿ",
+    "dataset-options-desc": "ನಿಮ್ಮ ಅಪ್‌ಲೋಡ್ ಮಾಡಿದ ಡೇಟಾಸೆಟ್ ಅನ್ನು ನಿರ್ವಹಿಸಿ",
     "analysis-active": "ವಿಶ್ಲೇಷಣೆ ಪ್ರಸ್ತುತ ಸಕ್ರಿಯವಾಗಿದೆ",
     "reset-analysis": "ವಿಶ್ಲೇಷಣೆಯನ್ನು ಮರುಹೊಂದಿಸಿ",
-    
-    // Settings
-    "map-navigation-settings": "ನಕ್ಷೆ ಮತ್ತು ನ್ಯಾವಿಗೇಶನ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
-    "notifications-alerts": "ಅಧಿಸೂಚನೆಗಳು ಮತ್ತು ಎಚ್ಚರಿಕೆಗಳು",
-    "performance-data": "ಕಾರ್ಯಕ್ಷಮತೆ ಮತ್ತು ಡೇಟಾ",
+    // Settings Page
     "system-preferences": "ಸಿಸ್ಟಮ್ ಆದ್ಯತೆಗಳು",
-    "real-time-traffic-updates": "ರಿಯಲ್-ಟೈಮ್ ಟ್ರಾಫಿಕ್ ಅಪ್‌ಡೇಟ್‌ಗಳು",
-    "smart-rerouting": "ಸ್ಮಾರ್ಟ್ ರೀರೂಟಿಂಗ್",
-    "road-closure-alerts": "ರಸ್ತೆ ಮುಚ್ಚುವಿಕೆ ಎಚ್ಚರಿಕೆಗಳು",
-    "3d-map-visualization": "3D ನಕ್ಷೆ ದೃಶ್ಯೀಕರಣ",
-    "lane-guidance": "ಲೇನ್ ಮಾರ್ಗದರ್ಶನ",
-    "emergency-alerts": "ತುರ್ತು ಎಚ್ಚರಿಕೆಗಳು",
-    "hospital-status-updates": "ಆಸ್ಪತ್ರೆ ಸ್ಥಿತಿ ಅಪ್‌ಡೇಟ್‌ಗಳು",
-    "traffic-condition-alerts": "ಟ್ರಾಫಿಕ್ ಸ್ಥಿತಿ ಎಚ್ಚರಿಕೆಗಳು",
-    "push-notifications": "ಪುಶ್ ಅಧಿಸೂಚನೆಗಳು",
-    "audio-alerts": "ಆಡಿಯೋ ಎಚ್ಚರಿಕೆಗಳು",
-    "ai-powered-recommendations": "AI-ಆಧಾರಿತ ಶಿಫಾರಸುಗಳು",
-    "survival-rate-prediction": "ಬದುಕುಳಿಯುವ ದರ ಭವಿಷ್ಯ",
-    "anonymous-data-sharing": "ಅನಾಮಧೇಯ ಡೇಟಾ ಹಂಚಿಕೆ",
-    "detailed-analytics": "ವಿವರವಾದ ವಿಶ್ಲೇಷಣೆ",
-    "dark-mode": "ಡಾರ್ಕ್ ಮೋಡ್",
-    "voice-commands": "ಧ್ವನಿ ಆದೇಶಗಳು",
-    "data-sync": "ಡೇಟಾ ಸಿಂಕ್",
     "language": "ಭಾಷೆ",
-    "current-language": "ಪ್ರಸ್ತುತ",
     "units": "ಘಟಕಗಳು",
     "metric": "ಮೆಟ್ರಿಕ್",
-    "imperial": "ಇಂಪೀರಿಯಲ್",
-    "switch-to-light": "ಲೈಟ್ ಮೋಡ್‌ಗೆ ಬದಲಾಯಿಸಿ",
-    "switch-to-dark": "ಡಾರ್ಕ್ ಮೋಡ್‌ಗೆ ಬದಲಾಯಿಸಿ",
-    "change": "ಬದಲಾಯಿಸಿ",
-    
-    // Profile
-    "name": "ಹೆಸರು",
-    "email": "ಇಮೇಲ್",
+    "imperial": "ಸಾಮ್ರಾಜ್ಯಶಾಹಿ",
+    "map-navigation-settings": "ನಕ್ಷೆ ಮತ್ತು ನ್ಯಾವಿಗೇಷನ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
+    "real-time-traffic-updates": "ನೈಜ-ಸಮಯದ ಟ್ರಾಫಿಕ್ ನವೀಕರಣಗಳು",
+    "receive-live-traffic": "ವೇಗವಾದ ಮಾರ್ಗಗಳಿಗಾಗಿ ಲೈವ್ ಟ್ರಾಫಿಕ್ ನವೀಕರಣಗಳನ್ನು ಸ್ವೀಕರಿಸಿ",
+    "smart-rerouting": "ಸ್ಮಾರ್ಟ್ ಮರುರೂಟಿಂಗ್",
+    "auto-reroute": "ಟ್ರಾಫಿಕ್ ಮತ್ತು ಮುಚ್ಚುವಿಕೆಗಳ ಸುತ್ತಲೂ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಮರುರೂಟ್ ಮಾಡಿ",
+    "road-closure-alerts": "ರಸ್ತೆ ಮುಚ್ಚುವ ಎಚ್ಚರಿಕೆಗಳು",
+    "get-road-closure": "ರಸ್ತೆ ಮುಚ್ಚುವಿಕೆಗಳು ಮತ್ತು ಘಟನೆಗಳ ಬಗ್ಗೆ ಸೂಚನೆ ಪಡೆಯಿರಿ",
+    "3d-map-visualization": "3D ನಕ್ಷೆ ದೃಶ್ಯೀಕರಣ",
+    "show-3d-buildings": "ನಕ್ಷೆಯಲ್ಲಿ 3D ಕಟ್ಟಡಗಳು ಮತ್ತು ಹೆಗ್ಗುರುತುಗಳನ್ನು ತೋರಿಸಿ",
+    "lane-guidance": "ಲೇನ್ ಮಾರ್ಗದರ್ಶನ",
+    "show-lanes": "ನ್ಯಾವಿಗೇಷನ್ ಸಮಯದಲ್ಲಿ ಲೇನ್ ಮಾರ್ಗದರ್ಶನವನ್ನು ತೋರಿಸಿ",
+    "notifications-alerts": "ಅಧಿಸೂಚನೆಗಳು ಮತ್ತು ಎಚ್ಚರಿಕೆಗಳು",
+    "emergency-alerts": "ತುರ್ತು ಎಚ್ಚರಿಕೆಗಳು",
+    "critical-alerts": "ನಿರ್ಣಾಯಕ ತುರ್ತು ಎಚ್ಚರಿಕೆಗಳನ್ನು ಸ್ವೀಕರಿಸಿ",
+    "hospital-status-updates": "ಆಸ್ಪತ್ರೆ ಸ್ಥಿತಿ ನವೀಕರಣಗಳು",
+    "bed-availability": "ಹಾಸಿಗೆ ಲಭ್ಯತೆಯ ಕುರಿತು ನವೀಕರಣಗಳನ್ನು ಪಡೆಯಿರಿ",
+    "traffic-condition-alerts": "ಟ್ರಾಫಿಕ್ ಸ್ಥಿತಿ ಎಚ್ಚರಿಕೆಗಳು",
+    "traffic-alerts": "ಟ್ರಾಫಿಕ್ ಪರಿಸ್ಥಿತಿಗಳ ಬಗ್ಗೆ ಎಚ್ಚರಿಕೆಗಳನ್ನು ಸ್ವೀಕರಿಸಿ",
+    "push-notifications": "ಪುಶ್ ಅಧಿಸೂಚನೆಗಳು",
+    "mobile-alerts": "ನಿಮ್ಮ ಮೊಬೈಲ್ ಸಾಧನದಲ್ಲಿ ಎಚ್ಚರಿಕೆಗಳನ್ನು ಸ್ವೀಕರಿಸಿ",
+    "audio-alerts": "ಆಡಿಯೋ ಎಚ್ಚರಿಕೆಗಳು",
+    "voice-announcements": "ಎಚ್ಚರಿಕೆಗಳಿಗಾಗಿ ಧ್ವನಿ ಪ್ರಕಟಣೆಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ",
+    "performance-data": "ಕಾರ್ಯಕ್ಷಮತೆ ಮತ್ತು ಡೇಟಾ",
+    "ai-powered-recommendations": "AI-ಚಾಲಿತ ಶಿಫಾರಸುಗಳು",
+    "smart-hospital": "ಸ್ಮಾರ್ಟ್ ಆಸ್ಪತ್ರೆ ಶಿಫಾರಸುಗಳನ್ನು ಪಡೆಯಿರಿ",
+    "survival-rate-prediction": "ಉಳಿವಿನ ದರ ಮುನ್ಸೂಚನೆ",
+    "show-survival": "ಉಳಿವಿನ ದರ ಮುನ್ಸೂಚನೆಗಳನ್ನು ತೋರಿಸಿ",
+    "anonymous-data-sharing": "ಅನಾಮಧೇಯ ಡೇಟಾ ಹಂಚಿಕೆ",
+    "share-data": "ಅಪ್ಲಿಕೇಶನ್ ಅನ್ನು ಸುಧಾರಿಸಲು ಅನಾಮಧೇಯ ಡೇಟಾವನ್ನು ಹಂಚಿಕೊಳ್ಳಿ",
+    "detailed-analytics": "ವಿವರವಾದ ವಿಶ್ಲೇಷಣೆ",
+    "performance-metrics": "ಕಾರ್ಯಕ್ಷಮತೆ ಮೆಟ್ರಿಕ್‌ಗಳನ್ನು ಟ್ರ್ಯಾಕ್ ಮಾಡಿ",
+    // Profile Page
+    "profile": "ಪ್ರೊಫೈಲ್",
+    "email": "ಇಮೇಲ್",
     "role": "ಪಾತ್ರ",
     "location": "ಸ್ಥಳ",
-    "edit-profile": "ಪ್ರೊಫೈಲ್ ಎಡಿಟ್ ಮಾಡಿ",
-    "sign-out": "ಸೈನ್ ಔಟ್",
+    "edit-profile": "ಪ್ರೊಫೈಲ್ ಸಂಪಾದಿಸಿ",
+    "sign-out": "ನಿರ್ಗಮಿಸಿ",
     "signed-out": "ಸೈನ್ ಔಟ್ ಮಾಡಲಾಗಿದೆ",
-    "signed-out-success": "ನೀವು ಯಶಸ್ವಿಯಾಗಿ ಸೈನ್ ಔಟ್ ಮಾಡಿದ್ದೀರಿ",
-    "profile": "ಪ್ರೊಫೈಲ್",
-    
-    // Analysis section
-    "data-analysis": "ಡೇಟಾ ವಿಶ್ಲೇಷಣೆ",
-    "geographic-distribution": "ಭೌಗೋಳಿಕ ವಿತರಣೆ",
-    "response-metrics": "ಪ್ರತಿಕ್ರಿಯೆ ಮೆಟ್ರಿಕ್ಸ್",
-    "interactive-map-placeholder": "ಇಂಟರಾಕ್ಟಿವ್ ನಕ್ಷೆ ದೃಶ್ಯೀಕರಣ (ವಿವರಗಳನ್ನು ವೀಕ್ಷಿಸಲು ಪ್ರದೇಶಗಳನ್ನು ಕ್ಲಿಕ್ ಮಾಡಿ)",
-    "incident-hotspots": "ಘಟನೆ ಹಾಟ್‌ಸ್ಪಾಟ್‌ಗಳು",
-    "avg-response-time": "ಸರಾಸರಿ ಪ್ರತಿಕ್ರಿಯೆ ಸಮಯ",
-    "incidents": "ಘಟನೆಗಳು",
-    "minutes": "ನಿಮಿಷಗಳು",
-    "total-incidents": "ಒಟ್ಟು ಘಟನೆಗಳು",
-    "from-previous": "ಹಿಂದಿನ ಅವಧಿಯಿಂದ",
-    "survival-rate": "ಬದುಕುಳಿಯುವ ದರ",
-    "response-statistics": "ಪ್ರಕರಣದ ತೀವ್ರತೆಯ ಪ್ರಕಾರ ಪ್ರತಿಕ್ರಿಯೆ ಯಶಸ್ಸಿನ ದರ",
-    "critical-cases": "ಗಂಭೀರ ಪ್ರಕರಣಗಳು",
-    "moderate-cases": "ಮಧ್ಯಮ ಪ್ರಕರಣಗಳು",
-    "mild-cases": "ಸೌಮ್ಯ ಪ್ರಕರಣಗಳು",
-    "dataset-instructions": "ವಿಶ್ಲೇಷಣೆಗಾಗಿ ತುರ್ತು ಡೇಟಾವನ್ನು ಒಳಗೊಂಡಿರುವ ನಿಮ್ಮ CSV ಡೇಟಾಸೆಟ್ ಅನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
-    "drag-drop-csv": "ನಿಮ್ಮ CSV ಫೈಲ್ ಅನ್ನು ಇಲ್ಲಿ ಎಳೆದು ಬಿಡಿ, ಅಥವಾ ಬ್ರೌಸ್ ಮಾಡಲು ಕ್ಲಿಕ್ ಮಾಡಿ",
-    "supported-format": "ಬೆಂಬಲಿತ ಫಾರ್ಮ್ಯಾಟ್",
-    "max-file-size": "ಗರಿಷ್ಠ ಫೈಲ್ ಗಾತ್ರ",
-    "upload-successful": "ಅಪ್ಲೋಡ್ ಯಶಸ್ವಿಯಾಗಿದೆ!",
-    
-    // Themes
-    "light": "ಬೆಳಕು",
-    "dark": "ಕತ್ತಲೆ",
-    
-    // Common actions
-    "search-hospitals": "ಆಸ್ಪತ್ರೆಗಳನ್ನು ಹುಡುಕಿ ಅಥವಾ ಮಾರ್ಗದರ್ಶನಕ್ಕಾಗಿ ಅಪಘಾತ ಸ್ಥಳವನ್ನು ನಮೂದಿಸಿ...",
-    "receive-live-traffic": "ಅನುಕೂಲಕರ ಮಾರ್ಗದರ್ಶನಕ್ಕಾಗಿ ಲೈವ್ ಟ್ರಾಫಿಕ್ ಡೇಟಾವನ್ನು ಪಡೆಯಿರಿ",
-    "auto-reroute": "ವೇಗದ ಮಾರ್ಗಗಳು ಲಭ್ಯವಿದ್ದಾಗ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಮರುಮಾರ್ಗಗೊಳಿಸಿ",
-    "get-road-closure": "ನಿಮ್ಮ ಮಾರ್ಗದಲ್ಲಿ ಮುಚ್ಚಿದ ರಸ್ತೆಗಳ ಬಗ್ಗೆ ಸೂಚನೆ ಪಡೆಯಿರಿ",
-    "show-3d-buildings": "3D ನಲ್ಲಿ ಕಟ್ಟಡಗಳು ಮತ್ತು ಲ್ಯಾಂಡ್‌ಮಾರ್ಕ್‌ಗಳನ್ನು ತೋರಿಸಿ",
-    "show-lanes": "ವೇಗದ ನ್ಯಾವಿಗೇಶನ್‌ಗಾಗಿ ಶಿಫಾರಸು ಮಾಡಿದ ಲೇನ್‌ಗಳನ್ನು ತೋರಿಸಿ",
-    "critical-alerts": "ಗಂಭೀರ ರೋಗಿ ಮತ್ತು ಹೆಚ್ಚಿನ ಆದ್ಯತೆಯ ಎಚ್ಚರಿಕೆಗಳು",
-    "bed-availability": "ಹಾಸಿಗೆ ಲಭ್ಯತೆ ಮತ್ತು ನಿರೀಕ್ಷಣಾ ಸಮಯದಲ್ಲಿ ಬದಲಾವಣೆಗಳು",
-    "traffic-alerts": "ಟ್ರಾಫಿಕ್ ಪರಿಸ್ಥಿತಿಗಳಲ್ಲಿ ಗಮನಾರ್ಹ ಬದಲಾವಣೆಗಳು",
-    "mobile-alerts": "ಮೊಬೈಲ್ ಸಾಧನಗಳಲ್ಲಿ ಎಚ್ಚರಿಕೆಗಳನ್ನು ಸ್ವೀಕರಿಸಿ",
-    "voice-announcements": "ಪ್ರಮುಖ ಅಪ್‌ಡೇಟ್‌ಗಳಿಗಾಗಿ ಧ್ವನಿ ಪ್ರಕಟಣೆಗಳು",
-    "smart-hospital": "ರೋಗಿಯ ದತ್ತಾಂಶದ ಆಧಾರದ ಮೇಲೆ ಸ್ಮಾರ್ಟ್ ಆಸ್ಪತ್ರೆ ಆಯ್ಕೆ",
-    "show-survival": "ಆಸ್ಪತ್ರೆಗಳಿಗೆ ನಿರೀಕ್ಷಿತ ಬದುಕುಳಿಯುವ ದರಗಳನ್ನು ತೋರಿಸಿ",
-    "share-data": "ವ್ಯವಸ್ಥೆಯನ್ನು ಸುಧಾರಿಸಲು ಅನಾಮಧೇಯ ಡೇಟಾವನ್ನು ಹಂಚಿಕೊಳ್ಳಿ",
-    "performance-metrics": "ಸಮಗ್ರ ಕಾರ್ಯಕ್ಷಮತೆ ಮೆಟ್ರಿಕ್‌ಗಳನ್ನು ವೀಕ್ಷಿಸಿ",
-    "switch-themes": "ಲೈಟ್ ಮತ್ತು ಡಾರ್ಕ್ ಥೀಮ್‌ಗಳ ನಡುವೆ ಬದಲಾಯಿಸಿ",
-    "enable-voice": "ಹ್ಯಾಂಡ್‌ಫ್ರೀ ಧ್ವನಿ ನಿಯಂತ್ರಣವನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ",
-    "sync-data": "ಸಾಧನಗಳ ನಡುವೆ ಡೇಟಾವನ್ನು ಸಿಂಕ್ ಮಾಡಿ",
-    
-    // Geo regions
+    "signed-out-success": "ನೀವು ಯಶಸ್ವಿಯಾಗಿ ಸೈನ್ ಔಟ್ ಆಗಿದ್ದೀರಿ",
+    // Search Page
+    "search-hospitals": "ಆಸ್ಪತ್ರೆಗಳನ್ನು ಹುಡುಕಿ...",
+    // Map Page
+    "navigate-to": "ನ್ಯಾವಿಗೇಟ್ ಮಾಡಲು",
+    "calling-hospital": "ಆಸ್ಪತ್ರೆಗೆ ಕರೆ ಮಾಡಲಾಗುತ್ತಿದೆ",
+    "connecting-to": "ಸಂಪರ್ಕಿಸಲಾಗುತ್ತಿದೆ",
+    // Welcome Page
+    "welcome-title": "ಮೆಡ್‌ರೆಸ್ಪಾನ್ಸ್‌ಗೆ ಸ್ವಾಗತ",
+    "welcome-description": "ನಿಮ್ಮ AI-ಚಾಲಿತ ತುರ್ತು ಪ್ರತಿಕ್ರಿಯೆ ಸಹಾಯಕ",
+    "get-started": "ಪ್ರಾರಂಭಿಸಿ",
+    // Not Found Page
+    "page-not-found": "ಪುಟ ಕಂಡುಬಂದಿಲ್ಲ",
+    "go-home": "ಮನೆಗೆ ಹೋಗಿ",
+    // Regions
     "north-bangalore": "ಉತ್ತರ ಬೆಂಗಳೂರು",
-    "central-bangalore": "ಕೇಂದ್ರ ಬೆಂಗಳೂರು", 
+    "central-bangalore": "ಕೇಂದ್ರ ಬೆಂಗಳೂರು",
     "south-bangalore": "ದಕ್ಷಿಣ ಬೆಂಗಳೂರು",
     "east-bangalore": "ಪೂರ್ವ ಬೆಂಗಳೂರು",
     "west-bangalore": "ಪಶ್ಚಿಮ ಬೆಂಗಳೂರು",
-    
-    // Analysis section
-    "incident-by-region": "ಪ್ರದೇಶವಾರು ಘಟನೆಗಳು",
-    "incident-trends": "ಘಟನೆ ಪ್ರವೃತ್ತಿಗಳು",
-    "response-time": "ಪ್ರತಿಕ್ರಿಯೆ ಸಮಯ",
-    "incident-distribution-map": "ಘಟನೆ ವಿತರಣೆ ನಕ್ಷೆ"
   },
   
   hindi: {
@@ -293,137 +212,97 @@ export const translations: Record<Language, Record<string, string>> = {
     "hospitals": "अस्पताल",
     "reports": "रिपोर्ट्स",
     "settings": "सेटिंग्स",
-    
     // Page Titles
-    "ai-smart-ambulance-routing": "AI स्मार्ट एम्बुलेंस मार्गदर्शन",
+    "ai-smart-ambulance-routing": "AI स्मार्ट एम्बुलेंस रूटिंग",
     "emergency-route": "आपातकालीन मार्ग",
     "hospitals-near-you": "आपके पास के अस्पताल",
-    
     // Patient Status
-    "patient-status": "मरीज की स्थिति",
+    "patient-status": "रोगी की स्थिति",
     "critical": "गंभीर",
-    
     // Hospital Info
-    "icu-availability": "ICU उपलब्धता",
-    "total-icu-beds": "कुल ICU बेड",
-    "view-all-hospitals": "सभी अस्पताल देखें",
-    "navigate-to": "नेविगेट करें",
-    "calling-hospital": "अस्पताल को कॉल कर रहे हैं",
-    "connecting-to": "से जुड़ रहे हैं",
-    
+    "icu-availability": "आईसीयू उपलब्धता",
+    "total-icu-beds": "कुल आईसीयू बिस्तर",
+    "view-all-hospitals": "सभी अस्पतालों को देखें",
+    "navigate-to": "नेविगेट करने के लिए",
+    "calling-hospital": "अस्पताल को कॉल किया जा रहा है",
+    "connecting-to": "कनेक्ट हो रहा है",
     // Upload Dataset
     "upload-dataset": "डेटासेट अपलोड करें",
     "dataset-ready": "डेटासेट तैयार है",
     "uploading": "अपलोड हो रहा है...",
     "dataset-uploaded-title": "डेटासेट सफलतापूर्वक अपलोड किया गया",
-    "dataset-uploaded-desc": "फ़ाइल को संसाधित किया गया है और विश्लेषण के लिए तैयार है",
+    "dataset-uploaded-desc": "फ़ाइल संसाधित की गई और विश्लेषण के लिए तैयार है",
     "dataset-reset-title": "डेटासेट रीसेट",
     "dataset-reset-desc": "विश्लेषण डेटा रीसेट किया गया है",
     "dataset-options": "डेटासेट विकल्प",
-    "dataset-options-desc": "अपने अपलोड किए गए डेटासेट का प्रबंधन करें",
+    "dataset-options-desc": "अपने अपलोड किए गए डेटासेट को प्रबंधित करें",
     "analysis-active": "विश्लेषण वर्तमान में सक्रिय है",
     "reset-analysis": "विश्लेषण रीसेट करें",
-    
-    // Settings
-    "map-navigation-settings": "मैप और नेविगेशन सेटिंग्स",
-    "notifications-alerts": "नोटिफिकेशन और अलर्ट",
-    "performance-data": "प्रदर्शन और डेटा",
-    "system-preferences": "सिस्टम प्राथमिकताएँ",
-    "real-time-traffic-updates": "रीयल-टाइम ट्रैफिक अपडेट",
-    "smart-rerouting": "स्मार्ट रीरूटिंग",
-    "road-closure-alerts": "सड़क बंद होने के अलर्ट",
-    "3d-map-visualization": "3D मैप विज़ुअलाइज़ेशन",
-    "lane-guidance": "लेन गाइडेंस",
-    "emergency-alerts": "आपातकालीन अलर्ट",
-    "hospital-status-updates": "अस्पताल स्थिति अपडेट",
-    "traffic-condition-alerts": "ट्रैफिक स्थिति अलर्ट",
-    "push-notifications": "पुश नोटिफिकेशन",
-    "audio-alerts": "ऑडियो अलर्ट",
-    "ai-powered-recommendations": "AI-संचालित सिफारिशें",
-    "survival-rate-prediction": "जीवित रहने की दर की भविष्यवाणी",
-    "anonymous-data-sharing": "अनाम डेटा शेयरिंग",
-    "detailed-analytics": "विस्तृत एनालिटिक्स",
-    "dark-mode": "डार्क मोड",
-    "voice-commands": "वॉइस कमांड",
-    "data-sync": "डेटा सिंक",
+    // Settings Page
+    "system-preferences": "सिस्टम प्राथमिकताएं",
     "language": "भाषा",
-    "current-language": "वर्तमान",
     "units": "इकाइयाँ",
-    "metric": "मेट्रिक",
-    "imperial": "इम्पीरियल",
-    "switch-to-light": "लाइट मोड में स्विच करें",
-    "switch-to-dark": "डार्क मोड में स्विच करें",
-    "change": "बदलें",
-    
-    // Profile
-    "name": "नाम",
+    "metric": "मीट्रिक",
+    "imperial": "साम्राज्यीय",
+    "map-navigation-settings": "मानचित्र और नेविगेशन सेटिंग्स",
+    "real-time-traffic-updates": "वास्तविक समय यातायात अपडेट",
+    "receive-live-traffic": "तेज़ मार्गों के लिए लाइव ट्रैफ़िक अपडेट प्राप्त करें",
+    "smart-rerouting": "स्मार्ट रीरूटिंग",
+    "auto-reroute": "ट्रैफ़िक और बंद होने के आसपास स्वचालित रूप से रीरूट करें",
+    "road-closure-alerts": "सड़क बंद होने की चेतावनी",
+    "get-road-closure": "सड़क बंद होने और घटनाओं के बारे में सूचना प्राप्त करें",
+    "3d-map-visualization": "3डी मानचित्र दृश्य",
+    "show-3d-buildings": "मानचित्र पर 3डी इमारतें और स्थलचिह्न दिखाएं",
+    "lane-guidance": "लेन मार्गदर्शन",
+    "show-lanes": "नेविगेशन के दौरान लेन मार्गदर्शन दिखाएं",
+    "notifications-alerts": "सूचनाएं और अलर्ट",
+    "emergency-alerts": "आपातकालीन अलर्ट",
+    "critical-alerts": "महत्वपूर्ण आपातकालीन अलर्ट प्राप्त करें",
+    "hospital-status-updates": "अस्पताल स्थिति अपडेट",
+    "bed-availability": "बिस्तर उपलब्धता पर अपडेट प्राप्त करें",
+    "traffic-condition-alerts": "यातायात स्थिति अलर्ट",
+    "traffic-alerts": "यातायात स्थितियों के बारे में अलर्ट प्राप्त करें",
+    "push-notifications": "पुश सूचनाएं",
+    "mobile-alerts": "अपने मोबाइल डिवाइस पर अलर्ट प्राप्त करें",
+    "audio-alerts": "ऑडियो अलर्ट",
+    "voice-announcements": "अलर्ट के लिए ध्वनि घोषणाएं सक्षम करें",
+    "performance-data": "प्रदर्शन और डेटा",
+    "ai-powered-recommendations": "AI-संचालित अनुशंसाएँ",
+    "smart-hospital": "स्मार्ट अस्पताल अनुशंसाएँ प्राप्त करें",
+    "survival-rate-prediction": "उत्तरजीविता दर भविष्यवाणी",
+    "show-survival": "उत्तरजीविता दर भविष्यवाणियाँ दिखाएँ",
+    "anonymous-data-sharing": "गुमनाम डेटा साझाकरण",
+    "share-data": "ऐप को बेहतर बनाने के लिए गुमनाम डेटा साझा करें",
+    "detailed-analytics": "विस्तृत विश्लेषिकी",
+    "performance-metrics": "प्रदर्शन मेट्रिक्स को ट्रैक करें",
+    // Profile Page
+    "profile": "प्रोफ़ाइल",
     "email": "ईमेल",
     "role": "भूमिका",
     "location": "स्थान",
-    "edit-profile": "प्रोफाइल एडिट करें",
+    "edit-profile": "प्रोफ़ाइल संपादित करें",
     "sign-out": "साइन आउट",
-    "signed-out": "साइन आउट किया गया",
+    "signed-out": "साइन आउट",
     "signed-out-success": "आप सफलतापूर्वक साइन आउट हो गए हैं",
-    "profile": "प्रोफाइल",
-    
-    // Analysis section
-    "data-analysis": "डेटा विश्लेषण",
-    "geographic-distribution": "भौगोलिक वितरण",
-    "response-metrics": "प्रतिक्रिया मेट्रिक्स",
-    "interactive-map-placeholder": "इंटरैक्टिव मैप विज़ुअलाइज़ेशन (विवरण देखने के लिए क्षेत्रों पर क्लिक करें)",
-    "incident-hotspots": "घटना हॉटस्पॉट",
-    "avg-response-time": "औसत प्रतिक्रिया समय",
-    "incidents": "घटनाएँ",
-    "minutes": "मिनट",
-    "total-incidents": "कुल घटनाएँ",
-    "from-previous": "पिछली अवधि से",
-    "survival-rate": "जीवित रहने की दर",
-    "response-statistics": "केस गंभीरता के अनुसार प्रतिक्रिया सफलता दर",
-    "critical-cases": "गंभीर मामले",
-    "moderate-cases": "मध्यम मामले",
-    "mild-cases": "हल्के मामले",
-    "dataset-instructions": "विश्लेषण के लिए आपातकालीन डेटा वाला अपना CSV डेटासेट अपलोड करें",
-    "drag-drop-csv": "अपनी CSV फ़ाइल यहां खींचें और छोड़ें, या ब्राउज़ करने के लिए क्लिक करें",
-    "supported-format": "समर्थित प्रारूप",
-    "max-file-size": "अधिकतम फ़ाइल आकार",
-    "upload-successful": "अपलोड सफल!",
-    
-    // Themes
-    "light": "लाइट",
-    "dark": "डार्क",
-    
-    // Common actions
-    "search-hospitals": "अस्पतालों को खोजें या रूटिंग के लिए दुर्घटना स्थान दर्ज करें...",
-    "receive-live-traffic": "इष्टतम रूटिंग के लिए लाइव ट्रैफिक डेटा प्राप्त करें",
-    "auto-reroute": "तेज मार्ग उपलब्ध होने पर स्वचालित रूप से रीरूट करें",
-    "get-road-closure": "अपने मार्ग पर बंद सड़कों के बारे में सूचित रहें",
-    "show-3d-buildings": "3D में इमारतों और लैंडमार्क्स को दिखाएं",
-    "show-lanes": "तेज नेविगेशन के लिए अनुशंसित लेन दिखाएं",
-    "critical-alerts": "गंभीर मरीज और उच्च प्राथमिकता वाले अलर्ट",
-    "bed-availability": "बेड उपलब्धता और प्रतीक्षा समय में परिवर्तन",
-    "traffic-alerts": "ट्रैफिक स्थितियों में महत्वपूर्ण परिवर्तन",
-    "mobile-alerts": "मोबाइल डिवाइस पर अलर्ट प्राप्त करें",
-    "voice-announcements": "महत्वपूर्ण अपडेट के लिए वॉइस घोषणाएं",
-    "smart-hospital": "मरीज के डेटा के आधार पर स्मार्ट अस्पताल चयन",
-    "show-survival": "अस्पतालों के लिए अनुमानित जीवित रहने की दर दिखाएं",
-    "share-data": "सिस्टम को बेहतर बनाने के लिए अनाम डेटा साझा करें",
-    "performance-metrics": "व्यापक प्रदर्शन मेट्रिक्स देखें",
-    "switch-themes": "लाइट और डार्क थीम के बीच स्विच करें",
-    "enable-voice": "हैंड्स-फ्री वॉइस कंट्रोल सक्षम करें",
-    "sync-data": "डिवाइसों के बीच डेटा सिंक करें",
-    
-    // Geo regions
-    "north-bangalore": "उत्तर बैंगलोर",
+    // Search Page
+    "search-hospitals": "अस्पतालों को खोजें...",
+    // Map Page
+    "navigate-to": "नेविगेट करने के लिए",
+    "calling-hospital": "अस्पताल को कॉल किया जा रहा है",
+    "connecting-to": "कनेक्ट हो रहा है",
+    // Welcome Page
+    "welcome-title": "मेडरेस्पॉन्स में आपका स्वागत है",
+    "welcome-description": "आपका एआई-संचालित आपातकालीन प्रतिक्रिया सहायक",
+    "get-started": "शुरू हो जाओ",
+    // Not Found Page
+    "page-not-found": "पृष्ठ नहीं मिला",
+    "go-home": "घर जाओ",
+    // Regions
+    "north-bangalore": "उत्तरी बैंगलोर",
     "central-bangalore": "मध्य बैंगलोर",
     "south-bangalore": "दक्षिण बैंगलोर",
-    "east-bangalore": "पूर्व बैंगलोर",
-    "west-bangalore": "पश्चिम बैंगलोर",
-    
-    // Analysis section
-    "incident-by-region": "क्षेत्र के अनुसार घटनाएँ",
-    "incident-trends": "घटना रुझान",
-    "response-time": "प्रतिक्रिया समय",
-    "incident-distribution-map": "घटना वितरण मानचित्र"
+    "east-bangalore": "पूर्वी बैंगलोर",
+    "west-bangalore": "पश्चिमी बैंगलोर",
   },
   
   tamil: {
@@ -433,137 +312,97 @@ export const translations: Record<Language, Record<string, string>> = {
     "hospitals": "மருத்துவமனைகள்",
     "reports": "அறிக்கைகள்",
     "settings": "அமைப்புகள்",
-    
     // Page Titles
-    "ai-smart-ambulance-routing": "AI ஸ்மார்ட் ஆம்புலன்ஸ் வழித்தடம்",
-    "emergency-route": "அவசர வழித்தடம்",
+    "ai-smart-ambulance-routing": "AI ஸ்மார்ட் ஆம்புலன்ஸ் ரூட்டிங்",
+    "emergency-route": "அவசர வழி",
     "hospitals-near-you": "உங்களுக்கு அருகிலுள்ள மருத்துவமனைகள்",
-    
     // Patient Status
     "patient-status": "நோயாளி நிலை",
-    "critical": "கடுமையான",
-    
+    "critical": "தீவிர",
     // Hospital Info
     "icu-availability": "ICU கிடைக்கும் தன்மை",
     "total-icu-beds": "மொத்த ICU படுக்கைகள்",
-    "view-all-hospitals": "அனைத்து மருத்துவமனைகளையும் காண்க",
-    "navigate-to": "வழிசெலுத்து",
-    "calling-hospital": "மருத்துவமனைக்கு அழைக்கிறது",
+    "view-all-hospitals": "எல்லா மருத்துவமனைகளையும் காட்டு",
+    "navigate-to": "வழிசெலுத்த",
+    "calling-hospital": "மருத்துவமனைக்கு அழைக்கப்படுகிறது",
     "connecting-to": "இணைக்கிறது",
-    
     // Upload Dataset
-    "upload-dataset": "தரவுத்தொகுப்பை பதிவேற்றுக",
-    "dataset-ready": "தரவுத்தொகுப்பு தயார்",
+    "upload-dataset": "தரவுத்தொகுப்பை பதிவேற்றவும்",
+    "dataset-ready": "தரவுத்தொகுப்பு தயாராக உள்ளது",
     "uploading": "பதிவேற்றுகிறது...",
     "dataset-uploaded-title": "தரவுத்தொகுப்பு வெற்றிகரமாக பதிவேற்றப்பட்டது",
     "dataset-uploaded-desc": "கோப்பு செயலாக்கப்பட்டு பகுப்பாய்வுக்கு தயாராக உள்ளது",
-    "dataset-reset-title": "தரவுத்தொகுப்பு மீட்டமைக்கப்பட்டது",
+    "dataset-reset-title": "தரவுத்தொகுப்பு மீட்டமை",
     "dataset-reset-desc": "பகுப்பாய்வு தரவு மீட்டமைக்கப்பட்டது",
     "dataset-options": "தரவுத்தொகுப்பு விருப்பங்கள்",
     "dataset-options-desc": "பதிவேற்றிய தரவுத்தொகுப்பை நிர்வகிக்கவும்",
     "analysis-active": "பகுப்பாய்வு தற்போது செயலில் உள்ளது",
-    "reset-analysis": "பகுப்பாய்வை மீட்டமைக்கவும்",
-    
-    // Settings
-    "map-navigation-settings": "வரைபட மற்றும் வழிசெலுத்தல் அமைப்புகள்",
-    "notifications-alerts": "அறிவிப்புகள் மற்றும் எச்சரிக்கைகள்",
-    "performance-data": "செயல்திறன் மற்றும் தரவு",
-    "system-preferences": "கணினி விருப்பங்கள்",
-    "real-time-traffic-updates": "நேரடி போக்குவரத்து புதுப்பிப்புகள்",
-    "smart-rerouting": "ஸ்மார்ட் மறுவழிப்படுத்தல்",
-    "road-closure-alerts": "சாலை மூடல் எச்சரிக்கைகள்",
-    "3d-map-visualization": "3D வரைபட காட்சிப்படுத்தல்",
-    "lane-guidance": "பாதை வழிகாட்டுதல்",
-    "emergency-alerts": "அவசர எச்சரிக்கைகள்",
-    "hospital-status-updates": "மருத்துவமனை நிலை புதுப்பிப்புகள்",
-    "traffic-condition-alerts": "போக்குவரத்து நிலை எச்சரிக்கைகள்",
-    "push-notifications": "புஷ் அறிவிப்புகள்",
-    "audio-alerts": "ஒலி எச்சரிக்கைகள்",
-    "ai-powered-recommendations": "AI-உந்தப்பட்ட பரிந்துரைகள்",
-    "survival-rate-prediction": "உயிர் வாழும் விகித கணிப்பு",
-    "anonymous-data-sharing": "அநாமதேய தரவு பகிர்வு",
-    "detailed-analytics": "விரிவான பகுப்பாய்வு",
-    "dark-mode": "டார்க் மோட்",
-    "voice-commands": "குரல் கட்டளைகள்",
-    "data-sync": "தரவு ஒத்திசைவு",
-    "language": "மொழி",
-    "current-language": "தற்போதைய",
+    "reset-analysis": "பகுப்பாய்வை மீட்டமை",
+    // Settings Page
+    "system-preferences": "கணினி விருப்பத்தேர்வுகள்",
+    "language": "மொழி",
     "units": "அலகுகள்",
     "metric": "மெட்ரிக்",
-    "imperial": "இம்பீரியல்",
-    "switch-to-light": "லைட் மோடுக்கு மாறவும்",
-    "switch-to-dark": "டார்க் மோடுக்கு மாறவும்",
-    "change": "மாற்று",
-    
-    // Profile
-    "name": "பெயர்",
+    "imperial": "ஏகாதிபத்தியம்",
+    "map-navigation-settings": "வரைபடம் & வழிசெலுத்தல் அமைப்புகள்",
+    "real-time-traffic-updates": "நிகழ்நேர போக்குவரத்து புதுப்பிப்புகள்",
+    "receive-live-traffic": "வேகமான வழிகளுக்கு நேரடி போக்குவரத்து புதுப்பிப்புகளைப் பெறுக",
+    "smart-rerouting": "ஸ்மார்ட் மறுவழி",
+    "auto-reroute": "போக்குவரத்து மற்றும் மூடல்களுக்கு தானாகவே மறுவழி",
+    "road-closure-alerts": "சாலை மூடல் எச்சரிக்கைகள்",
+    "get-road-closure": "சாலை மூடல்கள் மற்றும் சம்பவங்கள் பற்றி அறிவிக்கவும்",
+    "3d-map-visualization": "3D வரைபட காட்சிப்படுத்தல்",
+    "show-3d-buildings": "வரைபடத்தில் 3D கட்டிடங்கள் மற்றும் அடையாளங்களைக் காட்டு",
+    "lane-guidance": "பாதை வழிகாட்டுதல்",
+    "show-lanes": "வழிசெலுத்தலின் போது பாதை வழிகாட்டலைக் காட்டு",
+    "notifications-alerts": "அறிவிப்புகள் & விழிப்பூட்டல்கள்",
+    "emergency-alerts": "அவசர விழிப்பூட்டல்கள்",
+    "critical-alerts": "முக்கிய அவசர விழிப்பூட்டல்களைப் பெறுக",
+    "hospital-status-updates": "மருத்துவமனை நிலை புதுப்பிப்புகள்",
+    "bed-availability": "படுக்கை கிடைக்கும் தன்மை குறித்த புதுப்பிப்புகளைப் பெறுங்கள்",
+    "traffic-condition-alerts": "போக்குவரத்து நிலை விழிப்பூட்டல்கள்",
+    "traffic-alerts": "போக்குவரத்து நிலைமைகள் பற்றிய விழிப்பூட்டல்களைப் பெறுக",
+    "push-notifications": "புஷ் அறிவிப்புகள்",
+    "mobile-alerts": "உங்கள் மொபைல் சாதனத்தில் விழிப்பூட்டல்களைப் பெறுக",
+    "audio-alerts": "ஆடியோ விழிப்பூட்டல்கள்",
+    "voice-announcements": "விழிப்பூட்டல்களுக்கான குரல் அறிவிப்புகளை இயக்கவும்",
+    "performance-data": "செயல்திறன் & தரவு",
+    "ai-powered-recommendations": "AI- இயங்கும் பரிந்துரைகள்",
+    "smart-hospital": "ஸ்மார்ட் மருத்துவமனை பரிந்துரைகளைப் பெறுங்கள்",
+    "survival-rate-prediction": "உயிர்வாழ்வு விகித கணிப்பு",
+    "show-survival": "உயிர்வாழ்வு விகித கணிப்புகளைக் காட்டு",
+    "anonymous-data-sharing": "அடையாளம் தெரியாத தரவு பகிர்வு",
+    "share-data": "பயன்பாட்டை மேம்படுத்த அநாமதேய தரவைப் பகிரவும்",
+    "detailed-analytics": "விரிவான பகுப்பாய்வு",
+    "performance-metrics": "செயல்திறன் அளவீடுகளை கண்காணிக்கவும்",
+    // Profile Page
+    "profile": "சுயவிவரம்",
     "email": "மின்னஞ்சல்",
-    "role": "பாத்திரம்",
+    "role": "பங்கு",
     "location": "இடம்",
     "edit-profile": "சுயவிவரத்தைத் திருத்து",
     "sign-out": "வெளியேறு",
-    "signed-out": "வெளியேறினீர்கள்",
-    "signed-out-success": "நீங்கள் வெற்றிகரமாக வெளியேறியுள்ளீர்கள்",
-    "profile": "சுயவிவரம்",
-    
-    // Analysis section
-    "data-analysis": "தரவு பகுப்பாய்வு",
-    "geographic-distribution": "புவியியல் பரவல்",
-    "response-metrics": "பதில் அளவீடுகள்",
-    "interactive-map-placeholder": "ஊடாடும் வரைபட காட்சிப்படுத்தல் (விவரங்களைக் காண பகுதிகளைக் கிளிக் செய்யவும்)",
-    "incident-hotspots": "சம்பவ ஹாட்ஸ்பாட்கள்",
-    "avg-response-time": "சராசரி பதில் நேரம்",
-    "incidents": "சம்பவங்கள்",
-    "minutes": "நிமிடங்கள்",
-    "total-incidents": "மொத்த சம்பவங்கள்",
-    "from-previous": "முந்தைய காலத்திலிருந்து",
-    "survival-rate": "உயிர்வாழும் விகிதம்",
-    "response-statistics": "வழக்கின் தீவிரத்தன்மை வாரியாக பதில் வெற்றி விகிதம்",
-    "critical-cases": "நெருக்கடி வழக்குகள்",
-    "moderate-cases": "மிதமான வழக்குகள்",
-    "mild-cases": "லேசான வழக்குகள்",
-    "dataset-instructions": "பகுப்பாய்வுக்கு அவசர தரவு கொண்ட உங்கள் CSV தரவுத்தொகுப்பை பதிவேற்றவும்",
-    "drag-drop-csv": "உங்கள் CSV கோப்பை இங்கே இழுத்து விடவும், அல்லது உலாவ கிளிக் செய்யவும்",
-    "supported-format": "ஆதரிக்கப்படும் வடிவம்",
-    "max-file-size": "அதிகபட்ச கோப்பு அளவு",
-    "upload-successful": "பதிவேற்றம் வெற்றிகரமாக முடிந்தது!",
-    
-    // Themes
-    "light": "வெளிச்சம்",
-    "dark": "இருள்",
-    
-    // Common actions
-    "search-hospitals": "மருத்துவமனைகளைத் தேடுங்கள் அல்லது வழிசெலுத்துவதற்கு விபத்து இடத்தை உள்ளிடவும்...",
-    "receive-live-traffic": "சிறந்த வழிசெலுத்தலுக்கு நேரடி போக்குவரத்து தரவைப் பெறுங்கள்",
-    "auto-reroute": "வேகமான பாதைகள் கிடைக்கும்போது தானாகவே மறுவழிப்படுத்தவும்",
-    "get-road-closure": "உங்கள் பாதையில் மூடப்பட்ட சாலைகளைப் பற்றி அறிவிக்கப்படுங்கள்",
-    "show-3d-buildings": "3D இல் கட்டிடங்கள் மற்றும் நிலக்குறிகளைக் காட்டு",
-    "show-lanes": "வேகமான வழிசெலுத்தலுக்கு பரிந்துரைக்கப்பட்ட பாதைகளைக் காட்டு",
-    "critical-alerts": "கடுமையான நோயாளி மற்றும் உயர் முன்னுரிமை எச்சரிக்கைகள்",
-    "bed-availability": "படுக்கை கிடைக்கும் தன்மை மற்றும் காத்திருப்பு நேரங்களில் மாற்றங்கள்",
-    "traffic-alerts": "போக்குவரத்து நிலைகளில் குறிப்பிடத்தக்க மாற்றங்கள்",
-    "mobile-alerts": "மொபைல் சாதனங்களில் எச்சரிக்கைகளைப் பெறுங்கள்",
-    "voice-announcements": "முக்கியமான புதுப்பிப்புகளுக்கான குரல் அறிவிப்புகள்",
-    "smart-hospital": "நோயாளியின் தரவின் அடிப்படையில் ஸ்மார்ட் மருத்துவமனை தேர்வு",
-    "show-survival": "மருத்துவமனைகளுக்கான கணிக்கப்பட்ட உயிர் வாழும் விகிதங்களைக் காட்டு",
-    "share-data": "அமைப்பை மேம்படுத்த அநாமதேய தரவைப் பகிரவும்",
-    "performance-metrics": "விரிவான செயல்திறன் அளவீடுகளைப் பார்க்கவும்",
-    "switch-themes": "லைட் மற்றும் டார்க் தீம்களுக்கு இடையே மாறவும்",
-    "enable-voice": "ஹேண்ட்ஸ்-ஃப்ரீ குரல் கட்டுப்பாட்டை இயக்கவும்",
-    "sync-data": "சாதனங்களுக்கு இடையில் தரவை ஒத்திசைக்கவும்",
-    
-    // Geo regions
-    "north-bangalore": "வடக்கு பெங்களூரு",
-    "central-bangalore": "மத்திய பெங்களூரு",
-    "south-bangalore": "தெற்கு பெங்களூரு",
-    "east-bangalore": "கிழக்கு பெங்களூரு",
-    "west-bangalore": "மேற்கு பெங்களூரு",
-    
-    // Analysis section
-    "incident-by-region": "பகுதி வாரியாக சம்பவங்கள்",
-    "incident-trends": "சம்பவ போக்குகள்",
-    "response-time": "பதிலளிப்பு நேரம்",
-    "incident-distribution-map": "சம்பவ விநியோக வரைபடம்"
+    "signed-out": "வெளியேறப்பட்டது",
+    "signed-out-success": "நீங்கள் வெற்றிகரமாக வெளியேறிவிட்டீர்கள்",
+    // Search Page
+    "search-hospitals": "மருத்துவமனைகளைத் தேடு...",
+    // Map Page
+    "navigate-to": "வழிசெலுத்த",
+    "calling-hospital": "மருத்துவமனைக்கு அழைக்கப்படுகிறது",
+    "connecting-to": "இணைக்கிறது",
+    // Welcome Page
+    "welcome-title": "MedResponse க்கு வரவேற்கிறோம்",
+    "welcome-description": "உங்கள் AI- இயங்கும் அவசர பதில் உதவியாளர்",
+    "get-started": "தொடங்கு",
+    // Not Found Page
+    "page-not-found": "பக்கம் காணப்படவில்லை",
+    "go-home": "வீட்டிற்கு செல்",
+    // Regions
+    "north-bangalore": "வடக்கு பெங்களூர்",
+    "central-bangalore": "மத்திய பெங்களூர்",
+    "south-bangalore": "தெற்கு பெங்களூர்",
+    "east-bangalore": "கிழக்கு பெங்களூர்",
+    "west-bangalore": "மேற்கு பெங்களூர்",
   },
   
   telugu: {
@@ -599,149 +438,133 @@ export const translations: Record<Language, Record<string, string>> = {
     "dataset-options-desc": "మీ అప్‌లోడ్ చేసిన డేటాసెట్‌ను నిర్వహించండి",
     "analysis-active": "విశ్లేషణ ప్రస్తుతం యాక్టివ్‌గా ఉంది",
     "reset-analysis": "విశ్లేషణను రీసెట్ చేయండి",
-    
-    // Settings
-    "map-navigation-settings": "మ్యాప్ & నావిగేషన్ సెట్టింగులు",
-    "notifications-alerts": "నోటిఫికేషన్లు & అలర్ట్లు",
-    "performance-data": "పర్ఫార్మెన్స్ & డేటా",
-    "system-preferences": "సిస్టమ్ ప్రిఫరెన్సెస్",
-    "real-time-traffic-updates": "రియల్-టైమ్ ట్రాఫిక్ అప్‌డేట్లు",
-    "smart-rerouting": "స్మార్ట్ రీరూటింగ్",
-    "road-closure-alerts": "రోడ్ మూసివేత అలర్ట్లు",
-    "3d-map-visualization": "3D మ్యాప్ విజువలైజేషన్",
-    "lane-guidance": "లేన్ గైడెన్స్",
-    "emergency-alerts": "అత్యవసర అలర్ట్లు",
-    "hospital-status-updates": "ఆసుపత్రి స్థితి అప్‌డేట్లు",
-    "traffic-condition-alerts": "ట్రాఫిక్ కండిషన్ అలర్ట్లు",
-    "push-notifications": "పుష్ నోటిఫికేషన్లు",
-    "audio-alerts": "ఆడియో అలర్ట్లు",
-    "ai-powered-recommendations": "AI-పవర్డ్ రికమెండేషన్లు",
-    "survival-rate-prediction": "మనుగడ రేటు అంచనా",
-    "anonymous-data-sharing": "అనామక డేటా షేరింగ్",
-    "detailed-analytics": "వివరణాత్మక విశ్లేషణలు",
-    "dark-mode": "డార్క్ మోడ్",
-    "voice-commands": "వాయిస్ కమాండ్లు",
-    "data-sync": "డేటా సింక్",
+    // Settings Page
+    "system-preferences": "సిస్టమ్ ప్రాధాన్యతలు",
     "language": "భాష",
-    "current-language": "ప్రస్తుతం",
     "units": "యూనిట్లు",
     "metric": "మెట్రిక్",
     "imperial": "ఇంపీరియల్",
-    "switch-to-light": "లైట్ మోడ్‌కి మారండి",
-    "switch-to-dark": "డార్క్ మోడ్‌కి మారండి",
-    "change": "మార్చు",
-    
-    // Profile
-    "name": "పేరు",
+    "map-navigation-settings": "మ్యాప్ & నావిగేషన్ సెట్టింగ్‌లు",
+    "real-time-traffic-updates": "రియల్ టైమ్ ట్రాఫిక్ అప్‌డేట్‌లు",
+    "receive-live-traffic": "వేగవంతమైన మార్గాల కోసం లైవ్ ట్రాఫిక్ అప్‌డేట్‌లను స్వీకరించండి",
+    "smart-rerouting": "స్మార్ట్ రీరూటింగ్",
+    "auto-reroute": "ట్రాఫిక్ మరియు మూసివేతల చుట్టూ స్వయంచాలకంగా రీరూట్ చేయండి",
+    "road-closure-alerts": "రోడ్డు మూసివేత హెచ్చరికలు",
+    "get-road-closure": "రోడ్డు మూసివేతలు మరియు సంఘటనల గురించి తెలియజేయండి",
+    "3d-map-visualization": "3D మ్యాప్ విజువలైజేషన్",
+    "show-3d-buildings": "మ్యాప్‌లో 3D భవనాలు మరియు ల్యాండ్‌మార్క్‌లను చూపండి",
+    "lane-guidance": "లేన్ గైడెన్స్",
+    "show-lanes": "నావిగేషన్ సమయంలో లేన్ మార్గదర్శకత్వం చూపండి",
+    "notifications-alerts": "నోటిఫికేషన్‌లు & హెచ్చరికలు",
+    "emergency-alerts": "అత్యవసర హెచ్చరికలు",
+    "critical-alerts": "తీవ్రమైన అత్యవసర హెచ్చరికలను స్వీకరించండి",
+    "hospital-status-updates": "హాస్పిటల్ స్టేటస్ అప్‌డేట్‌లు",
+    "bed-availability": "పడకల లభ్యతపై నవీకరణలను పొందండి",
+    "traffic-condition-alerts": "ట్రాఫిక్ కండిషన్ హెచ్చరికలు",
+    "traffic-alerts": "ట్రాఫిక్ పరిస్థితుల గురించి హెచ్చరికలను స్వీకరించండి",
+    "push-notifications": "పుష్ నోటిఫికేషన్‌లు",
+    "mobile-alerts": "మీ మొబైల్ పరికరంలో హెచ్చరికలను స్వీకరించండి",
+    "audio-alerts": "ఆడియో హెచ్చరికలు",
+    "voice-announcements": "హెచ్చరికల కోసం వాయిస్ ప్రకటనలను ప్రారంభించండి",
+    "performance-data": "పనితీరు & డేటా",
+    "ai-powered-recommendations": "AI- ఆధారిత సిఫార్సులు",
+    "smart-hospital": "స్మార్ట్ హాస్పిటల్ సిఫార్సులను పొందండి",
+    "survival-rate-prediction": "మనుగడ రేటు అంచనా",
+    "show-survival": "మనుగడ రేటు అంచనాలను చూపించు",
+    "anonymous-data-sharing": "గుర్తు తెలియని డేటా భాగస్వామ్యం",
+    "share-data": "అనువర్తనాన్ని మెరుగుపరచడానికి అనామక డేటాను భాగస్వామ్యం చేయండి",
+    "detailed-analytics": "వివరణాత్మక విశ్లేషణలు",
+    "performance-metrics": "పనితీరు కొలమానాలను ట్రాక్ చేయండి",
+    // Profile Page
+    "profile": "ప్రొఫైల్",
     "email": "ఇమెయిల్",
     "role": "పాత్ర",
     "location": "స్థానం",
-    "edit-profile": "ప్రొఫైల్‌ని సవరించండి",
+    "edit-profile": "ప్రొఫైల్‌ను సవరించండి",
     "sign-out": "సైన్ అవుట్",
     "signed-out": "సైన్ అవుట్ చేయబడింది",
     "signed-out-success": "మీరు విజయవంతంగా సైన్ అవుట్ చేయబడ్డారు",
-    "profile": "ప్రొఫైల్",
-    
-    // Analysis section
-    "data-analysis": "డేటా విశ్లేషణ",
-    "geographic-distribution": "భౌగోళిక పంపిణీ",
-    "response-metrics": "ప్రతిస్పందన మెట్రిక్స్",
-    "interactive-map-placeholder": "ఇంటరాక్టివ్ మ్యాప్ విజువలైజేషన్ (వివరాలను చూడటానికి ప్రాంతాలపై క్లిక్ చేయండి)",
-    "incident-hotspots": "ఘటన హాట్‌స్పాట్లు",
-    "avg-response-time": "సగటు ప్రతిస్పందన సమయం",
-    "incidents": "ఘటనలు",
-    "minutes": "నిమిషాలు",
-    "total-incidents": "మొత్తం ఘటనలు",
-    "from-previous": "మునుపటి కాలం నుండి",
-    "survival-rate": "మనుగడ రేటు",
-    "response-statistics": "కేసు తీవ్రత ద్వారా ప్రతిస్పందన విజయ రేటు",
-    "critical-cases": "క్రిటికల్ కేసులు",
-    "moderate-cases": "మధ్యస్థ కేసులు",
-    "mild-cases": "తేలికపాటి కేసులు",
-    "dataset-instructions": "విశ్లేషణ కోసం అత్యవసర డేటాను కలిగి ఉన్న మీ CSV డేటాసెట్‌ను అప్‌లోడ్ చేయండి",
-    "drag-drop-csv": "మీ CSV ఫైల్‌ను ఇక్కడ డ్రాగ్ చేసి డ్రాప్ చేయండి, లేదా బ్రౌజ్ చేయడానికి క్లిక్ చేయండి",
-    "supported-format": "మద్దతు ఉన్న ఫార్మాట్",
-    "max-file-size": "గరిష్ట ఫైల్ పరిమాణం",
-    "upload-successful": "అప్‌లోడ్ విజయవంతం!",
-    
-    // Themes
-    "light": "లైట్",
-    "dark": "డార్క్",
-    
-    // Common actions
-    "search-hospitals": "ఆసుపత్రులను శోధించండి లేదా రూటింగ్ కోసం ప్రమాద స్థానాన్ని నమోదు చేయండి...",
-    "receive-live-traffic": "అనుకూలమైన రూటింగ్ కోసం లైవ్ ట్రాఫిక్ డేటాను పొందండి",
-    "auto-reroute": "వేగవంతమైన మార్గాలు అందుబాటులో ఉన్నప్పుడు స్వయంచాలకంగా రీరూట్ చేయండి",
-    "get-road-closure": "మీ మార్గంలో మూసివేసిన రోడ్ల గురించి తెలియజేయబడండి",
-    "show-3d-buildings": "3D లో భవనాలు మరియు ల్యాండ్‌మార్క్‌లను చూపించు",
-    "show-lanes": "వేగవంతమైన నావిగేషన్ కోసం సిఫార్సు చేయబడిన లేన్‌లను చూపించు",
-    "critical-alerts": "క్రిటికల్ పేషెంట్ మరియు అధిక ప్రాధాన్యత అలర్ట్లు",
-    "bed-availability": "బెడ్ లభ్యత మరియు వేచి ఉండే సమయాల్లో మార్పులు",
-    "traffic-alerts": "ట్రాఫిక్ పరిస్థితుల్లో గణనీయమైన మార్పులు",
-    "mobile-alerts": "మొబైల్ పరికరాలలో అలర్ట్‌లను పొందండి",
-    "voice-announcements": "కీలక అప్‌డేట్ల కోసం వాయిస్ ప్రకటనలు",
-    "smart-hospital": "పేషెంట్ డేటా ఆధారంగా స్మార్ట్ ఆసుపత్రి ఎంపిక",
-    "show-survival": "ఆసుపత్రుల కోసం అంచనా వేయబడిన మనుగడ రేట్లను చూపించు",
-    "share-data": "సిస్టమ్‌ను మెరుగుపరచడానికి అనామక డేటాను షేర్ చేయండి",
-    "performance-metrics": "సమగ్ర పనితీరు మెట్రిక్స్‌లను వీక్షించండి",
-    "switch-themes": "లైట్ మరియు డార్క్ థీమ్‌ల మధ్య మారండి",
-    "enable-voice": "హ్యాండ్స్-ఫ్రీ వాయిస్ కంట్రోల్‌ను ప్రారంభించండి",
-    "sync-data": "పరికరాల మధ్య డేటాను సింక్ చేయండి",
-    
-    // Geo regions
+    // Search Page
+    "search-hospitals": "ఆసుపత్రుల కోసం వెతకండి...",
+    // Map Page
+    "navigate-to": "నేవిగేట్ చేయండి",
+    "calling-hospital": "ఆసుపత్రికి కాల్ చేస్తోంది",
+    "connecting-to": "కనెక్ట్ అవుతోంది",
+    // Welcome Page
+    "welcome-title": "MedResponse కు స్వాగతం",
+    "welcome-description": "మీ AI- ఆధారిత అత్యవసర ప్రతిస్పందన సహాయకుడు",
+    "get-started": "ప్రారంభించండి",
+    // Not Found Page
+    "page-not-found": "పేజీ కనుగొనబడలేదు",
+    "go-home": "ఇంటికి వెళ్ళు",
+    // Regions
     "north-bangalore": "ఉత్తర బెంగళూరు",
     "central-bangalore": "సెంట్రల్ బెంగళూరు",
     "south-bangalore": "దక్షిణ బెంగళూరు",
     "east-bangalore": "తూర్పు బెంగళూరు",
     "west-bangalore": "పశ్చిమ బెంగళూరు",
-    
-    // Analysis section
-    "incident-by-region": "ప్రాంతం వారీగా ఘటనలు",
-    "incident-trends": "ఘటన ట్రెండ్‌లు",
-    "response-time": "ప్రతిస్పందన సమయం",
-    "incident-distribution-map": "ఘటన పంపిణీ మ్యాప్"
   }
 };
 
-// Create context
+// Define context type
 type LanguageContextType = {
   language: Language;
-  setLanguage: (lang: Language) => void;
+  setLanguage: (language: Language) => void;
   t: (key: string) => string;
 };
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+// Create language context
+const LanguageContext = createContext<LanguageContextType>({
+  language: "english",
+  setLanguage: () => {},
+  t: (key) => key,
+});
 
-// Provider component
-export const LanguageProvider: React.FC<{ children: React.ReactNode; defaultLanguage?: Language }> = ({ 
-  children, 
-  defaultLanguage = 'english' 
-}) => {
+// Language provider component
+interface LanguageProviderProps {
+  children: React.ReactNode;
+  defaultLanguage?: Language;
+}
+
+export function LanguageProvider({
+  children,
+  defaultLanguage = "english",
+}: LanguageProviderProps) {
   const [language, setLanguage] = useState<Language>(() => {
-    const savedLanguage = localStorage.getItem('language') as Language;
-    return savedLanguage || defaultLanguage;
+    const savedLanguage = localStorage.getItem("app-language");
+    return (savedLanguage as Language) || defaultLanguage;
   });
 
+  // Save language preference to localStorage when it changes
   useEffect(() => {
-    localStorage.setItem('language', language);
+    localStorage.setItem("app-language", language);
   }, [language]);
 
+  // Translation function
   const t = (key: string): string => {
     return translations[language][key] || key;
   };
 
+  const value = {
+    language,
+    setLanguage,
+    t,
+  };
+
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={value}>
       {children}
     </LanguageContext.Provider>
   );
-};
+}
 
 // Hook to use the language context
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
+
   if (context === undefined) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
+    throw new Error("useLanguage must be used within a LanguageProvider");
   }
+
   return context;
 };

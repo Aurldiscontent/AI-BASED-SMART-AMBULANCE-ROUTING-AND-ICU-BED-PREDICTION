@@ -1,13 +1,30 @@
 
 import React from 'react';
 import { Home, Search, Bell, User, Settings, Upload, Map } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
 const Navbar: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
   
   const isActive = (path: string) => {
     return location.pathname === path;
+  };
+  
+  const handleNavClick = (path: string) => {
+    if (path === location.pathname) return;
+    
+    if (path === '/search' || path === '/map') {
+      // These pages might not be fully implemented yet, so we'll show a toast
+      toast({
+        title: "Navigation",
+        description: `Navigating to ${path.replace('/', '')} page`,
+      });
+    }
+    
+    navigate(path);
   };
   
   const renderNavItem = (
@@ -17,9 +34,9 @@ const Navbar: React.FC = () => {
     active: boolean
   ) => {
     return (
-      <Link 
-        to={path} 
-        className={`flex flex-col items-center justify-center py-2 ${
+      <div 
+        onClick={() => handleNavClick(path)}
+        className={`flex flex-col items-center justify-center py-2 cursor-pointer ${
           active ? 'text-medical-600 dark:text-medical-400' : 'text-gray-500 dark:text-gray-400'
         }`}
       >
@@ -36,7 +53,7 @@ const Navbar: React.FC = () => {
         <div className={`h-0.5 w-4 mt-1 rounded-full transition-all duration-300 ${
           active ? 'bg-medical-500 opacity-100' : 'bg-transparent opacity-0'
         }`} />
-      </Link>
+      </div>
     );
   };
   
