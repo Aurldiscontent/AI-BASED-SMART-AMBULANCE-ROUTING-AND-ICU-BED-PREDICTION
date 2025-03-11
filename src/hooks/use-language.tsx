@@ -599,7 +599,8 @@ export const translations: Record<Language, Record<string, string>> = {
     "profile": "ప్రొఫైల్",
     "incident-by-region": "ప్రాంతం వారీగా సంఘటనలు",
     "incident-trends": "సంఘటన ట్రెండ్స్",
-    "response-time": "ప్రతిస్పందన సమయం"
+    "response-time": "ప్రతిస్పందన సమయం",
+    "incident-distribution-map": "ఘటన పంపిణీ మ్యాప్"
   }
 };
 
@@ -613,7 +614,7 @@ type LanguageContextType = {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 // Create a provider component with defaultLanguage prop
-interface LanguageProviderProps {
+export interface LanguageProviderProps {
   children: React.ReactNode;
   defaultLanguage?: Language;
 }

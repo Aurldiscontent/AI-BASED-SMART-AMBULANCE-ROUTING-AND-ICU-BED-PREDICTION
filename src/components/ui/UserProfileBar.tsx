@@ -41,6 +41,7 @@ const UserProfileBar = () => {
     localStorage.removeItem('userEmail');
     localStorage.removeItem('userRole');
     localStorage.removeItem('userLocation');
+    localStorage.removeItem('analysisData');
     
     // Show toast notification
     toast({
