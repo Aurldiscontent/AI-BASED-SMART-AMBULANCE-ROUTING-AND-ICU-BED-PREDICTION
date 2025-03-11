@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Search, Bell, User, Phone, AlertTriangle, MapPin, HeartPulse, Zap, LayoutDashboard, Hospital, Gauge, Map as MapIcon, FileText, Settings, Activity, Mic, Moon, Sun, Navigation } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -733,5 +734,97 @@ const HomePage: React.FC = () => {
               selectedHospitalId={selectedHospital}
               transportMode={transportMode}
               onHospitalClick={(id) => setShowHospitalDetails(id)}
-              onTrafficClick={() => {
-                setShowTrafficDetails(
+              onTrafficClick={handleTrafficAlert}
+              onPathClick={handleRoutePathClick}
+            />
+          </div>
+        </motion.div>
+      )}
+      
+      {activeTab === 'hospitals' && (
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="px-4 py-2"
+        >
+          <div className="flex justify-between items-center mb-3">
+            <h2 className="font-semibold text-gray-800 dark:text-gray-200">Hospitals Near You</h2>
+            <div className="flex items-center text-xs">
+              <div className="bg-green-100 dark:bg-green-900/30 px-2 py-1 rounded-md text-green-800 dark:text-green-400 font-medium flex items-center">
+                <HeartPulse size={14} className="mr-1" />
+                {hospitals.reduce((acc, h) => acc + h.icuBeds, 0)} Total ICU Beds
+              </div>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {sortedHospitals.map(hospital => (
+              <HospitalCard 
+                key={hospital.id}
+                id={hospital.id}
+                name={hospital.name}
+                distance={hospital.distance}
+                address={hospital.address}
+                icuBeds={hospital.icuBeds}
+                totalBeds={hospital.totalBeds}
+                isOpen={hospital.isOpen}
+                estimatedTime={hospital.estimatedTime}
+                phone={hospital.phone}
+                specialties={hospital.specialties}
+                aiSurvivalRate={hospital.aiSurvivalRate}
+                lastUpdated={hospital.lastUpdated}
+                trafficCondition={hospital.trafficCondition}
+                severity={severityLevel}
+                isRecommended={hospital.id === patientData.aiRecommendedHospital}
+                onNavigate={() => handleNavigate(hospital.id)}
+                onCall={() => handleCall(hospital.id)}
+                onClick={() => setShowHospitalDetails(hospital.id)}
+              />
+            ))}
+          </div>
+        </motion.div>
+      )}
+      
+      {activeTab === 'reports' && (
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="px-4 py-2"
+        >
+          <div className="glass-card rounded-2xl p-6 flex items-center justify-center h-64 dark:bg-gray-800/50 dark:border-gray-700">
+            <div className="text-center">
+              <FileText size={48} className="text-gray-400 dark:text-gray-500 mx-auto mb-3" />
+              <h3 className="font-semibold text-xl mb-2">Reports Coming Soon</h3>
+              <p className="text-gray-500 dark:text-gray-400 max-w-md">
+                Detailed emergency reports, transport analytics, and hospital performance metrics will be available in the next update.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      )}
+      
+      {activeTab === 'settings' && (
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="px-4 py-2"
+        >
+          <div className="glass-card rounded-2xl p-6 flex items-center justify-center h-64 dark:bg-gray-800/50 dark:border-gray-700">
+            <div className="text-center">
+              <Settings size={48} className="text-gray-400 dark:text-gray-500 mx-auto mb-3" />
+              <h3 className="font-semibold text-xl mb-2">Settings Coming Soon</h3>
+              <p className="text-gray-500 dark:text-gray-400 max-w-md">
+                Personalization and system configuration options will be available in the next update.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </div>
+  );
+};
+
+export default HomePage;
