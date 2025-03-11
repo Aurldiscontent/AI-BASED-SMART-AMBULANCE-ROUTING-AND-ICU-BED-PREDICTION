@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion';
 
 interface ActionButtonProps {
   children: React.ReactNode;
@@ -56,24 +57,30 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   };
 
   return (
-    <Button
-      type={type}
-      onClick={onClick}
-      disabled={disabled}
-      className={`
-        font-medium transition-all duration-300 shadow-sm
-        button-hover-elevation
-        ${getVariantClass()}
-        ${getSizeClass()}
-        ${fullWidth ? 'w-full' : ''}
-        ${className}
-      `}
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      transition={{ duration: 0.2 }}
     >
-      <div className="flex items-center justify-center gap-2">
-        {icon && <div>{icon}</div>}
-        {children}
-      </div>
-    </Button>
+      <Button
+        type={type}
+        onClick={onClick}
+        disabled={disabled}
+        className={`
+          font-medium transition-all duration-300 shadow-sm
+          button-hover-elevation
+          ${getVariantClass()}
+          ${getSizeClass()}
+          ${fullWidth ? 'w-full' : ''}
+          ${className}
+        `}
+      >
+        <div className="flex items-center justify-center gap-2">
+          {icon && <div className="animate-on-hover">{icon}</div>}
+          {children}
+        </div>
+      </Button>
+    </motion.div>
   );
 };
 
