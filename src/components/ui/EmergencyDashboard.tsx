@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area } from 'recharts';
-import { useTheme } from '@/hooks/use-theme';
 
 type ICUData = {
   time: string;
@@ -32,10 +31,10 @@ type CasesData = {
 type EmergencyDashboardProps = {
   data: ICUData[] | ResponseData[] | CasesData[];
   view: 'icu' | 'response' | 'cases';
+  theme?: string;
 };
 
-const EmergencyDashboard: React.FC<EmergencyDashboardProps> = ({ data, view }) => {
-  const { theme } = useTheme();
+const EmergencyDashboard: React.FC<EmergencyDashboardProps> = ({ data, view, theme = 'dark' }) => {
   const isDark = theme === 'dark';
   
   // Adjust colors based on theme
