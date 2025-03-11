@@ -1,7 +1,8 @@
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0;
   text-align: center;
 }
 
@@ -12,10 +13,10 @@
   transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  filter: drop-shadow(0 0 2em #9b87f5aa);
 }
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  filter: drop-shadow(0 0 2em #9b87f5aa);
 }
 
 @keyframes logo-spin {
@@ -35,8 +36,43 @@
 
 .card {
   padding: 2em;
+  border-radius: 1em;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .read-the-docs {
   color: #888;
+}
+
+/* Purple theme specific styles */
+.purple-theme {
+  --primary-color: #9b87f5;
+  --secondary-color: #7E69AB;
+  --tertiary-color: #6E59A5;
+  --dark-color: #1A1F2C;
+  --light-color: #D6BCFA;
+}
+
+/* Glassmorphism components */
+.purple-glass {
+  background: rgba(155, 135, 245, 0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(155, 135, 245, 0.2);
+  border-radius: 12px;
+}
+
+.dark .purple-glass {
+  background: rgba(30, 20, 60, 0.3);
+  border: 1px solid rgba(155, 135, 245, 0.1);
+}
+
+/* Gradient text */
+.purple-gradient-text {
+  background: linear-gradient(90deg, #9b87f5, #d6bcfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
 }

@@ -23,7 +23,7 @@ const ThemeSwitcher = () => {
       <Toggle 
         pressed={isDark}
         onPressedChange={toggleTheme}
-        className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-100/30 to-blue-300/20 dark:from-blue-900/30 dark:to-purple-900/20 border border-blue-200/50 dark:border-blue-700/50"
+        className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-300/30 to-purple-500/20 dark:from-purple-800/30 dark:to-purple-900/20 border border-purple-200/50 dark:border-purple-700/50"
         aria-label="Toggle theme"
       >
         <motion.div
@@ -32,7 +32,7 @@ const ThemeSwitcher = () => {
           className="flex items-center justify-center"
         >
           {isDark ? (
-            <Moon size={18} className="text-blue-200" />
+            <Moon size={18} className="text-purple-200" />
           ) : (
             <Sun size={18} className="text-amber-500" />
           )}
