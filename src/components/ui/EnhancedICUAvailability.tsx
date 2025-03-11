@@ -1,8 +1,8 @@
-
 import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import { motion } from 'framer-motion';
 import { Bed, Activity, AlertCircle, TrendingUp, InfoIcon } from 'lucide-react';
+import type { Theme } from '@/hooks/use-theme';
 
 interface ICUBedData {
   hospital: string;
@@ -14,9 +14,10 @@ interface ICUBedData {
 
 interface EnhancedICUAvailabilityProps {
   data: ICUBedData[];
+  theme?: Theme;  // Make theme optional to maintain backward compatibility
 }
 
-const EnhancedICUAvailability: React.FC<EnhancedICUAvailabilityProps> = ({ data }) => {
+const EnhancedICUAvailability: React.FC<EnhancedICUAvailabilityProps> = ({ data, theme }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   
   const getAvailabilityColor = (available: number, total: number) => {
@@ -151,7 +152,6 @@ const EnhancedICUAvailability: React.FC<EnhancedICUAvailabilityProps> = ({ data 
         </motion.div>
       </div>
       
-      {/* Add info tip at the bottom */}
       <div className="mt-3 text-xs text-gray-500 dark:text-gray-400 flex items-center justify-center">
         <InfoIcon size={12} className="mr-1" />
         <span>Click on bars for detailed statistics</span>

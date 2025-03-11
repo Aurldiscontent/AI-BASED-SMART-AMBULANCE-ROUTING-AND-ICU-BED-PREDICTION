@@ -1,7 +1,7 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Activity, Flame, Ambulance, Clock, AlertCircle, Map as MapIcon } from 'lucide-react';
+import type { Theme } from '@/hooks/use-theme';
 
 interface DistributionProps {
   regions: {
@@ -11,9 +11,10 @@ interface DistributionProps {
     response: number;
     color: string;
   }[];
+  theme?: Theme;  // Make theme optional to maintain backward compatibility
 }
 
-const GeographicDistribution: React.FC<DistributionProps> = ({ regions }) => {
+const GeographicDistribution: React.FC<DistributionProps> = ({ regions, theme }) => {
   const [selectedView, setSelectedView] = useState<'incidents' | 'response' | 'hospitals'>('incidents');
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
   
@@ -321,3 +322,4 @@ const GeographicDistribution: React.FC<DistributionProps> = ({ regions }) => {
 };
 
 export default GeographicDistribution;
+
