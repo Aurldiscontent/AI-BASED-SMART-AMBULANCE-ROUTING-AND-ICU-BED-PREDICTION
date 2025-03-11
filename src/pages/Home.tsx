@@ -12,11 +12,14 @@ import HospitalDashboard from '@/components/ui/HospitalDashboard';
 import Navbar from '@/components/ui/Navbar';
 import EmergencyDashboard from '@/components/ui/EmergencyDashboard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Wifi, WifiOff, Zap, AlertTriangle, Info, Clock, MapPin } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { Wifi, WifiOff, Zap, AlertTriangle, Info, Clock, MapPin, Sun, Moon } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const Home = () => {
-  const { theme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const { t } = useLanguage();
+  const { toast } = useToast();
   const isDark = theme === 'dark';
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [systemStatus, setSystemStatus] = useState<'normal' | 'warning' | 'critical'>('normal');
@@ -24,33 +27,45 @@ const Home = () => {
   const [patientSeverity, setPatientSeverity] = useState(5);
   const [selectedAnalyticView, setSelectedAnalyticView] = useState('icu');
   
-  // Mock data for hospitals
+  // Mock data for hospitals - extended to 10
   const [hospitals] = useState([
     { id: '1', name: 'City General Hospital', icuBeds: 12, totalBeds: 20, aiSurvivalRate: 92, distance: '2.3 km', waitTime: '5 min', specialties: ['Trauma', 'Cardiac'] },
     { id: '2', name: 'Memorial Care', icuBeds: 8, totalBeds: 15, aiSurvivalRate: 88, distance: '3.6 km', waitTime: '8 min', specialties: ['Pediatric'] },
     { id: '3', name: 'Community Medical', icuBeds: 5, totalBeds: 12, aiSurvivalRate: 85, distance: '4.1 km', waitTime: '15 min', specialties: ['Cardiac', 'Neuro'] },
     { id: '4', name: 'St. Mary\'s Hospital', icuBeds: 10, totalBeds: 18, aiSurvivalRate: 90, distance: '5.8 km', waitTime: '10 min', specialties: ['Trauma', 'Burns'] },
     { id: '5', name: 'Lakeside Health', icuBeds: 7, totalBeds: 15, aiSurvivalRate: 83, distance: '7.2 km', waitTime: '12 min', specialties: ['Cardiac'] },
+    { id: '6', name: 'University Medical', icuBeds: 15, totalBeds: 25, aiSurvivalRate: 94, distance: '6.5 km', waitTime: '7 min', specialties: ['Pediatric', 'Trauma', 'Research'] },
+    { id: '7', name: 'Central Hospital', icuBeds: 9, totalBeds: 16, aiSurvivalRate: 87, distance: '8.3 km', waitTime: '13 min', specialties: ['General', 'Orthopedic'] },
+    { id: '8', name: 'Eastside Medical', icuBeds: 6, totalBeds: 14, aiSurvivalRate: 82, distance: '9.7 km', waitTime: '18 min', specialties: ['Maternity', 'Geriatric'] },
+    { id: '9', name: 'North General', icuBeds: 11, totalBeds: 22, aiSurvivalRate: 89, distance: '10.1 km', waitTime: '14 min', specialties: ['Oncology', 'Cardiac'] },
+    { id: '10', name: 'West Valley Medical', icuBeds: 8, totalBeds: 17, aiSurvivalRate: 86, distance: '11.5 km', waitTime: '16 min', specialties: ['Neuro', 'Respiratory'] },
   ]);
   
-  // Mock emergency alerts
+  // Mock emergency alerts - added timestamps and categorization
   const [alerts] = useState([
     { id: '1', type: 'critical', message: 'Traffic accident on Main St. - Multiple casualties', timestamp: '3 min ago' },
     { id: '2', type: 'warning', message: 'Heavy traffic on Highway 101 - Potential delays', timestamp: '12 min ago' },
     { id: '3', type: 'info', message: 'St. Mary\'s Hospital ICU capacity reduced to 60%', timestamp: '27 min ago' },
     { id: '4', type: 'info', message: 'Air ambulance availability: 2 units on standby', timestamp: '45 min ago' },
+    { id: '5', type: 'warning', message: 'Potential mass casualty incident reported downtown', timestamp: '8 min ago' },
+    { id: '6', type: 'critical', message: 'Ambulance #243 breakdown - Rerouting required', timestamp: '1 min ago' },
+    { id: '7', type: 'info', message: 'System maintenance scheduled for 02:00 AM', timestamp: '1 hr ago' },
   ]);
   
-  // Mock analytics data
+  // Enhanced analytics data with 10 hospitals and 24-hour entries
   const [analyticData] = useState({
     icu: [
-      { time: '08:00', cityGeneral: 75, memorial: 60, community: 80, stMarys: 65, lakeside: 70 },
-      { time: '12:00', cityGeneral: 80, memorial: 70, community: 85, stMarys: 75, lakeside: 80 },
-      { time: '16:00', cityGeneral: 90, memorial: 80, community: 90, stMarys: 85, lakeside: 75 },
-      { time: '20:00', cityGeneral: 85, memorial: 75, community: 80, stMarys: 80, lakeside: 70 },
-      { time: 'Now', cityGeneral: 82, memorial: 85, community: 92, stMarys: 75, lakeside: 78 },
+      { time: '00:00', cityGeneral: 75, memorial: 60, community: 80, stMarys: 65, lakeside: 70, universityMed: 82, centralHospital: 68, eastside: 55, northGeneral: 78, westValley: 63 },
+      { time: '04:00', cityGeneral: 78, memorial: 65, community: 83, stMarys: 68, lakeside: 73, universityMed: 80, centralHospital: 70, eastside: 58, northGeneral: 76, westValley: 65 },
+      { time: '08:00', cityGeneral: 85, memorial: 72, community: 88, stMarys: 75, lakeside: 78, universityMed: 85, centralHospital: 75, eastside: 65, northGeneral: 80, westValley: 70 },
+      { time: '12:00', cityGeneral: 90, memorial: 80, community: 92, stMarys: 83, lakeside: 85, universityMed: 90, centralHospital: 82, eastside: 72, northGeneral: 85, westValley: 78 },
+      { time: '16:00', cityGeneral: 95, memorial: 85, community: 95, stMarys: 88, lakeside: 90, universityMed: 93, centralHospital: 87, eastside: 80, northGeneral: 90, westValley: 83 },
+      { time: '20:00', cityGeneral: 88, memorial: 78, community: 90, stMarys: 80, lakeside: 82, universityMed: 87, centralHospital: 80, eastside: 73, northGeneral: 83, westValley: 75 },
+      { time: 'Now', cityGeneral: 82, memorial: 73, community: 85, stMarys: 76, lakeside: 78, universityMed: 84, centralHospital: 75, eastside: 68, northGeneral: 80, westValley: 70 },
     ],
     response: [
+      { time: '00:00', avg: 7.5 },
+      { time: '04:00', avg: 6.8 },
       { time: '08:00', avg: 8.2 },
       { time: '12:00', avg: 9.5 },
       { time: '16:00', avg: 12.3 },
@@ -58,6 +73,8 @@ const Home = () => {
       { time: 'Now', avg: 9.2 },
     ],
     cases: [
+      { time: '00:00', trauma: 3, cardiac: 2, general: 6 },
+      { time: '04:00', trauma: 2, cardiac: 1, general: 4 },
       { time: '08:00', trauma: 5, cardiac: 3, general: 8 },
       { time: '12:00', trauma: 7, cardiac: 4, general: 10 },
       { time: '16:00', trauma: 12, cardiac: 8, general: 15 },
@@ -77,13 +94,18 @@ const Home = () => {
     ]
   });
   
-  // Mock data for ICU beds
+  // Enhanced ICU bed data with more information
   const [icuBedData] = useState([
     { hospital: 'City General', available: 12, total: 20, waitTime: 15, occupancyRate: 65 },
-    { hospital: 'Memorial Care', available: 8, total: 15, waitTime: 22, occupancyRate: 78 },
-    { hospital: 'Community Med', available: 5, total: 12, waitTime: 30, occupancyRate: 82 },
+    { hospital: 'Memorial', available: 8, total: 15, waitTime: 22, occupancyRate: 78 },
+    { hospital: 'Community', available: 5, total: 12, waitTime: 30, occupancyRate: 82 },
     { hospital: 'St. Mary\'s', available: 10, total: 18, waitTime: 18, occupancyRate: 70 },
     { hospital: 'Lakeside', available: 7, total: 15, waitTime: 25, occupancyRate: 75 },
+    { hospital: 'University', available: 15, total: 25, waitTime: 12, occupancyRate: 60 },
+    { hospital: 'Central', available: 9, total: 16, waitTime: 20, occupancyRate: 72 },
+    { hospital: 'Eastside', available: 6, total: 14, waitTime: 28, occupancyRate: 80 },
+    { hospital: 'North Gen', available: 11, total: 22, waitTime: 16, occupancyRate: 68 },
+    { hospital: 'West Valley', available: 8, total: 17, waitTime: 24, occupancyRate: 76 },
   ]);
   
   // Mock patient data
@@ -101,9 +123,13 @@ const Home = () => {
       id: h.id,
       name: h.name,
       location: {
-        lat: 12.9716 + (Math.random() * 0.1 - 0.05),
-        lng: 77.5946 + (Math.random() * 0.1 - 0.05)
-      }
+        lat: 12.9716 + (Math.random() * 0.2 - 0.1),
+        lng: 77.5946 + (Math.random() * 0.2 - 0.1)
+      },
+      icuAvailable: h.icuBeds,
+      icuTotal: h.totalBeds,
+      waitTime: parseInt(h.waitTime.split(' ')[0]),
+      specialties: h.specialties
     }))
   );
   
@@ -142,6 +168,10 @@ const Home = () => {
   const handleAnalysisReady = () => {
     localStorage.setItem('analysisData', 'true');
     setShowAnalysis(true);
+    toast({
+      title: "Analysis Ready",
+      description: "Real-time data analysis has been completed and is now available.",
+    });
   };
 
   // Handle analysis reset
@@ -162,39 +192,69 @@ const Home = () => {
     return 'Critical';
   };
   
+  // Toggle theme
+  const toggleTheme = () => {
+    setTheme(isDark ? 'light' : 'dark');
+    toast({
+      title: `Switched to ${isDark ? 'Light' : 'Dark'} Mode`,
+      description: `Display has been updated to ${isDark ? 'light' : 'dark'} mode.`,
+    });
+  };
+  
   return (
     <div 
-      className="min-h-screen w-full bg-cover bg-center transition-all duration-500"
+      className={`min-h-screen w-full bg-cover bg-center transition-all duration-500`}
       style={{ 
         backgroundImage: `url('/lovable-uploads/7c8af1f3-722f-4ce8-a1f9-aa995983760e.png')`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat'
       }}
     >
-      <div className="min-h-screen w-full bg-gradient-to-br from-gray-900/95 via-gray-800/90 to-gray-900/95 backdrop-blur-sm transition-all duration-500 pb-20">
+      <div className={`min-h-screen w-full ${
+        isDark 
+          ? 'bg-gradient-to-br from-gray-900/95 via-gray-800/90 to-gray-900/95' 
+          : 'bg-gradient-to-br from-white/95 via-blue-50/90 to-white/95'
+        } backdrop-blur-sm transition-all duration-500 pb-20`}>
         {/* Top Header with Smart Ambulance title */}
         <div className="container mx-auto px-4">
-          <div className="py-4 flex flex-col sm:flex-row justify-between items-center border-b border-blue-900/30">
+          <div className={`py-4 flex flex-col sm:flex-row justify-between items-center border-b ${
+            isDark ? 'border-blue-900/30' : 'border-blue-200/80'
+          }`}>
             <div className="text-left mb-3 sm:mb-0">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+              <h1 className={`text-2xl font-bold ${
+                isDark 
+                  ? 'bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent' 
+                  : 'text-blue-700'
+              }`}>
                 Smart Ambulance Routing & ICU Predictor
               </h1>
-              <p className="text-sm text-blue-300/80">AI-powered emergency response system</p>
+              <p className={isDark ? 'text-sm text-blue-300/80' : 'text-sm text-blue-600/80'}>AI-powered emergency response system</p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
+              {/* Theme toggle switch */}
+              <div className="flex items-center gap-2">
+                <Sun size={16} className={isDark ? "text-gray-400" : "text-amber-500"} />
+                <Switch
+                  checked={isDark}
+                  onCheckedChange={toggleTheme}
+                  className={isDark ? "bg-blue-900/50" : "bg-blue-200"}
+                />
+                <Moon size={16} className={isDark ? "text-blue-400" : "text-gray-400"} />
+              </div>
+              
               <div className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm ${
                 systemStatus === 'normal' 
-                  ? 'bg-green-900/30 text-green-400' 
+                  ? isDark ? 'bg-green-900/30 text-green-400' : 'bg-green-100 text-green-700' 
                   : systemStatus === 'warning'
-                    ? 'bg-amber-900/30 text-amber-400'
-                    : 'bg-red-900/30 text-red-400'
+                    ? isDark ? 'bg-amber-900/30 text-amber-400' : 'bg-amber-100 text-amber-700'
+                    : isDark ? 'bg-red-900/30 text-red-400' : 'bg-red-100 text-red-700'
               }`}>
                 {systemStatus === 'normal' ? (
-                  <Wifi size={14} className="text-green-400" />
+                  <Wifi size={14} className={isDark ? "text-green-400" : "text-green-600"} />
                 ) : systemStatus === 'warning' ? (
-                  <AlertTriangle size={14} className="text-amber-400" />
+                  <AlertTriangle size={14} className={isDark ? "text-amber-400" : "text-amber-600"} />
                 ) : (
-                  <WifiOff size={14} className="text-red-400" />
+                  <WifiOff size={14} className={isDark ? "text-red-400" : "text-red-600"} />
                 )}
                 <span>
                   {systemStatus === 'normal' 
@@ -220,8 +280,10 @@ const Home = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mb-6">
               {/* Left Panel - Data Dashboard */}
               <div className="lg:col-span-3">
-                <div className="bg-gray-800/70 rounded-xl p-4 space-y-4 border border-blue-900/30">
-                  <h2 className="text-lg font-bold text-blue-400 mb-3">Nearby ICU Availability</h2>
+                <div className={`${
+                  isDark ? 'bg-gray-800/70 border border-blue-900/30' : 'bg-white/80 border border-blue-100'
+                } rounded-xl p-4 space-y-4 shadow-md`}>
+                  <h2 className={`text-lg font-bold ${isDark ? 'text-blue-400' : 'text-blue-700'} mb-3`}>Nearby ICU Availability</h2>
                   
                   <div className="space-y-4 max-h-96 overflow-y-auto scrollbar-none pr-2">
                     {hospitals.map(hospital => (
@@ -229,15 +291,19 @@ const Home = () => {
                         key={hospital.id}
                         className={`p-3 rounded-lg transition-all cursor-pointer ${
                           selectedHospitalId === hospital.id 
-                            ? 'bg-blue-900/40 border border-blue-500/30' 
-                            : 'bg-gray-800/60 border border-gray-700/60 hover:bg-gray-800 hover:border-blue-900/30'
+                            ? isDark 
+                              ? 'bg-blue-900/40 border border-blue-500/30' 
+                              : 'bg-blue-50 border border-blue-200'
+                            : isDark
+                              ? 'bg-gray-800/60 border border-gray-700/60 hover:bg-gray-800 hover:border-blue-900/30'
+                              : 'bg-white/70 border border-gray-200 hover:bg-blue-50/50 hover:border-blue-200/50'
                         }`}
                         onClick={() => setSelectedHospitalId(hospital.id)}
                       >
                         <div className="flex justify-between items-start mb-2">
                           <div>
-                            <h3 className="font-medium text-gray-200">{hospital.name}</h3>
-                            <div className="flex items-center text-xs text-gray-400 mt-1 gap-1">
+                            <h3 className={`font-medium ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>{hospital.name}</h3>
+                            <div className={`flex items-center text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'} mt-1 gap-1`}>
                               <MapPin size={10} />
                               <span>{hospital.distance}</span>
                               <span className="mx-1">•</span>
@@ -245,15 +311,17 @@ const Home = () => {
                               <span>{hospital.waitTime}</span>
                             </div>
                           </div>
-                          <div className="bg-blue-900/40 px-2 py-0.5 rounded text-xs font-mono text-blue-300">ID: {hospital.id}</div>
+                          <div className={`${
+                            isDark ? 'bg-blue-900/40 text-blue-300' : 'bg-blue-100 text-blue-700'
+                          } px-2 py-0.5 rounded text-xs font-mono`}>ID: {hospital.id}</div>
                         </div>
                         
                         <div className="mb-2">
                           <div className="flex justify-between text-xs mb-1">
-                            <span className="text-gray-400">ICU Availability</span>
-                            <span className="text-gray-300">{hospital.icuBeds}/{hospital.totalBeds}</span>
+                            <span className={isDark ? 'text-gray-400' : 'text-gray-500'}>ICU Availability</span>
+                            <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>{hospital.icuBeds}/{hospital.totalBeds}</span>
                           </div>
-                          <div className="w-full bg-gray-700 rounded-full h-2">
+                          <div className={`w-full ${isDark ? 'bg-gray-700' : 'bg-gray-200'} rounded-full h-2`}>
                             <div 
                               className={`h-2 rounded-full ${
                                 (hospital.icuBeds / hospital.totalBeds) > 0.5 
@@ -271,7 +339,11 @@ const Home = () => {
                           {hospital.specialties.map(specialty => (
                             <span 
                               key={specialty}
-                              className="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-900/30 text-blue-300 border border-blue-800/50"
+                              className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+                                isDark 
+                                  ? 'bg-blue-900/30 text-blue-300 border border-blue-800/50' 
+                                  : 'bg-blue-100 text-blue-700 border border-blue-200'
+                              }`}
                             >
                               {specialty}
                             </span>
@@ -281,26 +353,32 @@ const Home = () => {
                     ))}
                   </div>
                   
-                  <h2 className="text-lg font-bold text-blue-400 mt-6 mb-3">Emergency Alerts</h2>
+                  <h2 className={`text-lg font-bold ${isDark ? 'text-blue-400' : 'text-blue-700'} mt-6 mb-3`}>Emergency Alerts</h2>
                   <div className="space-y-2 max-h-60 overflow-y-auto scrollbar-none pr-2">
                     {alerts.map(alert => (
                       <div 
                         key={alert.id}
                         className={`p-3 rounded-lg border ${
                           alert.type === 'critical' 
-                            ? 'bg-red-900/20 border-red-700/30 text-red-200' 
+                            ? isDark 
+                              ? 'bg-red-900/20 border-red-700/30 text-red-200' 
+                              : 'bg-red-50 border-red-200 text-red-800'
                             : alert.type === 'warning'
-                              ? 'bg-amber-900/20 border-amber-700/30 text-amber-200'
-                              : 'bg-blue-900/20 border-blue-700/30 text-blue-200'
+                              ? isDark
+                                ? 'bg-amber-900/20 border-amber-700/30 text-amber-200'
+                                : 'bg-amber-50 border-amber-200 text-amber-800'
+                              : isDark
+                                ? 'bg-blue-900/20 border-blue-700/30 text-blue-200'
+                                : 'bg-blue-50 border-blue-200 text-blue-800'
                         }`}
                       >
                         <div className="flex items-start gap-2">
                           {alert.type === 'critical' ? (
-                            <AlertTriangle size={16} className="text-red-400 mt-0.5" />
+                            <AlertTriangle size={16} className={isDark ? "text-red-400" : "text-red-600"} />
                           ) : alert.type === 'warning' ? (
-                            <AlertTriangle size={16} className="text-amber-400 mt-0.5" />
+                            <AlertTriangle size={16} className={isDark ? "text-amber-400" : "text-amber-600"} />
                           ) : (
-                            <Info size={16} className="text-blue-400 mt-0.5" />
+                            <Info size={16} className={isDark ? "text-blue-400" : "text-blue-600"} />
                           )}
                           <div>
                             <p className="text-sm">{alert.message}</p>
@@ -315,8 +393,10 @@ const Home = () => {
               
               {/* Main Content Area - Live Mapping */}
               <div className="lg:col-span-6">
-                <div className="bg-gray-800/70 rounded-xl p-4 border border-blue-900/30 h-full">
-                  <h2 className="text-lg font-bold text-blue-400 mb-3">Live Route Mapping</h2>
+                <div className={`${
+                  isDark ? 'bg-gray-800/70 border border-blue-900/30' : 'bg-white/80 border border-blue-100'
+                } rounded-xl p-4 shadow-md h-full`}>
+                  <h2 className={`text-lg font-bold ${isDark ? 'text-blue-400' : 'text-blue-700'} mb-3`}>Live Route Mapping</h2>
                   
                   {/* Enhanced Map View */}
                   <EnhancedMapView 
@@ -324,33 +404,55 @@ const Home = () => {
                     selectedHospitalId={selectedHospitalId}
                     onHospitalClick={(id) => setSelectedHospitalId(id)}
                     transportMode={transportMode}
+                    theme={theme}
                   />
                   
                   <div className="mt-4 mb-6">
                     <Tabs defaultValue="icu" onValueChange={setSelectedAnalyticView}>
                       <div className="flex justify-between items-center mb-3">
-                        <h2 className="text-lg font-bold text-blue-400">Real-Time Analytics</h2>
-                        <TabsList className="bg-gray-700/50">
-                          <TabsTrigger value="icu" className="data-[state=active]:bg-blue-900/50">ICU Status</TabsTrigger>
-                          <TabsTrigger value="response" className="data-[state=active]:bg-blue-900/50">Response Time</TabsTrigger>
-                          <TabsTrigger value="cases" className="data-[state=active]:bg-blue-900/50">Cases</TabsTrigger>
+                        <h2 className={`text-lg font-bold ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>Real-Time Analytics</h2>
+                        <TabsList className={isDark ? "bg-gray-700/50" : "bg-gray-200"}>
+                          <TabsTrigger 
+                            value="icu" 
+                            className={isDark ? "data-[state=active]:bg-blue-900/50" : "data-[state=active]:bg-blue-100"}
+                          >
+                            ICU Status
+                          </TabsTrigger>
+                          <TabsTrigger 
+                            value="response" 
+                            className={isDark ? "data-[state=active]:bg-blue-900/50" : "data-[state=active]:bg-blue-100"}
+                          >
+                            Response Time
+                          </TabsTrigger>
+                          <TabsTrigger 
+                            value="cases" 
+                            className={isDark ? "data-[state=active]:bg-blue-900/50" : "data-[state=active]:bg-blue-100"}
+                          >
+                            Cases
+                          </TabsTrigger>
                         </TabsList>
                       </div>
                       
                       <TabsContent value="icu" className="mt-0">
-                        <div className="bg-gray-800/90 rounded-lg border border-gray-700/60 p-3 h-60">
+                        <div className={`${
+                          isDark ? 'bg-gray-800/90 border border-gray-700/60' : 'bg-white/90 border border-gray-200'
+                        } rounded-lg p-3 h-60`}>
                           <EmergencyDashboard data={analyticData.icu} view="icu" />
                         </div>
                       </TabsContent>
                       
                       <TabsContent value="response" className="mt-0">
-                        <div className="bg-gray-800/90 rounded-lg border border-gray-700/60 p-3 h-60">
+                        <div className={`${
+                          isDark ? 'bg-gray-800/90 border border-gray-700/60' : 'bg-white/90 border border-gray-200'
+                        } rounded-lg p-3 h-60`}>
                           <EmergencyDashboard data={analyticData.response} view="response" />
                         </div>
                       </TabsContent>
                       
                       <TabsContent value="cases" className="mt-0">
-                        <div className="bg-gray-800/90 rounded-lg border border-gray-700/60 p-3 h-60">
+                        <div className={`${
+                          isDark ? 'bg-gray-800/90 border border-gray-700/60' : 'bg-white/90 border border-gray-200'
+                        } rounded-lg p-3 h-60`}>
                           <EmergencyDashboard data={analyticData.cases} view="cases" />
                         </div>
                       </TabsContent>
@@ -361,29 +463,40 @@ const Home = () => {
                   <HospitalDashboard 
                     hospitals={hospitals}
                     patientData={patientData}
+                    theme={theme}
                   />
                 </div>
               </div>
               
               {/* Right Sidebar - Patient & Emergency Details */}
               <div className="lg:col-span-3">
-                <div className="bg-gray-800/70 rounded-xl p-4 space-y-4 border border-blue-900/30">
-                  <h2 className="text-lg font-bold text-blue-400 mb-3">Patient & Emergency Details</h2>
+                <div className={`${
+                  isDark ? 'bg-gray-800/70 border border-blue-900/30' : 'bg-white/80 border border-blue-100'
+                } rounded-xl p-4 space-y-4 shadow-md`}>
+                  <h2 className={`text-lg font-bold ${isDark ? 'text-blue-400' : 'text-blue-700'} mb-3`}>Patient & Emergency Details</h2>
                   
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm text-gray-400 mb-1">Patient Location</label>
+                      <label className={`block text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-1`}>Patient Location</label>
                       <input 
                         type="text" 
-                        className="w-full bg-gray-900/60 border border-gray-700 rounded-lg px-3 py-2 text-gray-200"
+                        className={`w-full ${
+                          isDark 
+                            ? 'bg-gray-900/60 border border-gray-700 text-gray-200' 
+                            : 'bg-white/60 border border-gray-300 text-gray-700'
+                        } rounded-lg px-3 py-2`}
                         defaultValue={patientData.location}
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-sm text-gray-400 mb-1">Selected Hospital</label>
+                      <label className={`block text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-1`}>Selected Hospital</label>
                       <select 
-                        className="w-full bg-gray-900/60 border border-gray-700 rounded-lg px-3 py-2 text-gray-200"
+                        className={`w-full ${
+                          isDark 
+                            ? 'bg-gray-900/60 border border-gray-700 text-gray-200' 
+                            : 'bg-white/60 border border-gray-300 text-gray-700'
+                        } rounded-lg px-3 py-2`}
                         value={selectedHospitalId || ''}
                         onChange={(e) => setSelectedHospitalId(e.target.value)}
                       >
@@ -396,8 +509,8 @@ const Home = () => {
                       </select>
                       {patientData.aiRecommendedHospital && (
                         <div className="mt-1 flex items-center">
-                          <Zap size={14} className="text-blue-400 mr-1" />
-                          <span className="text-xs text-blue-300">
+                          <Zap size={14} className={isDark ? "text-blue-400" : "text-blue-600"} />
+                          <span className={`text-xs ${isDark ? 'text-blue-300' : 'text-blue-600'}`}>
                             AI recommended: {
                               hospitals.find(h => h.id === patientData.aiRecommendedHospital)?.name
                             }
@@ -408,13 +521,13 @@ const Home = () => {
                     
                     <div>
                       <div className="flex justify-between mb-1">
-                        <label className="block text-sm text-gray-400">Patient Severity</label>
+                        <label className={`block text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Patient Severity</label>
                         <span className="text-sm font-medium" style={{
                           color: patientSeverity <= 3 
-                            ? '#34d399' 
+                            ? isDark ? '#34d399' : '#10b981' 
                             : patientSeverity <= 7 
-                              ? '#fbbf24' 
-                              : '#ef4444'
+                              ? isDark ? '#fbbf24' : '#d97706' 
+                              : isDark ? '#ef4444' : '#dc2626'
                         }}>
                           {getSeverityLabel(patientSeverity)}
                         </span>
@@ -428,13 +541,13 @@ const Home = () => {
                         className="w-full"
                         style={{
                           '--range-color': patientSeverity <= 3 
-                            ? '#10b981' 
+                            ? isDark ? '#34d399' : '#10b981' 
                             : patientSeverity <= 7 
-                              ? '#f59e0b' 
-                              : '#dc2626'
+                              ? isDark ? '#fbbf24' : '#d97706' 
+                              : isDark ? '#ef4444' : '#dc2626'
                         } as React.CSSProperties}
                       />
-                      <div className="flex justify-between text-xs text-gray-500 px-1">
+                      <div className={`flex justify-between text-xs ${isDark ? 'text-gray-500' : 'text-gray-600'} px-1`}>
                         <span>1</span>
                         <span>5</span>
                         <span>10</span>
@@ -442,13 +555,17 @@ const Home = () => {
                     </div>
                     
                     <div>
-                      <label className="block text-sm text-gray-400 mb-2">Transport Mode</label>
+                      <label className={`block text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-2`}>Transport Mode</label>
                       <div className="grid grid-cols-2 gap-3">
                         <button
                           className={`flex items-center justify-center gap-2 py-2 px-3 rounded-lg border ${
                             transportMode === 'ground'
-                              ? 'bg-blue-900/40 border-blue-500/50 text-blue-300'
-                              : 'bg-gray-800/60 border-gray-700 text-gray-400 hover:bg-gray-800'
+                              ? isDark
+                                ? 'bg-blue-900/40 border-blue-500/50 text-blue-300'
+                                : 'bg-blue-100 border-blue-300 text-blue-700'
+                              : isDark
+                                ? 'bg-gray-800/60 border-gray-700 text-gray-400 hover:bg-gray-800'
+                                : 'bg-white/60 border-gray-300 text-gray-500 hover:bg-gray-100'
                           }`}
                           onClick={() => setTransportMode('ground')}
                         >
@@ -463,8 +580,12 @@ const Home = () => {
                         <button
                           className={`flex items-center justify-center gap-2 py-2 px-3 rounded-lg border ${
                             transportMode === 'air'
-                              ? 'bg-blue-900/40 border-blue-500/50 text-blue-300'
-                              : 'bg-gray-800/60 border-gray-700 text-gray-400 hover:bg-gray-800'
+                              ? isDark
+                                ? 'bg-blue-900/40 border-blue-500/50 text-blue-300'
+                                : 'bg-blue-100 border-blue-300 text-blue-700'
+                              : isDark
+                                ? 'bg-gray-800/60 border-gray-700 text-gray-400 hover:bg-gray-800'
+                                : 'bg-white/60 border-gray-300 text-gray-500 hover:bg-gray-100'
                           }`}
                           onClick={() => setTransportMode('air')}
                         >
@@ -477,7 +598,7 @@ const Home = () => {
                         </button>
                       </div>
                       {patientSeverity > 8 && transportMode !== 'air' && (
-                        <div className="mt-2 text-xs text-amber-400 flex items-center">
+                        <div className={`mt-2 text-xs ${isDark ? 'text-amber-400' : 'text-amber-600'} flex items-center`}>
                           <AlertTriangle size={12} className="mr-1" />
                           Air transport recommended for critical patients
                         </div>
@@ -485,7 +606,17 @@ const Home = () => {
                     </div>
                     
                     <button 
-                      className="w-full bg-blue-700 hover:bg-blue-600 text-white py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 mt-4"
+                      className={`w-full ${
+                        isDark 
+                          ? 'bg-blue-700 hover:bg-blue-600 text-white' 
+                          : 'bg-blue-600 hover:bg-blue-500 text-white'
+                      } py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 mt-4`}
+                      onClick={() => {
+                        toast({
+                          title: "Emergency Response Dispatched",
+                          description: `Ambulance dispatched to ${patientData.location}. ETA: 8 minutes.`,
+                        });
+                      }}
                     >
                       <Zap size={16} />
                       Dispatch Emergency Response
@@ -495,12 +626,16 @@ const Home = () => {
                 
                 {/* Enhanced ICU Availability & Geographic Distribution graphs */}
                 <div className="mt-4 space-y-4">
-                  <div className="bg-gray-800/70 rounded-xl p-4 border border-blue-900/30">
-                    <EnhancedICUAvailability data={icuBedData} />
+                  <div className={`${
+                    isDark ? 'bg-gray-800/70 border border-blue-900/30' : 'bg-white/80 border border-blue-100'
+                  } rounded-xl p-4 shadow-md`}>
+                    <EnhancedICUAvailability data={icuBedData} theme={theme} />
                   </div>
                   
-                  <div className="bg-gray-800/70 rounded-xl p-4 border border-blue-900/30">
-                    <GeographicDistribution regions={geoDistributionData.regions} />
+                  <div className={`${
+                    isDark ? 'bg-gray-800/70 border border-blue-900/30' : 'bg-white/80 border border-blue-100'
+                  } rounded-xl p-4 shadow-md`}>
+                    <GeographicDistribution regions={geoDistributionData.regions} theme={theme} />
                   </div>
                 </div>
               </div>
