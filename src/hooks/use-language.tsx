@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Define available languages
@@ -293,13 +292,16 @@ export const translations: Record<Language, Record<string, string>> = {
     "hospitals": "अस्पताल",
     "reports": "रिपोर्ट्स",
     "settings": "सेटिंग्स",
+    
     // Page Titles
     "ai-smart-ambulance-routing": "AI स्मार्ट एम्बुलेंस मार्गदर्शन",
     "emergency-route": "आपातकालीन मार्ग",
     "hospitals-near-you": "आपके पास के अस्पताल",
+    
     // Patient Status
     "patient-status": "मरीज की स्थिति",
     "critical": "गंभीर",
+    
     // Hospital Info
     "icu-availability": "ICU उपलब्धता",
     "total-icu-beds": "कुल ICU बेड",
@@ -307,6 +309,7 @@ export const translations: Record<Language, Record<string, string>> = {
     "navigate-to": "नेविगेट करें",
     "calling-hospital": "अस्पताल को कॉल कर रहे हैं",
     "connecting-to": "से जुड़ रहे हैं",
+    
     // Upload Dataset
     "upload-dataset": "डेटासेट अपलोड करें",
     "dataset-ready": "डेटासेट तैयार है",
@@ -319,6 +322,7 @@ export const translations: Record<Language, Record<string, string>> = {
     "dataset-options-desc": "अपने अपलोड किए गए डेटासेट का प्रबंधन करें",
     "analysis-active": "विश्लेषण वर्तमान में सक्रिय है",
     "reset-analysis": "विश्लेषण रीसेट करें",
+    
     // Settings
     "map-navigation-settings": "मैप और नेविगेशन सेटिंग्स",
     "notifications-alerts": "नोटिफिकेशन और अलर्ट",
@@ -349,6 +353,7 @@ export const translations: Record<Language, Record<string, string>> = {
     "switch-to-light": "लाइट मोड में स्विच करें",
     "switch-to-dark": "डार्क मोड में स्विच करें",
     "change": "बदलें",
+    
     // Profile
     "name": "नाम",
     "email": "ईमेल",
@@ -356,15 +361,10 @@ export const translations: Record<Language, Record<string, string>> = {
     "location": "स्थान",
     "edit-profile": "प्रोफाइल एडिट करें",
     "sign-out": "साइन आउट",
-    "signed-out": "साइन आउट",
+    "signed-out": "साइन आउट किया गया",
     "signed-out-success": "आप सफलतापूर्वक साइन आउट हो गए हैं",
     "profile": "प्रोफाइल",
-    // Geo regions
-    "north-bangalore": "उत्तर बैंगलोर",
-    "central-bangalore": "मध्य बैंगलोर",
-    "south-bangalore": "दक्षिण बैंगलोर",
-    "east-bangalore": "पूर्व बैंगलोर",
-    "west-bangalore": "पश्चिम बैंगलोर",
+    
     // Analysis section
     "data-analysis": "डेटा विश्लेषण",
     "geographic-distribution": "भौगोलिक वितरण",
@@ -386,9 +386,11 @@ export const translations: Record<Language, Record<string, string>> = {
     "supported-format": "समर्थित प्रारूप",
     "max-file-size": "अधिकतम फ़ाइल आकार",
     "upload-successful": "अपलोड सफल!",
+    
     // Themes
     "light": "लाइट",
     "dark": "डार्क",
+    
     // Common actions
     "search-hospitals": "अस्पतालों को खोजें या रूटिंग के लिए दुर्घटना स्थान दर्ज करें...",
     "receive-live-traffic": "इष्टतम रूटिंग के लिए लाइव ट्रैफिक डेटा प्राप्त करें",
@@ -408,6 +410,15 @@ export const translations: Record<Language, Record<string, string>> = {
     "switch-themes": "लाइट और डार्क थीम के बीच स्विच करें",
     "enable-voice": "हैंड्स-फ्री वॉइस कंट्रोल सक्षम करें",
     "sync-data": "डिवाइसों के बीच डेटा सिंक करें",
+    
+    // Geo regions
+    "north-bangalore": "उत्तर बैंगलोर",
+    "central-bangalore": "मध्य बैंगलोर",
+    "south-bangalore": "दक्षिण बैंगलोर",
+    "east-bangalore": "पूर्व बैंगलोर",
+    "west-bangalore": "पश्चिम बैंगलोर",
+    
+    // Analysis section
     "incident-by-region": "क्षेत्र के अनुसार घटनाएँ",
     "incident-trends": "घटना रुझान",
     "response-time": "प्रतिक्रिया समय",
@@ -421,13 +432,16 @@ export const translations: Record<Language, Record<string, string>> = {
     "hospitals": "மருத்துவமனைகள்",
     "reports": "அறிக்கைகள்",
     "settings": "அமைப்புகள்",
+    
     // Page Titles
     "ai-smart-ambulance-routing": "AI ஸ்மார்ட் ஆம்புலன்ஸ் வழித்தடம்",
     "emergency-route": "அவசர வழித்தடம்",
     "hospitals-near-you": "உங்களுக்கு அருகிலுள்ள மருத்துவமனைகள்",
+    
     // Patient Status
     "patient-status": "நோயாளி நிலை",
     "critical": "கடுமையான",
+    
     // Hospital Info
     "icu-availability": "ICU கிடைக்கும் தன்மை",
     "total-icu-beds": "மொத்த ICU படுக்கைகள்",
@@ -435,6 +449,7 @@ export const translations: Record<Language, Record<string, string>> = {
     "navigate-to": "வழிசெலுத்து",
     "calling-hospital": "மருத்துவமனைக்கு அழைக்கிறது",
     "connecting-to": "இணைக்கிறது",
+    
     // Upload Dataset
     "upload-dataset": "தரவுத்தொகுப்பை பதிவேற்றுக",
     "dataset-ready": "தரவுத்தொகுப்பு தயார்",
@@ -447,6 +462,7 @@ export const translations: Record<Language, Record<string, string>> = {
     "dataset-options-desc": "பதிவேற்றிய தரவுத்தொகுப்பை நிர்வகிக்கவும்",
     "analysis-active": "பகுப்பாய்வு தற்போது செயலில் உள்ளது",
     "reset-analysis": "பகுப்பாய்வை மீட்டமைக்கவும்",
+    
     // Settings
     "map-navigation-settings": "வரைபட மற்றும் வழிசெலுத்தல் அமைப்புகள்",
     "notifications-alerts": "அறிவிப்புகள் மற்றும் எச்சரிக்கைகள்",
@@ -477,6 +493,7 @@ export const translations: Record<Language, Record<string, string>> = {
     "switch-to-light": "லைட் மோடுக்கு மாறவும்",
     "switch-to-dark": "டார்க் மோடுக்கு மாறவும்",
     "change": "மாற்று",
+    
     // Profile
     "name": "பெயர்",
     "email": "மின்னஞ்சல்",
@@ -484,15 +501,10 @@ export const translations: Record<Language, Record<string, string>> = {
     "location": "இடம்",
     "edit-profile": "சுயவிவரத்தைத் திருத்து",
     "sign-out": "வெளியேறு",
-    "signed-out": "வெளியேறியுள்ளீர்கள்",
+    "signed-out": "வெளியேறினீர்கள்",
     "signed-out-success": "நீங்கள் வெற்றிகரமாக வெளியேறியுள்ளீர்கள்",
     "profile": "சுயவிவரம்",
-    // Geo regions
-    "north-bangalore": "வடக்கு பெங்களூரு",
-    "central-bangalore": "மத்திய பெங்களூரு",
-    "south-bangalore": "தெற்கு பெங்களூரு",
-    "east-bangalore": "கிழக்கு பெங்களூரு",
-    "west-bangalore": "மேற்கு பெங்களூரு",
+    
     // Analysis section
     "data-analysis": "தரவு பகுப்பாய்வு",
     "geographic-distribution": "புவியியல் பரவல்",
@@ -514,9 +526,11 @@ export const translations: Record<Language, Record<string, string>> = {
     "supported-format": "ஆதரிக்கப்படும் வடிவம்",
     "max-file-size": "அதிகபட்ச கோப்பு அளவு",
     "upload-successful": "பதிவேற்றம் வெற்றிகரமாக முடிந்தது!",
+    
     // Themes
     "light": "வெளிச்சம்",
     "dark": "இருள்",
+    
     // Common actions
     "search-hospitals": "மருத்துவமனைகளைத் தேடுங்கள் அல்லது வழிசெலுத்துவதற்கு விபத்து இடத்தை உள்ளிடவும்...",
     "receive-live-traffic": "சிறந்த வழிசெலுத்தலுக்கு நேரடி போக்குவரத்து தரவைப் பெறுங்கள்",
@@ -536,6 +550,15 @@ export const translations: Record<Language, Record<string, string>> = {
     "switch-themes": "லைட் மற்றும் டார்க் தீம்களுக்கு இடையே மாறவும்",
     "enable-voice": "ஹேண்ட்ஸ்-ஃப்ரீ குரல் கட்டுப்பாட்டை இயக்கவும்",
     "sync-data": "சாதனங்களுக்கு இடையில் தரவை ஒத்திசைக்கவும்",
+    
+    // Geo regions
+    "north-bangalore": "வடக்கு பெங்களூரு",
+    "central-bangalore": "மத்திய பெங்களூரு",
+    "south-bangalore": "தெற்கு பெங்களூரு",
+    "east-bangalore": "கிழக்கு பெங்களூரு",
+    "west-bangalore": "மேற்கு பெங்களூரு",
+    
+    // Analysis section
     "incident-by-region": "பகுதி வாரியாக சம்பவங்கள்",
     "incident-trends": "சம்பவ போக்குகள்",
     "response-time": "பதிலளிப்பு நேரம்",
@@ -574,165 +597,4 @@ export const translations: Record<Language, Record<string, string>> = {
     "dataset-options": "డేటాసెట్ ఎంపికలు",
     "dataset-options-desc": "మీ అప్‌లోడ్ చేసిన డేటాసెట్‌ను నిర్వహించండి",
     "analysis-active": "విశ్లేషణ ప్రస్తుతం యాక్టివ్‌గా ఉంది",
-    "reset-analysis": "విశ్లేషణను రీసెట్ చేయండి",
-    // Settings
-    "map-navigation-settings": "మ్యాప్ & నావిగేషన్ సెట్టింగులు",
-    "notifications-alerts": "నోటిఫికేషన్లు & అలర్ట్లు",
-    "performance-data": "పనితీరు & డేటా",
-    "system-preferences": "సిస్టమ్ ప్రాధాన్యతలు",
-    "real-time-traffic-updates": "రియల్-టైమ్ ట్రాఫిక్ అప్‌డేట్‌లు",
-    "smart-rerouting": "స్మార్ట్ రీరూటింగ్",
-    "road-closure-alerts": "రోడ్ మూసివేత అలర్ట్‌లు",
-    "3d-map-visualization": "3D మ్యాప్ విజువలైజేషన్",
-    "lane-guidance": "లేన్ గైడెన్స్",
-    "emergency-alerts": "అత్యవసర అలర్ట్‌లు",
-    "hospital-status-updates": "ఆసుపత్రి స్థితి అప్‌డేట్‌లు",
-    "traffic-condition-alerts": "ట్రాఫిక్ కండిషన్ అలర్ట్‌లు",
-    "push-notifications": "పుష్ నోటిఫికేషన్‌లు",
-    "audio-alerts": "ఆడియో అలర్ట్‌లు",
-    "ai-powered-recommendations": "AI-ఆధారిత సిఫార్సులు",
-    "survival-rate-prediction": "మనుగడ రేటు అంచనా",
-    "anonymous-data-sharing": "అనామక డేటా షేరింగ్",
-    "detailed-analytics": "వివరణాత్మక విశ్లేషణలు",
-    "dark-mode": "డార్క్ మోడ్",
-    "voice-commands": "వాయిస్ కమాండ్‌లు",
-    "data-sync": "డేటా సింక్",
-    "language": "భాష",
-    "current-language": "ప్రస్తుతం",
-    "units": "యూనిట్లు",
-    "metric": "మెట్రిక్",
-    "imperial": "ఇంపీరియల్",
-    "switch-to-light": "లైట్ మోడ్‌కి మారండి",
-    "switch-to-dark": "డార్క్ మోడ్‌కి మారండి",
-    "change": "మార్చు",
-    // Profile
-    "name": "పేరు",
-    "email": "ఇమెయిల్",
-    "role": "పాత్ర",
-    "location": "స్థానం",
-    "edit-profile": "ప్రొఫైల్‌ని సవరించండి",
-    "sign-out": "సైన్ అవుట్",
-    "signed-out": "సైన్ అవుట్ చేయబడింది",
-    "signed-out-success": "మీరు విజయవంతంగా సైన్ అవుట్ చేసారు",
-    "profile": "ప్రొఫైల్",
-    // Geo regions
-    "north-bangalore": "ఉత్తర బెంగళూరు",
-    "central-bangalore": "సెంట్రల్ బెంగళూరు", 
-    "south-bangalore": "దక్షిణ బెంగళూరు",
-    "east-bangalore": "తూర్పు బెంగళూరు",
-    "west-bangalore": "పశ్చిమ బెంగళూరు",
-    
-    // Analysis section
-    "data-analysis": "డేటా విశ్లేషణ",
-    "geographic-distribution": "భౌగోళిక పంపిణీ",
-    "response-metrics": "ప్రతిస్పందన మెట్రిక్స్",
-    "interactive-map-placeholder": "ఇంటరాక్టివ్ మ్యాప్ విజువలైజేషన్ (వివరాలను వీక్షించడానికి ప్రాంతాలపై క్లిక్ చేయండి)",
-    "incident-hotspots": "ఘటన హాట్‌స్పాట్‌లు",
-    "avg-response-time": "సగటు ప్రతిస్పందన సమయం",
-    "incidents": "ఘటనలు",
-    "minutes": "నిమిషాలు",
-    "total-incidents": "మొత్తం సంఘటనలు",
-    "from-previous": "మునుపటి కాలం నుండి",
-    "survival-rate": "మనుగడ రేటు",
-    "response-statistics": "కేసు తీవ్రత ద్వారా ప్రతిస్పందన విజయ రేటు",
-    "critical-cases": "క్రిటికల్ కేసులు",
-    "moderate-cases": "మధ్యస్థ కేసులు",
-    "mild-cases": "తేలికపాటి కేసులు",
-    "dataset-instructions": "విశ్లేషణ కోసం అత్యవసర డేటా కలిగి ఉన్న మీ CSV డేటాసెట్‌ను అప్‌లోడ్ చేయండి",
-    "drag-drop-csv": "మీ CSV ఫైల్‌ను ఇక్కడ డ్రాగ్ చేసి డ్రాప్ చేయండి లేదా బ్రౌజ్ చేయడానికి క్లిక్ చేయండి",
-    "supported-format": "మద్దతు ఉన్న ఫార్మాట్",
-    "max-file-size": "గరిష్ట ఫైల్ పరిమాణం",
-    "upload-successful": "అప్‌లోడ్ విజయవంతమైంది!",
-    
-    // Themes
-    "light": "లైట్",
-    "dark": "డార్క్",
-    
-    // Common actions
-    "search-hospitals": "ఆసుపత్రులను శోధించండి లేదా రూటింగ్ కోసం ప్రమాద స్థానాన్ని నమోదు చేయండి...",
-    "receive-live-traffic": "అత్యుత్తమ రూటింగ్ కోసం లైవ్ ట్రాఫిక్ డేటాను పొందండి",
-    "auto-reroute": "వేగవంతమైన మార్గాలు అందుబాటులో ఉన్నప్పుడు స్వయంచాలకంగా రీరూట్ చేయండి",
-    "get-road-closure": "మీ మార్గంలో మూసివేసిన రోడ్ల గురించి తెలియజేయబడండి",
-    "show-3d-buildings": "3D లో భవనాలు మరియు ల్యాండ్‌మార్క్‌లను చూపించండి",
-    "show-lanes": "వేగవంతమైన నావిగేషన్ కోసం సిఫార్సు చేయబడిన లేన్‌లను చూపండి",
-    "critical-alerts": "క్రిటికల్ పేషెంట్ మరియు అధిక ప్రాధాన్యత అలర్ట్‌లు",
-    "bed-availability": "బెడ్ లభ్యత మరియు వేచి ఉండే సమయాల్లో మార్పులు",
-    "traffic-alerts": "ట్రాఫిక్ పరిస్థితుల్లో గణనీయమైన మార్పులు",
-    "mobile-alerts": "మొబైల్ పరికరాలలో అలర్ట్‌లను స్వీకరించండి",
-    "voice-announcements": "కీలక అప్‌డేట్‌ల కోసం వాయిస్ ప్రకటనలు",
-    "smart-hospital": "పేషెంట్ డేటా ఆధారంగా స్మార్ట్ ఆసుపత్రి ఎంపిక",
-    "show-survival": "ఆసుపత్రుల కోసం అంచనా వేసిన మనుగడ రేట్లను చూపండి",
-    "share-data": "సిస్టమ్‌ను మెరుగుపరచడానికి అనామక డేటాను షేర్ చేయండి",
-    "performance-metrics": "సమగ్ర పనితీరు మెట్రిక్స్‌ను వీక్షించండి",
-    "switch-themes": "లైట్ మరియు డార్క్ థీమ్‌ల మధ్య మారండి",
-    "enable-voice": "హ్యాండ్స్-ఫ్రీ వాయిస్ కంట్రోల్‌ను ప్రారంభించండి",
-    "sync-data": "పరికరాల మధ్య డేటాను సింక్ చేయండి",
-    "incident-by-region": "ప్రాంతం వారీగా సంఘటనలు",
-    "incident-trends": "సంఘటన ధోరణులు",
-    "response-time": "ప్రతిస్పందన సమయం",
-    "incident-distribution-map": "సంఘటన పంపిణీ మ్యాప్"
-  }
-};
-
-// Create context for language settings
-type LanguageContextType = {
-  language: Language;
-  setLanguage: (language: Language) => void;
-  t: (key: string) => string;
-};
-
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
-
-// Provider component
-export const LanguageProvider = ({
-  children,
-  defaultLanguage = "english",
-}: {
-  children: React.ReactNode;
-  defaultLanguage?: Language;
-}) => {
-  // Get the language from localStorage or use default
-  const [language, setLanguage] = useState<Language>(() => {
-    const savedLanguage = localStorage.getItem("language") as Language;
-    return savedLanguage || defaultLanguage;
-  });
-
-  // Translation function
-  const t = (key: string): string => {
-    // Return the translation for the current language, or fallback to english,
-    // or return the key itself if no translation is found
-    const translation = translations[language][key] || 
-                         translations["english"][key] || 
-                         key;
-    return translation;
-  };
-
-  // Update localStorage when language changes
-  useEffect(() => {
-    localStorage.setItem("language", language);
-  }, [language]);
-
-  const value = {
-    language,
-    setLanguage,
-    t,
-  };
-
-  return (
-    <LanguageContext.Provider value={value}>
-      {children}
-    </LanguageContext.Provider>
-  );
-};
-
-// Hook to use the language context
-export const useLanguage = (): LanguageContextType => {
-  const context = useContext(LanguageContext);
-  
-  if (context === undefined) {
-    throw new Error("useLanguage must be used within a LanguageProvider");
-  }
-  
-  return context;
-};
-
+    "reset-analysis": "విశ్
