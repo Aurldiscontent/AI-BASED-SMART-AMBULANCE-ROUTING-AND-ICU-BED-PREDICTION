@@ -713,10 +713,13 @@ type LanguageContextType = {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 // Provider component
-export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const LanguageProvider: React.FC<{ children: React.ReactNode; defaultLanguage?: Language }> = ({ 
+  children, 
+  defaultLanguage = 'english' 
+}) => {
   const [language, setLanguage] = useState<Language>(() => {
     const savedLanguage = localStorage.getItem('language') as Language;
-    return savedLanguage || 'english';
+    return savedLanguage || defaultLanguage;
   });
 
   useEffect(() => {
