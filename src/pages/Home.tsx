@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import HomePage from '@/components/HomePage';
 import { useTheme } from '@/hooks/use-theme';
+import { useLanguage } from '@/hooks/use-language';
 import ThemeSwitcher from '@/components/ui/ThemeSwitcher';
 import { motion } from 'framer-motion';
 import UserProfileBar from '@/components/ui/UserProfileBar';
@@ -11,6 +12,7 @@ import { useToast } from '@/components/ui/use-toast';
 
 const Home = () => {
   const { theme } = useTheme();
+  const { t } = useLanguage();
   const isDark = theme === 'dark';
   const { toast } = useToast();
   const [isUploading, setIsUploading] = useState(false);
@@ -29,8 +31,8 @@ const Home = () => {
         setUploadSuccess(true);
         
         toast({
-          title: "Dataset Uploaded Successfully",
-          description: `File "${file.name}" has been processed and is ready for analysis`,
+          title: t("dataset-uploaded-title"),
+          description: `${t("dataset-uploaded-desc")}: "${file.name}"`,
           variant: "default",
         });
         
@@ -97,17 +99,17 @@ const Home = () => {
                   {isUploading ? (
                     <>
                       <div className="animate-spin mr-2 h-4 w-4 border-2 border-current border-t-transparent rounded-full"></div>
-                      Uploading...
+                      {t("uploading")}
                     </>
                   ) : uploadSuccess ? (
                     <>
                       <CheckCircle2 size={16} className="text-white" /> 
-                      Dataset Ready
+                      {t("dataset-ready")}
                     </>
                   ) : (
                     <>
                       <FileSpreadsheet size={16} /> 
-                      Upload Dataset
+                      {t("upload-dataset")}
                     </>
                   )}
                 </Button>

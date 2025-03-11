@@ -5,6 +5,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { ThemeProvider } from "./hooks/use-theme";
+import { LanguageProvider } from "./hooks/use-language";
+import { UnitsProvider } from "./hooks/use-units";
+import { SettingsProvider } from "./hooks/use-settings";
 import { useEffect } from "react";
 import Index from "./pages/Index";
 import Welcome from "./pages/Welcome";
@@ -53,24 +56,30 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="system">
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <RouteGuard>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/welcome" element={<Welcome />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/home" element={<Home />} />
-                <Route path="/search" element={<Home />} /> {/* Placeholder */}
-                <Route path="/profile" element={<Home />} /> {/* Placeholder */}
-                <Route path="/settings" element={<Home />} /> {/* Placeholder */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </RouteGuard>
-          </BrowserRouter>
-        </TooltipProvider>
+        <LanguageProvider defaultLanguage="english">
+          <UnitsProvider defaultUnitSystem="metric">
+            <SettingsProvider>
+              <TooltipProvider>
+                <Toaster />
+                <Sonner />
+                <BrowserRouter>
+                  <RouteGuard>
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/welcome" element={<Welcome />} />
+                      <Route path="/auth" element={<Auth />} />
+                      <Route path="/home" element={<Home />} />
+                      <Route path="/search" element={<Home />} /> {/* Placeholder */}
+                      <Route path="/profile" element={<Home />} /> {/* Placeholder */}
+                      <Route path="/settings" element={<Home />} /> {/* Placeholder */}
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </RouteGuard>
+                </BrowserRouter>
+              </TooltipProvider>
+            </SettingsProvider>
+          </UnitsProvider>
+        </LanguageProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );

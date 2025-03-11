@@ -1,12 +1,14 @@
 
 import React from 'react';
 import { useTheme } from "@/hooks/use-theme";
+import { useLanguage } from "@/hooks/use-language";
 import { Sun, Moon } from "lucide-react";
 import { Toggle } from "@/components/ui/toggle";
 import { motion } from "framer-motion";
 
 const ThemeSwitcher = () => {
   const { theme, setTheme } = useTheme();
+  const { t } = useLanguage();
   const isDark = theme === "dark";
 
   const toggleTheme = () => {
@@ -24,6 +26,7 @@ const ThemeSwitcher = () => {
           ? 'bg-gray-800/70 border border-purple-700/40' 
           : 'bg-white/70 border border-purple-200/40'
       } backdrop-blur-md`}
+      title={isDark ? t("switch-to-light") : t("switch-to-dark")}
     >
       <Toggle 
         pressed={isDark}

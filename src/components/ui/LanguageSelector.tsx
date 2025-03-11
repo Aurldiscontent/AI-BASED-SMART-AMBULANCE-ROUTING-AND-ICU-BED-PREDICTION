@@ -1,0 +1,76 @@
+
+import { useState } from "react";
+import { useLanguage, Language } from "@/hooks/use-language";
+import { Button } from "@/components/ui/button";
+import { Check, Languages } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+
+const languages: { code: Language; label: string }[] = [
+  { code: "english", label: "English" },
+  { code: "hindi", label: "हिन्दी" },
+  { code: "kannada", label: "ಕನ್ನಡ" },
+  { code: "tamil", label: "தமிழ்" },
+  { code: "telugu", label: "తెలుగు" },
+];
+
+const LanguageSelector = () => {
+  const { language, setLanguage, t } = useLanguage();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleSelect = (code: Language) => {
+    setLanguage(code);
+    setIsOpen(false);
+  };
+
+  const getCurrentLanguageLabel = () => {
+    return languages.find((lang) => lang.code === language)?.label || "English";
+  };
+
+  return (
+    <div className="relative">
+      <Button
+        variant="ghost"
+        className="flex items-center justify-between w-full text-sm"
+        onClick={toggleDropdown}
+      >
+        <div className="flex items-center">
+          <Languages size={16} className="mr-2" />
+          <span>{getCurrentLanguageLabel()}</span>
+        </div>
+      </Button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="absolute right-0 mt-1 w-full bg-white dark:bg-gray-800 shadow-lg rounded-md overflow-hidden z-50 border border-gray-200 dark:border-gray-700"
+          >
+            <ul className="py-1">
+              {languages.map((lang) => (
+                <li key={lang.code}>
+                  <button
+                    className="flex items-center justify-between w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+                    onClick={() => handleSelect(lang.code)}
+                  >
+                    <span>{lang.label}</span>
+                    {language === lang.code && (
+                      <Check size={16} className="text-green-500" />
+                    )}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+export default LanguageSelector;
