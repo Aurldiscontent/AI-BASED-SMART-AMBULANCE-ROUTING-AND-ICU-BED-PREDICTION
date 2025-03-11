@@ -128,9 +128,6 @@ const WelcomeScreen: React.FC = () => {
               { label: "Smart AI Routing", emoji: "🗺️" },
               { label: "Hospital Network", emoji: "🏥" },
               { label: "Real-time Updates", emoji: "⏳" },
-              { label: "Accuracy Focused", emoji: "🎯" },
-              { label: "AI Powered", emoji: "🧠" },
-              { label: "AI Technology", emoji: "🤖" },
               { label: "Saving Lives Together", emoji: "👨‍⚕️" },
               { label: "Fast & Reliable", emoji: "⚡" },
             ].map((tag, index) => (
