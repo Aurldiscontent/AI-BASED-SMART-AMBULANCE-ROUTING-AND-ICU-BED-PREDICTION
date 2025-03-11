@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AnimatedLogo from './ui/AnimatedLogo';
 import { motion } from 'framer-motion';
-import { ArrowRight, Map, Clock, Hospital, Navigation, Brain } from 'lucide-react';
+import { ArrowRight, Map, Clock, Hospital, Navigation, Brain, Heart, HeartPulse, Ambulance } from 'lucide-react';
 import { Button } from './ui/button';
 
 const WelcomeScreen: React.FC = () => {
@@ -97,6 +97,36 @@ const WelcomeScreen: React.FC = () => {
         >
           <Brain size={70} />
         </motion.div>
+        
+        <motion.div 
+          className="absolute top-[40%] right-[30%] text-white/5 transform"
+          animate={{ 
+            y: [0, 12, 0], 
+            opacity: [0.2, 0.5, 0.2] 
+          }}
+          transition={{ 
+            repeat: Infinity, 
+            duration: 7,
+            ease: "easeInOut"
+          }}
+        >
+          <HeartPulse size={90} />
+        </motion.div>
+        
+        <motion.div 
+          className="absolute bottom-[20%] left-[35%] text-white/5 transform"
+          animate={{ 
+            y: [0, -12, 0], 
+            opacity: [0.1, 0.3, 0.1] 
+          }}
+          transition={{ 
+            repeat: Infinity, 
+            duration: 8,
+            ease: "easeInOut"
+          }}
+        >
+          <Heart size={60} />
+        </motion.div>
       </div>
       
       <div className="w-full max-w-md flex flex-col items-center z-10">
@@ -120,9 +150,21 @@ const WelcomeScreen: React.FC = () => {
           transition={{ delay: 0.6, duration: 0.5 }}
           className="mt-4 text-white text-center"
         >
-          <p className="text-xl font-medium text-cyan-300 drop-shadow-lg mb-2">
-            Smart AI Ambulance Routing for Life-Saving Response! 🚀
+          <p className="text-xl font-medium text-cyan-300 drop-shadow-lg mb-4">
+            <span className="inline-block mr-2">🚑</span>
+            Smart AI Ambulance Routing for Life-Saving Response!
+            <span className="inline-block ml-2">🚀</span>
           </p>
+          
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.9, duration: 0.6 }}
+            className="text-blue-100 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 mb-6"
+          >
+            <span className="text-cyan-300 font-medium">💡 What We Do:</span> Our AI-powered system finds the fastest routes for ambulances through traffic, connects with hospitals for real-time bed availability, and helps save precious minutes during emergencies. Because every second counts when saving lives! 💓
+          </motion.p>
+          
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20">
               🚨 Emergency Response
@@ -135,6 +177,12 @@ const WelcomeScreen: React.FC = () => {
             </span>
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20">
               ⏱️ Real-time Updates
+            </span>
+            <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20">
+              💯 Accuracy Focused
+            </span>
+            <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20">
+              🧠 AI Powered
             </span>
           </div>
         </motion.div>
@@ -160,7 +208,7 @@ const WelcomeScreen: React.FC = () => {
           transition={{ delay: 1.4, duration: 0.5 }}
           className="mt-12 text-sm text-cyan-100/80"
         >
-          Powered by 🧠 AI Technology • Saving Lives Together ❤️
+          Powered by 🧠 AI Technology • Saving Lives Together ❤️ • Fast & Reliable 🚀
         </motion.div>
       </div>
     </motion.div>
