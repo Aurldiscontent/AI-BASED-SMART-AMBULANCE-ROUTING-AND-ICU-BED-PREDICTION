@@ -10,6 +10,7 @@ import HospitalDashboard from './ui/HospitalDashboard';
 import SeverityDetector from './ui/SeverityDetector';
 import TransportOptions from './ui/TransportOptions';
 import RealtimeMetrics from './ui/RealtimeMetrics';
+import ThemeSwitcher from './ui/ThemeSwitcher';
 
 const hospitals = [
   {
@@ -301,12 +302,12 @@ const HomePage: React.FC = () => {
   });
   
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white pb-24">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 dark:text-white pb-24">
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="glass-panel sticky top-0 z-20 px-4 py-3 border-b border-gray-200"
+        className="glass-panel sticky top-0 z-20 px-4 py-3 border-b border-gray-200 dark:border-gray-700"
       >
         <div className="flex justify-between items-center">
           <div className="flex items-center">
@@ -314,7 +315,7 @@ const HomePage: React.FC = () => {
               <img 
                 src={userData.avatar} 
                 alt={userData.name} 
-                className="w-10 h-10 rounded-full object-cover border-2 border-medical-200"
+                className="w-10 h-10 rounded-full object-cover border-2 border-medical-200 dark:border-medical-700"
               />
             ) : (
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-medical-400 to-medical-600 flex items-center justify-center text-white font-medium">
@@ -322,8 +323,8 @@ const HomePage: React.FC = () => {
               </div>
             )}
             <div className="ml-3 text-left">
-              <p className="text-base font-medium text-gray-800">Hello, {userData.name.split(' ')[0]}!</p>
-              <div className="flex items-center text-xs text-gray-500">
+              <p className="text-base font-medium text-gray-800 dark:text-gray-200">Hello, {userData.name.split(' ')[0]}!</p>
+              <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
                 <MapPin size={12} className="mr-1" />
                 {userData.location}
               </div>
@@ -331,8 +332,9 @@ const HomePage: React.FC = () => {
           </div>
           
           <div className="flex items-center space-x-3">
-            <button className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 relative">
-              <Bell size={20} className="text-gray-600" />
+            <ThemeSwitcher />
+            <button className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 relative">
+              <Bell size={20} className="text-gray-600 dark:text-gray-300" />
               <span className="absolute top-0 right-0 w-2 h-2 rounded-full bg-red-500"></span>
             </button>
           </div>
@@ -346,14 +348,14 @@ const HomePage: React.FC = () => {
         className="px-4 pt-3 pb-1"
       >
         <div className="flex items-center justify-between mb-2">
-          <h2 className="text-lg font-bold text-gray-800">Emergency Medical Services</h2>
-          <div className="flex bg-gray-100 rounded-lg p-1">
+          <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200">Emergency Medical Services</h2>
+          <div className="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
             <button 
               onClick={() => setViewMode('map')}
               className={`px-3 py-1.5 text-sm font-medium rounded-md transition ${
                 viewMode === 'map' 
-                  ? 'bg-white shadow-sm text-medical-800' 
-                  : 'text-gray-600 hover:text-gray-800'
+                  ? 'bg-white dark:bg-gray-800 shadow-sm text-medical-800 dark:text-medical-300' 
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100'
               }`}
             >
               <MapPin size={16} className="inline-block mr-1 -mt-0.5" />
@@ -363,8 +365,8 @@ const HomePage: React.FC = () => {
               onClick={() => setViewMode('list')}
               className={`px-3 py-1.5 text-sm font-medium rounded-md transition ${
                 viewMode === 'list' 
-                  ? 'bg-white shadow-sm text-medical-800' 
-                  : 'text-gray-600 hover:text-gray-800'
+                  ? 'bg-white dark:bg-gray-800 shadow-sm text-medical-800 dark:text-medical-300' 
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100'
               }`}
             >
               <Hospital size={16} className="inline-block mr-1 -mt-0.5" />
@@ -374,8 +376,8 @@ const HomePage: React.FC = () => {
               onClick={() => setViewMode('dashboard')}
               className={`px-3 py-1.5 text-sm font-medium rounded-md transition ${
                 viewMode === 'dashboard' 
-                  ? 'bg-white shadow-sm text-medical-800' 
-                  : 'text-gray-600 hover:text-gray-800'
+                  ? 'bg-white dark:bg-gray-800 shadow-sm text-medical-800 dark:text-medical-300' 
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100'
               }`}
             >
               <LayoutDashboard size={16} className="inline-block mr-1 -mt-0.5" />
@@ -395,9 +397,9 @@ const HomePage: React.FC = () => {
           <input
             type="text"
             placeholder="Search hospitals or enter accident location"
-            className="input-field w-full pl-10 pr-4 py-3"
+            className="input-field w-full pl-10 pr-4 py-3 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
           />
-          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
             <Search size={18} />
           </div>
         </div>
@@ -409,11 +411,11 @@ const HomePage: React.FC = () => {
         transition={{ delay: 0.2, duration: 0.5 }}
         className="px-4 py-2"
       >
-        <div className="glass-card rounded-2xl p-4 mb-4">
+        <div className="glass-card rounded-2xl p-4 mb-4 dark:bg-gray-800/70 dark:border-gray-700">
           <div className="flex justify-between items-center mb-2">
             <div className="flex items-center">
               <HeartPulse size={18} className="text-emergency-500 mr-2" />
-              <h3 className="font-semibold text-gray-800">Patient Status</h3>
+              <h3 className="font-semibold text-gray-800 dark:text-gray-200">Patient Status</h3>
             </div>
             {severityLevel === 'Critical' && (
               <div className="bg-emergency-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">
@@ -444,7 +446,7 @@ const HomePage: React.FC = () => {
           className="px-4 py-2"
         >
           <div className="flex justify-between items-center mb-2">
-            <h2 className="font-semibold text-gray-800">Emergency Route</h2>
+            <h2 className="font-semibold text-gray-800 dark:text-gray-200">Emergency Route</h2>
             <div className="flex items-center text-xs">
               <div className="bg-green-100 px-2 py-1 rounded-md text-green-800 font-medium flex items-center mr-2">
                 <Zap size={14} className="mr-1" />
@@ -474,7 +476,7 @@ const HomePage: React.FC = () => {
           className="px-4 py-3"
         >
           <div className="flex justify-between items-center mb-3">
-            <h2 className="font-semibold text-gray-800">Nearby Hospitals</h2>
+            <h2 className="font-semibold text-gray-800 dark:text-gray-200">Nearby Hospitals</h2>
             <div className="flex items-center">
               <div className="h-2 w-2 rounded-full bg-green-500 mr-1"></div>
               <span className="text-xs text-gray-600">Live Updates</span>
@@ -519,19 +521,19 @@ const HomePage: React.FC = () => {
       
       {showSosModal && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in">
-          <div className="bg-white rounded-2xl p-6 max-w-xs w-full mx-4 animate-scale">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-xs w-full mx-4 animate-scale">
             <div className="flex flex-col items-center">
-              <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mb-4 animate-pulse">
+              <div className="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mb-4 animate-pulse">
                 <AlertTriangle size={32} className="text-emergency-500" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Emergency Alert</h3>
-              <p className="text-gray-600 text-center mb-4">
+              <h3 className="text-xl font-bold mb-2 dark:text-white">Emergency Alert</h3>
+              <p className="text-gray-600 dark:text-gray-300 text-center mb-4">
                 Sending your location to emergency services...
               </p>
-              <div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
+              <div className="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
                 <div className="h-full bg-emergency-500 animate-pulse" style={{ width: '70%' }}></div>
               </div>
-              <p className="mt-2 text-sm text-gray-500">Please wait...</p>
+              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Please wait...</p>
             </div>
           </div>
         </div>

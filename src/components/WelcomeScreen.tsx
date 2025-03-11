@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AnimatedLogo from './ui/AnimatedLogo';
@@ -140,7 +141,7 @@ const WelcomeScreen: React.FC = () => {
           }}
           className="mb-2"
         >
-          {/* Remove AnimatedLogo to avoid duplication */}
+          {/* AnimatedLogo removed to avoid duplication */}
         </motion.div>
         
         <motion.div
@@ -151,13 +152,13 @@ const WelcomeScreen: React.FC = () => {
         >
           <h1 className="text-2xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-200 drop-shadow-[0_0_8px_rgba(0,200,255,0.5)] tracking-wide mb-2">
             <div className="flex items-center justify-center flex-wrap gap-x-2 gap-y-1">
-              <span className="inline-flex text-3xl p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">🚑</span>
+              <span className="inline-flex text-3xl p-1.5 bg-white/30 rounded-lg backdrop-blur-sm shadow-lg">🚑</span>
               <span>RAPID</span>
-              <span className="inline-flex text-3xl p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">🏥</span>
+              <span className="inline-flex text-3xl p-1.5 bg-white/30 rounded-lg backdrop-blur-sm shadow-lg">🏥</span>
               <span>AID</span>
-              <span className="inline-flex text-3xl p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">💓</span>
+              <span className="inline-flex text-3xl p-1.5 bg-white/30 rounded-lg backdrop-blur-sm shadow-lg">💓</span>
               <span>INNOVATORS</span>
-              <span className="inline-flex text-3xl p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">🚀</span>
+              <span className="inline-flex text-3xl p-1.5 bg-white/30 rounded-lg backdrop-blur-sm shadow-lg">🚀</span>
             </div>
           </h1>
           

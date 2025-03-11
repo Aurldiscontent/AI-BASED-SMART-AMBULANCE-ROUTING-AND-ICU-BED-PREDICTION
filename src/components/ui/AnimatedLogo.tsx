@@ -125,7 +125,7 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
               <motion.span
                 variants={emojiVariants}
                 animate="animate"
-                className="inline-flex text-2xl"
+                className="inline-flex text-2xl p-1 bg-white/25 rounded-md shadow-sm"
               >
                 🚑
               </motion.span>
@@ -133,7 +133,7 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
               <motion.span
                 variants={emojiVariants}
                 animate="animate"
-                className="inline-flex text-2xl"
+                className="inline-flex text-2xl p-1 bg-white/25 rounded-md shadow-sm"
               >
                 🏥
               </motion.span>
@@ -141,7 +141,7 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
               <motion.span
                 variants={emojiVariants}
                 animate="animate" 
-                className="inline-flex text-2xl"
+                className="inline-flex text-2xl p-1 bg-white/25 rounded-md shadow-sm"
               >
                 💓
               </motion.span>
@@ -149,7 +149,7 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
               <motion.span
                 variants={emojiVariants}
                 animate="animate"
-                className="inline-flex text-2xl"
+                className="inline-flex text-2xl p-1 bg-white/25 rounded-md shadow-sm"
               >
                 🚀
               </motion.span>

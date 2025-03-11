@@ -13,7 +13,7 @@ const EmergencyPanel: React.FC<EmergencyPanelProps> = ({
   onEmergencyCall
 }) => {
   return (
-    <div className="fixed bottom-24 left-0 right-0 px-4 z-30 animate-fade-in">
+    <div className="fixed bottom-24 left-0 right-0 px-4 z-30 animate-fade-in mb-3">
       <div className="relative">
         <div 
           className="absolute inset-0 bg-gradient-to-t from-emergency-500/20 to-emergency-500/5 rounded-2xl blur-xl"
@@ -23,11 +23,11 @@ const EmergencyPanel: React.FC<EmergencyPanelProps> = ({
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center">
               <AlertTriangle className="text-emergency-500 mr-2" size={20} />
-              <h3 className="font-semibold text-gray-800">Emergency Access</h3>
+              <h3 className="font-semibold text-gray-800 dark:text-gray-200">Emergency Access</h3>
             </div>
           </div>
           
-          <p className="text-sm text-gray-600 mb-3">
+          <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
             Need immediate assistance? Use these emergency options:
           </p>
           
