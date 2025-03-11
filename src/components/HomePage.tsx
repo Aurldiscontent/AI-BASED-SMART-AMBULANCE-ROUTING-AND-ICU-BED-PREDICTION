@@ -1,12 +1,15 @@
-
-import React, { useState } from 'react';
-import { Search, Bell, User, Phone, AlertTriangle, MapPin } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Search, Bell, User, Phone, AlertTriangle, MapPin, HeartPulse, Zap, LayoutDashboard, Hospital, Gauge } from 'lucide-react';
 import { motion } from 'framer-motion';
 import MapView from './ui/MapView';
 import HospitalCard from './ui/HospitalCard';
 import Navbar from './ui/Navbar';
 import EmergencyPanel from './ui/EmergencyPanel';
 import { toast } from '@/hooks/use-toast';
+import HospitalDashboard from './ui/HospitalDashboard';
+import SeverityDetector from './ui/SeverityDetector';
+import TransportOptions from './ui/TransportOptions';
+import RealtimeMetrics from './ui/RealtimeMetrics';
 
 const hospitals = [
   {
@@ -19,6 +22,11 @@ const hospitals = [
     isOpen: true,
     estimatedTime: '12 min',
     phone: '+91 9876543210',
+    specialties: ['Trauma', 'Cardiac'],
+    aiSurvivalRate: 92,
+    lastUpdated: '2 min ago',
+    trafficCondition: 'Moderate',
+    location: { lat: 12.9716, lng: 77.6946 }
   },
   {
     id: 'hospital-2',
@@ -30,6 +38,11 @@ const hospitals = [
     isOpen: true,
     estimatedTime: '18 min',
     phone: '+91 9876543211',
+    specialties: ['Neuro', 'Pediatric'],
+    aiSurvivalRate: 89,
+    lastUpdated: '5 min ago',
+    trafficCondition: 'Heavy',
+    location: { lat: 12.9783, lng: 77.6408 }
   },
   {
     id: 'hospital-3',
@@ -41,21 +54,165 @@ const hospitals = [
     isOpen: true,
     estimatedTime: '24 min',
     phone: '+91 9876543212',
+    specialties: ['Cardiac', 'Respiratory'],
+    aiSurvivalRate: 85,
+    lastUpdated: '7 min ago', 
+    trafficCondition: 'Light',
+    location: { lat: 12.9352, lng: 77.6245 }
   },
+  {
+    id: 'hospital-4',
+    name: 'Fortis Healthcare',
+    distance: '7.2 km',
+    address: '42 Wellness Road, HSR Layout',
+    icuBeds: 7,
+    totalBeds: 180,
+    isOpen: true,
+    estimatedTime: '26 min',
+    phone: '+91 9876543213',
+    specialties: ['Multi-Specialty', 'Trauma'],
+    aiSurvivalRate: 91,
+    lastUpdated: '3 min ago',
+    trafficCondition: 'Moderate',
+    location: { lat: 12.9116, lng: 77.6346 }
+  },
+  {
+    id: 'hospital-5',
+    name: 'Victoria Hospital',
+    distance: '5.1 km',
+    address: '12 Queen Victoria Road, City Market',
+    icuBeds: 1,
+    totalBeds: 250,
+    isOpen: true,
+    estimatedTime: '22 min',
+    phone: '+91 9876543214',
+    specialties: ['General', 'Emergency'],
+    aiSurvivalRate: 83,
+    lastUpdated: '10 min ago',
+    trafficCondition: 'Heavy',
+    location: { lat: 12.9647, lng: 77.5732 }
+  },
+  {
+    id: 'hospital-6',
+    name: 'Baptist Medical Center',
+    distance: '8.7 km',
+    address: '34 Church Street, Richmond Town',
+    icuBeds: 4,
+    totalBeds: 120,
+    isOpen: true,
+    estimatedTime: '32 min',
+    phone: '+91 9876543215',
+    specialties: ['Cardiac', 'Geriatric'],
+    aiSurvivalRate: 87,
+    lastUpdated: '4 min ago',
+    trafficCondition: 'Light',
+    location: { lat: 12.9698, lng: 77.6096 }
+  },
+  {
+    id: 'hospital-7',
+    name: 'St. Johns Medical',
+    distance: '9.3 km',
+    address: '56 Apostle Avenue, Koramangala',
+    icuBeds: 0,
+    totalBeds: 170,
+    isOpen: true,
+    estimatedTime: '35 min',
+    phone: '+91 9876543216',
+    specialties: ['Pediatric', 'Obstetrics'],
+    aiSurvivalRate: 86,
+    lastUpdated: '8 min ago',
+    trafficCondition: 'Moderate',
+    location: { lat: 12.9432, lng: 77.6298 }
+  },
+  {
+    id: 'hospital-8',
+    name: 'Narayana Hrudayalaya',
+    distance: '12.5 km',
+    address: '23 Heart Plaza, Electronic City',
+    icuBeds: 15,
+    totalBeds: 300,
+    isOpen: true,
+    estimatedTime: '42 min',
+    phone: '+91 9876543217',
+    specialties: ['Cardiac', 'Vascular'],
+    aiSurvivalRate: 95,
+    lastUpdated: '1 min ago',
+    trafficCondition: 'Light',
+    location: { lat: 12.8416, lng: 77.6654 }
+  },
+  {
+    id: 'hospital-9',
+    name: 'Columbia Asia',
+    distance: '10.8 km',
+    address: '89 International Boulevard, Yeswanthpur',
+    icuBeds: 3,
+    totalBeds: 220,
+    isOpen: true,
+    estimatedTime: '38 min',
+    phone: '+91 9876543218',
+    specialties: ['Multi-Specialty', 'Internal Medicine'],
+    aiSurvivalRate: 88,
+    lastUpdated: '6 min ago',
+    trafficCondition: 'Heavy',
+    location: { lat: 13.0279, lng: 77.5371 }
+  },
+  {
+    id: 'hospital-10',
+    name: 'Bowring & Lady Curzon',
+    distance: '4.5 km',
+    address: '67 Heritage Lane, Shivajinagar',
+    icuBeds: 2,
+    totalBeds: 180,
+    isOpen: true,
+    estimatedTime: '20 min',
+    phone: '+91 9876543219',
+    specialties: ['General', 'Obstetrics'],
+    aiSurvivalRate: 82,
+    lastUpdated: '12 min ago',
+    trafficCondition: 'Moderate',
+    location: { lat: 12.9825, lng: 77.5932 }
+  }
 ];
 
-// Mock user data (in a real app, this would come from authentication)
+const patientData = {
+  id: 'PAT-2023-05-12',
+  location: { lat: 12.9716, lng: 77.5946 },
+  vitals: {
+    heartRate: 110,
+    bloodPressure: '140/90',
+    oxygenLevel: 92,
+    temperature: 38.5
+  },
+  severity: 'Moderate',
+  estimatedSurvivalRate: 87,
+  aiRecommendedHospital: 'hospital-8',
+  transportOptions: ['Ground Ambulance', 'Air Ambulance']
+};
+
 const userData = {
   name: "John Doe",
   email: "john.doe@example.com",
-  avatar: null, // If no avatar, we'll show initials
+  avatar: null,
   location: "Bangalore, India"
 };
 
 const HomePage: React.FC = () => {
   const [showSosModal, setShowSosModal] = useState(false);
+  const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'map' | 'list' | 'dashboard'>('map');
+  const [severityLevel, setSeverityLevel] = useState<'Low' | 'Moderate' | 'High' | 'Critical'>('Moderate');
+  const [transportMode, setTransportMode] = useState<'ground' | 'air'>('ground');
+  
+  useEffect(() => {
+    const dataInterval = setInterval(() => {
+      console.log('Refreshing real-time data...');
+    }, 30000);
+    
+    return () => clearInterval(dataInterval);
+  }, []);
   
   const handleNavigate = (hospitalId: string) => {
+    setSelectedHospital(hospitalId);
     const hospital = hospitals.find(h => h.id === hospitalId);
     toast({
       title: "Navigation Started",
@@ -91,7 +248,32 @@ const HomePage: React.FC = () => {
     });
   };
   
-  // Get user initials for the avatar
+  const handleSeverityChange = (level: 'Low' | 'Moderate' | 'High' | 'Critical') => {
+    setSeverityLevel(level);
+    toast({
+      title: "Severity Updated",
+      description: `Patient condition set to ${level}`,
+    });
+    
+    if (level === 'Critical') {
+      setTimeout(() => {
+        toast({
+          title: "⚠️ CRITICAL ALERT",
+          description: "Recommending nearest trauma center with air transport!",
+          variant: "destructive",
+        });
+      }, 500);
+    }
+  };
+  
+  const handleTransportChange = (mode: 'ground' | 'air') => {
+    setTransportMode(mode);
+    toast({
+      title: "Transport Mode Updated",
+      description: `Switched to ${mode === 'air' ? 'Air Ambulance' : 'Ground Ambulance'} mode`,
+    });
+  };
+  
   const getInitials = (name: string) => {
     return name
       .split(' ')
@@ -100,9 +282,26 @@ const HomePage: React.FC = () => {
       .toUpperCase();
   };
   
+  const getMapDestinations = () => {
+    return hospitals.map(hospital => ({
+      id: hospital.id,
+      name: hospital.name,
+      location: hospital.location
+    }));
+  };
+  
+  const sortedHospitals = [...hospitals].sort((a, b) => {
+    if (severityLevel === 'Critical' || severityLevel === 'High') {
+      if (a.icuBeds === 0) return 1;
+      if (b.icuBeds === 0) return -1;
+      return b.aiSurvivalRate - a.aiSurvivalRate;
+    }
+    
+    return parseFloat(a.distance) - parseFloat(b.distance);
+  });
+  
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white pb-24">
-      {/* Header */}
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -140,17 +339,62 @@ const HomePage: React.FC = () => {
         </div>
       </motion.div>
       
-      {/* Search Bar */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1, duration: 0.5 }}
+        className="px-4 pt-3 pb-1"
+      >
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-lg font-bold text-gray-800">Emergency Medical Services</h2>
+          <div className="flex bg-gray-100 rounded-lg p-1">
+            <button 
+              onClick={() => setViewMode('map')}
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition ${
+                viewMode === 'map' 
+                  ? 'bg-white shadow-sm text-medical-800' 
+                  : 'text-gray-600 hover:text-gray-800'
+              }`}
+            >
+              <MapPin size={16} className="inline-block mr-1 -mt-0.5" />
+              Map
+            </button>
+            <button 
+              onClick={() => setViewMode('list')}
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition ${
+                viewMode === 'list' 
+                  ? 'bg-white shadow-sm text-medical-800' 
+                  : 'text-gray-600 hover:text-gray-800'
+              }`}
+            >
+              <Hospital size={16} className="inline-block mr-1 -mt-0.5" />
+              Hospitals
+            </button>
+            <button 
+              onClick={() => setViewMode('dashboard')}
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition ${
+                viewMode === 'dashboard' 
+                  ? 'bg-white shadow-sm text-medical-800' 
+                  : 'text-gray-600 hover:text-gray-800'
+              }`}
+            >
+              <LayoutDashboard size={16} className="inline-block mr-1 -mt-0.5" />
+              Dashboard
+            </button>
+          </div>
+        </div>
+      </motion.div>
+      
       <motion.div 
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.5 }}
-        className="px-4 py-3"
+        className="px-4 py-2"
       >
         <div className="relative">
           <input
             type="text"
-            placeholder="Find nearest hospital"
+            placeholder="Search hospitals or enter accident location"
             className="input-field w-full pl-10 pr-4 py-3"
           />
           <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
@@ -159,55 +403,120 @@ const HomePage: React.FC = () => {
         </div>
       </motion.div>
       
-      {/* Map View */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.5 }}
         className="px-4 py-2"
       >
-        <div className="flex justify-between items-center mb-2">
-          <h2 className="font-semibold text-gray-800">Real-Time Route</h2>
-          <button className="text-sm text-medical-600 font-medium">View Details</button>
-        </div>
-        <MapView onNavigate={handleNavigate} />
-      </motion.div>
-      
-      {/* Hospital List */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3, duration: 0.5 }}
-        className="px-4 py-3"
-      >
-        <div className="flex justify-between items-center mb-3">
-          <h2 className="font-semibold text-gray-800">Nearby Hospitals</h2>
-          <div className="flex items-center">
-            <div className="h-2 w-2 rounded-full bg-green-500 mr-1"></div>
-            <span className="text-xs text-gray-600">Live Updates</span>
+        <div className="glass-card rounded-2xl p-4 mb-4">
+          <div className="flex justify-between items-center mb-2">
+            <div className="flex items-center">
+              <HeartPulse size={18} className="text-emergency-500 mr-2" />
+              <h3 className="font-semibold text-gray-800">Patient Status</h3>
+            </div>
+            {severityLevel === 'Critical' && (
+              <div className="bg-emergency-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">
+                CRITICAL
+              </div>
+            )}
+          </div>
+          
+          <div className="grid grid-cols-2 gap-3">
+            <SeverityDetector 
+              currentSeverity={severityLevel} 
+              onSeverityChange={handleSeverityChange}
+            />
+            <TransportOptions 
+              currentMode={transportMode}
+              onModeChange={handleTransportChange}
+              isAirRecommended={severityLevel === 'Critical'}
+            />
           </div>
         </div>
-        
-        {hospitals.map((hospital) => (
-          <HospitalCard
-            key={hospital.id}
-            {...hospital}
-            onNavigate={() => handleNavigate(hospital.id)}
-            onCall={() => handleCall(hospital.id)}
-          />
-        ))}
       </motion.div>
       
-      {/* Emergency Panel */}
+      {viewMode === 'map' && (
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="px-4 py-2"
+        >
+          <div className="flex justify-between items-center mb-2">
+            <h2 className="font-semibold text-gray-800">Emergency Route</h2>
+            <div className="flex items-center text-xs">
+              <div className="bg-green-100 px-2 py-1 rounded-md text-green-800 font-medium flex items-center mr-2">
+                <Zap size={14} className="mr-1" />
+                Quickest Route
+              </div>
+              <div className="bg-blue-100 px-2 py-1 rounded-md text-blue-800 font-medium flex items-center">
+                <Gauge size={14} className="mr-1" />
+                Live Traffic
+              </div>
+            </div>
+          </div>
+          <MapView 
+            userLocation={patientData.location} 
+            destinations={getMapDestinations()} 
+            onNavigate={handleNavigate}
+            selectedHospitalId={selectedHospital}
+            transportMode={transportMode}
+          />
+        </motion.div>
+      )}
+      
+      {viewMode === 'list' && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="px-4 py-3"
+        >
+          <div className="flex justify-between items-center mb-3">
+            <h2 className="font-semibold text-gray-800">Nearby Hospitals</h2>
+            <div className="flex items-center">
+              <div className="h-2 w-2 rounded-full bg-green-500 mr-1"></div>
+              <span className="text-xs text-gray-600">Live Updates</span>
+            </div>
+          </div>
+          
+          {sortedHospitals.map((hospital) => (
+            <HospitalCard
+              key={hospital.id}
+              {...hospital}
+              onNavigate={() => handleNavigate(hospital.id)}
+              onCall={() => handleCall(hospital.id)}
+              severity={severityLevel}
+              specialties={hospital.specialties}
+              aiSurvivalRate={hospital.aiSurvivalRate}
+              lastUpdated={hospital.lastUpdated}
+              trafficCondition={hospital.trafficCondition}
+              isRecommended={hospital.id === patientData.aiRecommendedHospital}
+            />
+          ))}
+        </motion.div>
+      )}
+      
+      {viewMode === 'dashboard' && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="px-4 py-3"
+        >
+          <HospitalDashboard hospitals={hospitals} patientData={patientData} />
+          <RealtimeMetrics />
+        </motion.div>
+      )}
+      
       <EmergencyPanel
         onSOSClick={handleSOSClick}
         onEmergencyCall={handleEmergencyCall}
       />
       
-      {/* Bottom Navigation */}
       <Navbar />
       
-      {/* SOS Modal */}
       {showSosModal && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in">
           <div className="bg-white rounded-2xl p-6 max-w-xs w-full mx-4 animate-scale">
