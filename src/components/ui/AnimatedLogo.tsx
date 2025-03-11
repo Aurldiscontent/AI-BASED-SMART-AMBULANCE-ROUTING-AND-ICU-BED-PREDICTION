@@ -90,38 +90,14 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
           }`}
         >
           {showEmojis ? (
-            <div className="flex items-center justify-center flex-wrap gap-3">
-              <motion.div
-                variants={emojiVariants}
-                animate="animate"
-                className="emoji-container"
-              >
-                <span className="emoji">🚑</span>
-              </motion.div>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <span className="emoji-simple">🚑</span>
               <span className="inline-flex font-extrabold">RAPID</span>
-              <motion.div
-                variants={emojiVariants}
-                animate="animate"
-                className="emoji-container"
-              >
-                <span className="emoji">🏥</span>
-              </motion.div>
+              <span className="emoji-simple">🏥</span>
               <span className="inline-flex font-extrabold">AID</span>
-              <motion.div
-                variants={emojiVariants}
-                animate="animate"
-                className="emoji-container"
-              >
-                <span className="emoji">💓</span>
-              </motion.div>
+              <span className="emoji-simple">💓</span>
               <span className="inline-flex font-extrabold">INNOVATORS</span>
-              <motion.div
-                variants={emojiVariants}
-                animate="animate"
-                className="emoji-container"
-              >
-                <span className="emoji">🚀</span>
-              </motion.div>
+              <span className="emoji-simple">🚀</span>
             </div>
           ) : (
             "RAPID AID INNOVATORS"

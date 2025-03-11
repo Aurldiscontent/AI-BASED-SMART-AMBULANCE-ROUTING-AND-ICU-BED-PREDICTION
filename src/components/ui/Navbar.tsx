@@ -1,7 +1,8 @@
 
 import React from 'react';
-import { Home, Search, User, Settings } from 'lucide-react';
+import { Home, Search, User, Settings, Bell } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import ThemeSwitcher from './ThemeSwitcher';
 
 const Navbar: React.FC = () => {
   const location = useLocation();
@@ -20,7 +21,7 @@ const Navbar: React.FC = () => {
       <Link 
         to={path} 
         className={`flex flex-col items-center justify-center py-2 ${
-          active ? 'text-medical-600' : 'text-gray-500'
+          active ? 'text-medical-600 dark:text-medical-400' : 'text-gray-500 dark:text-gray-400'
         }`}
       >
         <div className={`mb-0.5 transition-all duration-300 ${
@@ -42,7 +43,7 @@ const Navbar: React.FC = () => {
   
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40">
-      <div className="glass-panel border-t border-gray-200 rounded-t-xl backdrop-blur-lg py-1 px-2">
+      <div className="glass-panel border-t border-gray-200 dark:border-gray-800 rounded-t-xl backdrop-blur-lg py-1 px-2">
         <div className="flex justify-around items-center">
           {renderNavItem('/home', 'Home', <Home size={22} />, isActive('/home'))}
           {renderNavItem('/search', 'Search', <Search size={22} />, isActive('/search'))}
