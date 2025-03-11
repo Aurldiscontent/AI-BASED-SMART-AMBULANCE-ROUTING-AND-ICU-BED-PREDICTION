@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { User, Mail, Phone, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { User, Mail, Phone, Lock, Eye, EyeOff, AlertCircle, Shield, KeyRound, UserPlus } from 'lucide-react';
 import ActionButton from './ui/ActionButton';
 import AnimatedLogo from './ui/AnimatedLogo';
 
@@ -141,15 +141,15 @@ const AuthScreen: React.FC = () => {
           <h1 className="text-2xl font-bold text-white">
             {isSignup ? (
               <span className="flex items-center justify-center gap-2">
-                <div className="emoji-container w-8 h-8 flex items-center justify-center">
-                  <span className="emoji">✨</span>
+                <div className="w-8 h-8 flex items-center justify-center rounded-lg bg-cyan-500/30 backdrop-blur-sm border border-cyan-500/50">
+                  <UserPlus className="text-white" size={18} />
                 </div> 
                 Create an Account
               </span>
             ) : (
               <span className="flex items-center justify-center gap-2">
-                <div className="emoji-container w-8 h-8 flex items-center justify-center">
-                  <span className="emoji">👋</span>
+                <div className="w-8 h-8 flex items-center justify-center rounded-lg bg-cyan-500/30 backdrop-blur-sm border border-cyan-500/50">
+                  <KeyRound className="text-white" size={18} />
                 </div> 
                 Welcome Back
               </span>
@@ -159,15 +159,15 @@ const AuthScreen: React.FC = () => {
             {isSignup ? (
               <span className="flex items-center justify-center gap-2">
                 Sign up to access emergency services 
-                <div className="emoji-container w-6 h-6 flex items-center justify-center">
-                  <span className="emoji" style={{ fontSize: "1.2rem" }}>🚑</span>
+                <div className="w-6 h-6 flex items-center justify-center rounded-lg bg-cyan-500/30 backdrop-blur-sm border border-cyan-500/50">
+                  <Ambulance className="text-white" size={14} />
                 </div>
               </span>
             ) : (
               <span className="flex items-center justify-center gap-2">
                 Sign in to continue to your account 
-                <div className="emoji-container w-6 h-6 flex items-center justify-center">
-                  <span className="emoji" style={{ fontSize: "1.2rem" }}>🔐</span>
+                <div className="w-6 h-6 flex items-center justify-center rounded-lg bg-cyan-500/30 backdrop-blur-sm border border-cyan-500/50">
+                  <Shield className="text-white" size={14} />
                 </div>
               </span>
             )}
@@ -310,15 +310,15 @@ const AuthScreen: React.FC = () => {
                 />
                 <label htmlFor="rememberMe" className="text-sm text-blue-100 flex items-center">
                   Remember me 
-                  <div className="emoji-container ml-1 w-5 h-5 flex items-center justify-center">
-                    <span className="emoji" style={{ fontSize: "0.9rem" }}>🔒</span>
+                  <div className="w-5 h-5 flex items-center justify-center rounded-lg bg-cyan-500/30 backdrop-blur-sm ml-1 border border-cyan-500/50">
+                    <Lock className="text-white" size={10} />
                   </div>
                 </label>
               </div>
               <button type="button" className="text-sm text-cyan-300 hover:text-cyan-200 transition-colors flex items-center">
                 Forgot Password? 
-                <div className="emoji-container ml-1 w-5 h-5 flex items-center justify-center">
-                  <span className="emoji" style={{ fontSize: "0.9rem" }}>🤔</span>
+                <div className="w-5 h-5 flex items-center justify-center rounded-lg bg-cyan-500/30 backdrop-blur-sm ml-1 border border-cyan-500/50">
+                  <AlertCircle className="text-white" size={10} />
                 </div>
               </button>
             </motion.div>
@@ -331,8 +331,11 @@ const AuthScreen: React.FC = () => {
                 id="terms"
                 className="mt-1 mr-2 h-4 w-4 text-cyan-500 focus:ring-cyan-400 border-white/30 rounded bg-white/5"
               />
-              <label htmlFor="terms" className="text-sm text-blue-100">
-                I agree to the <a href="#" className="text-cyan-300 hover:text-cyan-200 transition-colors">Terms of Service</a> and <a href="#" className="text-cyan-300 hover:text-cyan-200 transition-colors">Privacy Policy</a> 📝
+              <label htmlFor="terms" className="text-sm text-blue-100 flex items-center flex-wrap">
+                I agree to the <a href="#" className="text-cyan-300 hover:text-cyan-200 transition-colors mx-1">Terms of Service</a> and <a href="#" className="text-cyan-300 hover:text-cyan-200 transition-colors mx-1">Privacy Policy</a>
+                <div className="w-5 h-5 flex items-center justify-center rounded-lg bg-cyan-500/30 backdrop-blur-sm ml-1 border border-cyan-500/50">
+                  <Shield className="text-white" size={10} />
+                </div>
               </label>
             </motion.div>
           )}
@@ -344,15 +347,15 @@ const AuthScreen: React.FC = () => {
             >
               {isSignup ? (
                 <>
-                  <div className="emoji-container w-6 h-6 flex items-center justify-center">
-                    <span className="emoji" style={{ fontSize: "1rem" }}>✨</span>
+                  <div className="w-6 h-6 flex items-center justify-center rounded-lg bg-white/20 backdrop-blur-sm border border-white/30">
+                    <UserPlus className="text-white" size={14} />
                   </div>
                   Create Account
                 </>
               ) : (
                 <>
-                  <div className="emoji-container w-6 h-6 flex items-center justify-center">
-                    <span className="emoji" style={{ fontSize: "1rem" }}>🔐</span>
+                  <div className="w-6 h-6 flex items-center justify-center rounded-lg bg-white/20 backdrop-blur-sm border border-white/30">
+                    <KeyRound className="text-white" size={14} />
                   </div>
                   Sign In
                 </>
@@ -397,17 +400,26 @@ const AuthScreen: React.FC = () => {
           </motion.div>
           
           <motion.div variants={formItemVariants} className="text-center">
-            <p className="text-sm text-blue-100">
+            <p className="text-sm text-blue-100 flex items-center justify-center">
               {isSignup 
-                ? 'Already have an account? 🤔' 
-                : "Don't have an account yet? 🤔"
+                ? 'Already have an account?' 
+                : "Don't have an account yet?"
               }
+              <div className="w-5 h-5 flex items-center justify-center rounded-lg bg-cyan-500/30 backdrop-blur-sm mx-1 border border-cyan-500/50">
+                <AlertCircle className="text-white" size={10} />
+              </div>
               <button
                 type="button"
                 onClick={() => setIsSignup(!isSignup)}
-                className="ml-1 text-cyan-300 hover:text-cyan-200 transition-colors font-medium"
+                className="ml-1 text-cyan-300 hover:text-cyan-200 transition-colors font-medium flex items-center"
               >
-                {isSignup ? 'Sign In' : 'Sign Up'} ✨
+                {isSignup ? 'Sign In' : 'Sign Up'}
+                <div className="w-5 h-5 flex items-center justify-center rounded-lg bg-cyan-500/30 backdrop-blur-sm ml-1 border border-cyan-500/50">
+                  {isSignup ? 
+                    <KeyRound className="text-white" size={10} /> : 
+                    <UserPlus className="text-white" size={10} />
+                  }
+                </div>
               </button>
             </p>
           </motion.div>

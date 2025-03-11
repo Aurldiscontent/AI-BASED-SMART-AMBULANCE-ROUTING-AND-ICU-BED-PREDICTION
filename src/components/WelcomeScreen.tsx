@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AnimatedLogo from './ui/AnimatedLogo';
@@ -151,7 +152,15 @@ const WelcomeScreen: React.FC = () => {
         >
           <h1 className="text-2xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-200 drop-shadow-[0_0_8px_rgba(0,200,255,0.5)] tracking-wide mb-3">
             <div className="flex items-center justify-center flex-wrap gap-x-3 gap-y-2">
-              <AnimatedLogo size="md" showText={true} textSize="lg" darkMode={true} showEmojis={true} />
+              <div className="flex items-center">
+                <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-cyan-500/30 backdrop-blur-sm mr-2 border border-cyan-500/50">
+                  <Ambulance className="text-white" size={24} />
+                </div>
+                <AnimatedLogo size="md" showText={true} textSize="lg" darkMode={true} showEmojis={true} />
+                <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-cyan-500/30 backdrop-blur-sm ml-2 border border-cyan-500/50">
+                  <HeartPulse className="text-white" size={24} />
+                </div>
+              </div>
             </div>
           </h1>
           
@@ -165,23 +174,34 @@ const WelcomeScreen: React.FC = () => {
             transition={{ delay: 0.9, duration: 0.6 }}
             className="text-blue-100 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-5 mb-6 shadow-lg"
           >
-            <h2 className="text-cyan-300 font-medium text-lg mb-2">💡 What We Do</h2>
+            <h2 className="text-cyan-300 font-medium text-lg mb-2 flex items-center">
+              <div className="w-8 h-8 flex items-center justify-center rounded-lg bg-cyan-500/30 backdrop-blur-sm mr-2 border border-cyan-500/50">
+                <Clock className="text-white" size={18} />
+              </div>
+              What We Do
+            </h2>
             <ul className="text-left space-y-2 pl-1">
               <li className="flex items-start">
-                <span className="text-cyan-300 mr-2">•</span>
+                <div className="w-6 h-6 flex items-center justify-center rounded-lg bg-cyan-500/30 backdrop-blur-sm mr-2 border border-cyan-500/50">
+                  <Map className="text-white" size={14} />
+                </div>
                 <span>AI-powered system finds the fastest routes for ambulances through traffic</span>
               </li>
               <li className="flex items-start">
-                <span className="text-cyan-300 mr-2">•</span>
+                <div className="w-6 h-6 flex items-center justify-center rounded-lg bg-cyan-500/30 backdrop-blur-sm mr-2 border border-cyan-500/50">
+                  <Hospital className="text-white" size={14} />
+                </div>
                 <span>Real-time hospital bed availability tracking</span>
               </li>
               <li className="flex items-start">
-                <span className="text-cyan-300 mr-2">•</span>
+                <div className="w-6 h-6 flex items-center justify-center rounded-lg bg-cyan-500/30 backdrop-blur-sm mr-2 border border-cyan-500/50">
+                  <Clock className="text-white" size={14} />
+                </div>
                 <span>Helps save precious minutes during emergencies</span>
               </li>
               <li className="flex items-start">
-                <div className="emoji-container mr-2 w-6 h-6 flex items-center justify-center">
-                  <span className="emoji" style={{ fontSize: "1.2rem" }}>💓</span>
+                <div className="w-6 h-6 flex items-center justify-center rounded-lg bg-cyan-500/30 backdrop-blur-sm mr-2 border border-cyan-500/50 text-white">
+                  <Heart className="text-white" size={14} />
                 </div>
                 <span>Because every second counts when saving lives!</span>
               </li>
@@ -190,38 +210,38 @@ const WelcomeScreen: React.FC = () => {
           
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
-              <div className="emoji-container mr-1 w-6 h-6 flex items-center justify-center">
-                <span className="emoji" style={{ fontSize: "1rem" }}>🚨</span>
+              <div className="w-6 h-6 flex items-center justify-center rounded-full bg-cyan-500/30 backdrop-blur-sm mr-1 border border-cyan-500/50">
+                <Ambulance className="text-white" size={12} />
               </div>
               Emergency Response
             </span>
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
-              <div className="emoji-container mr-1 w-6 h-6 flex items-center justify-center">
-                <span className="emoji" style={{ fontSize: "1rem" }}>🗺️</span>
+              <div className="w-6 h-6 flex items-center justify-center rounded-full bg-cyan-500/30 backdrop-blur-sm mr-1 border border-cyan-500/50">
+                <Map className="text-white" size={12} />
               </div>
               Smart AI Routing
             </span>
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
-              <div className="emoji-container mr-1 w-6 h-6 flex items-center justify-center">
-                <span className="emoji" style={{ fontSize: "1rem" }}>🏥</span>
+              <div className="w-6 h-6 flex items-center justify-center rounded-full bg-cyan-500/30 backdrop-blur-sm mr-1 border border-cyan-500/50">
+                <Hospital className="text-white" size={12} />
               </div>
               Hospital Network
             </span>
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
-              <div className="emoji-container mr-1 w-6 h-6 flex items-center justify-center">
-                <span className="emoji" style={{ fontSize: "1rem" }}>⏱️</span>
+              <div className="w-6 h-6 flex items-center justify-center rounded-full bg-cyan-500/30 backdrop-blur-sm mr-1 border border-cyan-500/50">
+                <Clock className="text-white" size={12} />
               </div>
               Real-time Updates
             </span>
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
-              <div className="emoji-container mr-1 w-6 h-6 flex items-center justify-center">
-                <span className="emoji" style={{ fontSize: "1rem" }}>💯</span>
+              <div className="w-6 h-6 flex items-center justify-center rounded-full bg-cyan-500/30 backdrop-blur-sm mr-1 border border-cyan-500/50">
+                <Navigation className="text-white" size={12} />
               </div>
               Accuracy Focused
             </span>
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/10 text-cyan-100 text-sm backdrop-blur-sm border border-white/20 shadow-md">
-              <div className="emoji-container mr-1 w-6 h-6 flex items-center justify-center">
-                <span className="emoji" style={{ fontSize: "1rem" }}>🧠</span>
+              <div className="w-6 h-6 flex items-center justify-center rounded-full bg-cyan-500/30 backdrop-blur-sm mr-1 border border-cyan-500/50">
+                <Brain className="text-white" size={12} />
               </div>
               AI Powered
             </span>
@@ -249,9 +269,24 @@ const WelcomeScreen: React.FC = () => {
           transition={{ delay: 1.4, duration: 0.5 }}
           className="mt-10 text-sm text-cyan-100/80 flex flex-wrap justify-center gap-x-3"
         >
-          <span className="flex items-center">🧠 AI Technology</span>
-          <span className="flex items-center">❤️ Saving Lives Together</span>
-          <span className="flex items-center">🚀 Fast & Reliable</span>
+          <span className="flex items-center">
+            <div className="w-5 h-5 flex items-center justify-center rounded-full bg-cyan-500/30 backdrop-blur-sm mr-1 border border-cyan-500/50">
+              <Brain className="text-white" size={10} />
+            </div>
+            AI Technology
+          </span>
+          <span className="flex items-center">
+            <div className="w-5 h-5 flex items-center justify-center rounded-full bg-cyan-500/30 backdrop-blur-sm mr-1 border border-cyan-500/50">
+              <Heart className="text-white" size={10} />
+            </div>
+            Saving Lives Together
+          </span>
+          <span className="flex items-center">
+            <div className="w-5 h-5 flex items-center justify-center rounded-full bg-cyan-500/30 backdrop-blur-sm mr-1 border border-cyan-500/50">
+              <Ambulance className="text-white" size={10} />
+            </div>
+            Fast & Reliable
+          </span>
         </motion.div>
       </div>
     </motion.div>
