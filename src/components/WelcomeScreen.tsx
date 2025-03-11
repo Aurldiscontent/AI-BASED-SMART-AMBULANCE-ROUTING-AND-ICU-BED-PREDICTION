@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AnimatedLogo from './ui/AnimatedLogo';
@@ -152,21 +151,7 @@ const WelcomeScreen: React.FC = () => {
         >
           <h1 className="text-2xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-200 drop-shadow-[0_0_8px_rgba(0,200,255,0.5)] tracking-wide mb-3">
             <div className="flex items-center justify-center flex-wrap gap-x-3 gap-y-2">
-              <div className="emoji-container">
-                <span className="emoji">🚑</span>
-              </div>
-              <span>RAPID</span>
-              <div className="emoji-container">
-                <span className="emoji">🏥</span>
-              </div>
-              <span>AID</span>
-              <div className="emoji-container">
-                <span className="emoji">💓</span>
-              </div>
-              <span>INNOVATORS</span>
-              <div className="emoji-container">
-                <span className="emoji">🚀</span>
-              </div>
+              <AnimatedLogo size="md" showText={true} textSize="lg" darkMode={true} showEmojis={true} />
             </div>
           </h1>
           

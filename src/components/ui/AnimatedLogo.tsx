@@ -12,23 +12,13 @@ interface AnimatedLogoProps {
 }
 
 const getIconSize = (size: 'sm' | 'md' | 'lg' | 'xl') => {
-  switch (size) {
-    case 'sm': return 28;
-    case 'md': return 38;
-    case 'lg': return 54;
-    case 'xl': return 70;
-    default: return 38;
-  }
+  const sizes = { sm: 28, md: 38, lg: 54, xl: 70 };
+  return sizes[size] || 38;
 };
 
 const getTextClass = (size: 'sm' | 'md' | 'lg' | 'xl') => {
-  switch (size) {
-    case 'sm': return 'text-lg';
-    case 'md': return 'text-2xl';
-    case 'lg': return 'text-3xl';
-    case 'xl': return 'text-5xl';
-    default: return 'text-2xl';
-  }
+  const sizes = { sm: 'text-lg', md: 'text-2xl', lg: 'text-4xl', xl: 'text-6xl' };
+  return sizes[size] || 'text-2xl';
 };
 
 const AnimatedLogo: React.FC<AnimatedLogoProps> = ({ 
@@ -50,62 +40,41 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
 
   const iconVariants = {
     animate: {
-      x: [-20, 20],
+      x: [-15, 15],
       transition: {
-        x: {
-          repeat: Infinity,
-          repeatType: "reverse",
-          duration: 2,
-          ease: "easeInOut"
-        }
+        x: { repeat: Infinity, repeatType: "reverse", duration: 1.8, ease: "easeInOut" }
       }
     }
   };
 
   const glowVariants = {
     animate: {
-      opacity: [0.4, 0.7, 0.4],
-      scale: [1, 1.05, 1],
-      transition: {
-        duration: 2,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }
+      opacity: [0.4, 0.8, 0.4],
+      scale: [1, 1.1, 1],
+      transition: { duration: 1.8, repeat: Infinity, ease: "easeInOut" }
     }
   };
 
   const emojiVariants = {
     animate: {
-      y: [0, -5, 0],
-      scale: [1, 1.1, 1],
-      transition: {
-        duration: 1.5,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }
+      y: [0, -6, 0],
+      scale: [1, 1.15, 1],
+      transition: { duration: 1.2, repeat: Infinity, ease: "easeInOut" }
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center">
-      <motion.div 
-        variants={iconVariants}
-        animate="animate"
-        className="relative"
-      >
+    <div className="flex flex-col items-center justify-center gap-2">
+      <motion.div variants={iconVariants} animate="animate" className="relative">
         <motion.div 
-          className="absolute inset-0 blur-lg opacity-40 scale-110"
-          variants={glowVariants}
-          animate="animate"
+          className="absolute inset-0 blur-xl opacity-50 scale-125"
+          variants={glowVariants} animate="animate"
         >
-          <Ambulance 
-            size={getIconSize(size)} 
-            className={darkMode ? "text-cyan-300" : "text-medical-500"} 
-          />
+          <Ambulance size={getIconSize(size)} className={darkMode ? "text-cyan-400" : "text-red-500"} />
         </motion.div>
         <Ambulance 
           size={getIconSize(size)} 
-          className={`${darkMode ? "text-cyan-300" : "text-medical-500"} drop-shadow-lg`} 
+          className={`${darkMode ? "text-cyan-400" : "text-red-500"} drop-shadow-xl`} 
         />
       </motion.div>
       
@@ -114,14 +83,14 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.5 }}
-          className={`mt-1 font-bold tracking-tight ${getTextClass(textSize)} ${
+          className={`mt-2 font-extrabold tracking-wide ${getTextClass(textSize)} ${
             darkMode 
-              ? "text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-200 drop-shadow-[0_0_5px_rgba(0,200,255,0.3)]" 
-              : "text-medical-800"
+              ? "text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-400 drop-shadow-lg" 
+              : "text-gray-800"
           }`}
         >
           {showEmojis ? (
-            <div className="flex items-center justify-center flex-wrap gap-x-2 gap-y-2 px-2">
+            <div className="flex items-center justify-center flex-wrap gap-3">
               <motion.div
                 variants={emojiVariants}
                 animate="animate"
@@ -140,7 +109,7 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
               <span className="inline-flex font-extrabold">AID</span>
               <motion.div
                 variants={emojiVariants}
-                animate="animate" 
+                animate="animate"
                 className="emoji-container"
               >
                 <span className="emoji">💓</span>

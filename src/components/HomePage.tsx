@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Bell, User, Phone, AlertTriangle, MapPin, HeartPulse, Zap, LayoutDashboard, Hospital, Gauge } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import MapView from './ui/MapView';
 import HospitalCard from './ui/HospitalCard';
 import Navbar from './ui/Navbar';
@@ -521,49 +521,60 @@ const HomePage: React.FC = () => {
         </button>
       </div>
       
-      {showEmergencyPanel && (
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 50 }}
-          className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-emergency-500/30 p-5"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center">
-              <AlertTriangle className="text-emergency-500 mr-2" size={20} />
-              <h3 className="font-semibold text-gray-800 dark:text-gray-200">Emergency Access</h3>
-            </div>
-            <button
-              onClick={() => setShowEmergencyPanel(false)}
-              className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+      <AnimatePresence>
+        {showEmergencyPanel && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 flex items-center justify-center px-4"
+            onClick={() => setShowEmergencyPanel(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 50 }}
+              className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-emergency-500/30 p-5"
+              onClick={(e) => e.stopPropagation()}
             >
-              ✕
-            </button>
-          </div>
-          
-          <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-            Need immediate assistance? Use these emergency options:
-          </p>
-          
-          <div className="flex gap-3">
-            <button
-              onClick={handleEmergencyCall}
-              className="flex-1 py-3 px-4 flex items-center justify-center gap-2 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
-            >
-              <Phone size={18} />
-              <span>Emergency Call</span>
-            </button>
-            
-            <button
-              onClick={handleSOSClick}
-              className="flex-1 py-3 px-4 flex items-center justify-center gap-2 rounded-xl bg-emergency-500 hover:bg-emergency-600 text-white transition-colors"
-            >
-              <AlertTriangle size={18} />
-              <span>SOS</span>
-            </button>
-          </div>
-        </motion.div>
-      )}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center">
+                  <AlertTriangle className="text-emergency-500 mr-2" size={20} />
+                  <h3 className="font-semibold text-gray-800 dark:text-gray-200">Emergency Access</h3>
+                </div>
+                <button
+                  onClick={() => setShowEmergencyPanel(false)}
+                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                >
+                  ✕
+                </button>
+              </div>
+              
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+                Need immediate assistance? Use these emergency options:
+              </p>
+              
+              <div className="flex gap-3">
+                <button
+                  onClick={handleEmergencyCall}
+                  className="flex-1 py-3 px-4 flex items-center justify-center gap-2 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                >
+                  <Phone size={18} />
+                  <span>Emergency Call</span>
+                </button>
+                
+                <button
+                  onClick={handleSOSClick}
+                  className="flex-1 py-3 px-4 flex items-center justify-center gap-2 rounded-xl bg-emergency-500 hover:bg-emergency-600 text-white transition-colors"
+                >
+                  <AlertTriangle size={18} />
+                  <span>SOS</span>
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       
       <Navbar />
       
