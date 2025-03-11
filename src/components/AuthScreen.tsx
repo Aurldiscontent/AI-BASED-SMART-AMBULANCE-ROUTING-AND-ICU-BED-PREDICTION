@@ -1,7 +1,8 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { User, Mail, Phone, Lock, Eye, EyeOff, AlertCircle, Shield, KeyRound, UserPlus } from 'lucide-react';
+import { User, Mail, Phone, Lock, Eye, EyeOff, AlertCircle, Shield, KeyRound, UserPlus, Ambulance } from 'lucide-react';
 import ActionButton from './ui/ActionButton';
 import AnimatedLogo from './ui/AnimatedLogo';
 
