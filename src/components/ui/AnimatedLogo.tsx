@@ -114,7 +114,7 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.5 }}
-          className={`mt-3 font-bold tracking-tight ${getTextClass(textSize)} ${
+          className={`mt-1 font-bold tracking-tight ${getTextClass(textSize)} ${
             darkMode 
               ? "text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-200 drop-shadow-[0_0_5px_rgba(0,200,255,0.3)]" 
               : "text-medical-800"

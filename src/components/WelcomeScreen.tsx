@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AnimatedLogo from './ui/AnimatedLogo';
@@ -141,7 +140,7 @@ const WelcomeScreen: React.FC = () => {
           }}
           className="mb-2"
         >
-          <AnimatedLogo size="xl" textSize="xl" showEmojis={true} darkMode={true} />
+          {/* Remove AnimatedLogo to avoid duplication */}
         </motion.div>
         
         <motion.div
@@ -150,10 +149,16 @@ const WelcomeScreen: React.FC = () => {
           transition={{ delay: 0.6, duration: 0.5 }}
           className="mt-0 text-white text-center"
         >
-          <h1 className="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-200 drop-shadow-[0_0_8px_rgba(0,200,255,0.5)] tracking-wide mb-2">
-            <span className="inline-block mr-1 p-1 bg-white/20 rounded-lg backdrop-blur-sm">🚑</span>
-            RAPID AID INNOVATORS
-            <span className="inline-block ml-1 p-1 bg-white/20 rounded-lg backdrop-blur-sm">🚀</span>
+          <h1 className="text-2xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-200 drop-shadow-[0_0_8px_rgba(0,200,255,0.5)] tracking-wide mb-2">
+            <div className="flex items-center justify-center flex-wrap gap-x-2 gap-y-1">
+              <span className="inline-flex text-3xl p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">🚑</span>
+              <span>RAPID</span>
+              <span className="inline-flex text-3xl p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">🏥</span>
+              <span>AID</span>
+              <span className="inline-flex text-3xl p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">💓</span>
+              <span>INNOVATORS</span>
+              <span className="inline-flex text-3xl p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">🚀</span>
+            </div>
           </h1>
           
           <p className="text-lg md:text-xl font-medium text-cyan-300 drop-shadow-lg mb-6 mt-2 px-2">
