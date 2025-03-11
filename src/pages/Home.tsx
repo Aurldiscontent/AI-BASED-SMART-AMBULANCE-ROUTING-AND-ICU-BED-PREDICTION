@@ -15,6 +15,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Switch } from '@/components/ui/switch';
 import { Wifi, WifiOff, Zap, AlertTriangle, Info, Clock, MapPin, Sun, Moon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import LanguageSwitcher from '@/components/ui/LanguageSwitcher';
 
 const Home = () => {
   const { theme, setTheme } = useTheme();
@@ -226,11 +227,16 @@ const Home = () => {
                   ? 'bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent' 
                   : 'text-blue-700'
               }`}>
-                Smart Ambulance Routing & ICU Predictor
+                {t('ai-smart-ambulance-routing')}
               </h1>
-              <p className={isDark ? 'text-sm text-blue-300/80' : 'text-sm text-blue-600/80'}>AI-powered emergency response system</p>
+              <p className={isDark ? 'text-sm text-blue-300/80' : 'text-sm text-blue-600/80'}>
+                {t('emergency-route')}
+              </p>
             </div>
             <div className="flex items-center gap-4">
+              {/* Language Switcher */}
+              <LanguageSwitcher />
+              
               {/* Theme toggle switch */}
               <div className="flex items-center gap-2">
                 <Sun size={16} className={isDark ? "text-gray-400" : "text-amber-500"} />
@@ -258,10 +264,10 @@ const Home = () => {
                 )}
                 <span>
                   {systemStatus === 'normal' 
-                    ? 'Connected to Emergency Network' 
+                    ? t('receive-live-traffic') 
                     : systemStatus === 'warning'
-                      ? 'Partial Network Connection'
-                      : 'Network Connection Issues'
+                      ? t('partial-network-connection')
+                      : t('network-connection-issues')
                   }
                 </span>
               </div>

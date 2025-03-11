@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Define available languages
@@ -101,6 +100,10 @@ export const translations: Record<Language, Record<string, string>> = {
     "south-bangalore": "South Bangalore",
     "east-bangalore": "East Bangalore",
     "west-bangalore": "West Bangalore",
+    
+    // Network status
+    "partial-network-connection": "Partial Network Connection",
+    "network-connection-issues": "Network Connection Issues",
   },
   
   kannada: {
@@ -198,6 +201,10 @@ export const translations: Record<Language, Record<string, string>> = {
     "south-bangalore": "ದಕ್ಷಿಣ ಬೆಂಗಳೂರು",
     "east-bangalore": "ಪೂರ್ವ ಬೆಂಗಳೂರು",
     "west-bangalore": "ಪಶ್ಚಿಮ ಬೆಂಗಳೂರು",
+    
+    // Network status
+    "partial-network-connection": "ಭಾಗಶಃ ನೆಟ್‌ವರ್ಕ್ ಸಂಪರ್ಕ",
+    "network-connection-issues": "ನೆಟ್‌ವರ್ಕ್ ಸಂಪರ್ಕ ಸಮಸ್ಯೆಗಳು",
   },
   
   hindi: {
@@ -295,6 +302,10 @@ export const translations: Record<Language, Record<string, string>> = {
     "south-bangalore": "दक्षिण बैंगलोर",
     "east-bangalore": "पूर्वी बैंगलोर",
     "west-bangalore": "पश्चिमी बैंगलोर",
+    
+    // Network status
+    "partial-network-connection": "आंशिक नेटवर्क कनेक्शन",
+    "network-connection-issues": "नेटवर्क कनेक्शन समस्याएं",
   },
   
   tamil: {
@@ -392,6 +403,10 @@ export const translations: Record<Language, Record<string, string>> = {
     "south-bangalore": "தெற்கு பெங்களூர்",
     "east-bangalore": "கிழக்கு பெங்களூர்",
     "west-bangalore": "மேற்கு பெங்களூர்",
+    
+    // Network status
+    "partial-network-connection": "பகுதி நெட்வொர்க் இணைப்பு",
+    "network-connection-issues": "நெட்வொர்க் இணைப்பு சிக்கல்கள்",
   },
   
   telugu: {
@@ -489,6 +504,10 @@ export const translations: Record<Language, Record<string, string>> = {
     "south-bangalore": "దక్షిణ బెంగళూరు",
     "east-bangalore": "తూర్పు బెంగళూరు",
     "west-bangalore": "పశ్చిమ బెంగళూరు",
+    
+    // Network status
+    "partial-network-connection": "పాక్షిక నెట్‌వర్క్ కనెక్షన్",
+    "network-connection-issues": "నెట్‌వర్క్ కనెక్షన్ సమస్యలు",
   }
 };
 
@@ -554,4 +573,3 @@ export const useLanguage = () => {
 
   return context;
 };
-
