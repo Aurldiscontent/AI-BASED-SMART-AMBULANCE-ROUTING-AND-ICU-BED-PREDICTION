@@ -12,7 +12,6 @@ import AnimatedLogo from './ui/AnimatedLogo';
 const AuthScreen: React.FC = () => {
   const [isSignup, setIsSignup] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -50,16 +49,25 @@ const AuthScreen: React.FC = () => {
         transition={{ duration: 0.5 }}
         className="flex items-center justify-center mb-8"
       >
-        <AnimatedLogo size="md" showEmojis={true} darkMode={true} />
+        <AnimatedLogo size="md" showEmojis={false} darkMode={true} />
       </motion.div>
 
-      {/* Subtitle */}
+      {/* Title with Emojis */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6, duration: 0.5 }}
         className="text-center mb-6"
       >
+        <h1 className="text-2xl md:text-3xl font-extrabold tracking-wide text-white mb-3 flex items-center justify-center flex-wrap gap-2">
+          <span>🚑</span>
+          <span>RAPID</span>
+          <span>🏥</span>
+          <span>AID</span>
+          <span>💓</span>
+          <span>INNOVATORS</span>
+          <span>🚀</span>
+        </h1>
         <p className="text-lg md:text-xl font-medium text-cyan-300 drop-shadow-lg mt-2 px-2">
           Smart AI Ambulance Routing for Life-Saving Response! ⚡🚑
         </p>
@@ -72,7 +80,7 @@ const AuthScreen: React.FC = () => {
         transition={{ duration: 0.5 }}
         className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-7 max-w-md w-full mx-auto shadow-lg"
       >
-        {/* ✨ Updated Title with Professional Emojis */}
+        {/* Form Title */}
         <motion.div className="mb-6 text-center">
           <h1 className="text-2xl font-bold text-white flex items-center justify-center gap-2">
             <Ambulance size={24} className="text-red-400" /> 
