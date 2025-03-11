@@ -1,8 +1,8 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import { motion } from 'framer-motion';
-import { Bed, Activity, AlertCircle, TrendingUp } from 'lucide-react';
+import { Bed, Activity, AlertCircle, TrendingUp, InfoIcon } from 'lucide-react';
 
 interface ICUBedData {
   hospital: string;
@@ -17,11 +17,21 @@ interface EnhancedICUAvailabilityProps {
 }
 
 const EnhancedICUAvailability: React.FC<EnhancedICUAvailabilityProps> = ({ data }) => {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  
   const getAvailabilityColor = (available: number, total: number) => {
     const ratio = available / total;
     if (ratio > 0.5) return '#4ADE80'; // Green for good availability
     if (ratio > 0.2) return '#FBBF24'; // Yellow for moderate
     return '#EF4444'; // Red for low
+  };
+  
+  const handleMouseEnter = (data: any, index: number) => {
+    setActiveIndex(index);
+  };
+  
+  const handleMouseLeave = () => {
+    setActiveIndex(null);
   };
   
   return (
@@ -77,9 +87,19 @@ const EnhancedICUAvailability: React.FC<EnhancedICUAvailabilityProps> = ({ data 
               dataKey="available" 
               name="Available ICU Beds" 
               radius={[4, 4, 4, 4]}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
             >
               {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={getAvailabilityColor(entry.available, entry.total)} />
+                <Cell 
+                  key={`cell-${index}`} 
+                  fill={getAvailabilityColor(entry.available, entry.total)}
+                  opacity={activeIndex === index ? 1 : 0.8}
+                  style={{
+                    filter: activeIndex === index ? 'drop-shadow(0px 0px 6px rgba(0,0,0,0.2))' : 'none',
+                    transition: 'all 0.3s ease'
+                  }}
+                />
               ))}
             </Bar>
             <Bar 
@@ -93,7 +113,10 @@ const EnhancedICUAvailability: React.FC<EnhancedICUAvailabilityProps> = ({ data 
       </div>
       
       <div className="mt-4 grid grid-cols-3 gap-2">
-        <div className="bg-blue-50 dark:bg-blue-900/20 p-2 rounded-lg">
+        <motion.div 
+          whileHover={{ scale: 1.05 }}
+          className="bg-blue-50 dark:bg-blue-900/20 p-2 rounded-lg transition-all duration-300 hover:shadow-md"
+        >
           <div className="flex items-center text-blue-600 dark:text-blue-400 mb-1">
             <Activity size={14} className="mr-1" />
             <span className="text-xs font-medium">Avg. Occupancy</span>
@@ -101,17 +124,23 @@ const EnhancedICUAvailability: React.FC<EnhancedICUAvailabilityProps> = ({ data 
           <p className="text-lg font-bold">
             {Math.round(data.reduce((acc, curr) => acc + curr.occupancyRate, 0) / data.length)}%
           </p>
-        </div>
+        </motion.div>
         
-        <div className="bg-purple-50 dark:bg-purple-900/20 p-2 rounded-lg">
+        <motion.div 
+          whileHover={{ scale: 1.05 }}
+          className="bg-purple-50 dark:bg-purple-900/20 p-2 rounded-lg transition-all duration-300 hover:shadow-md"
+        >
           <div className="flex items-center text-purple-600 dark:text-purple-400 mb-1">
             <TrendingUp size={14} className="mr-1" />
             <span className="text-xs font-medium">Bed Turnover</span>
           </div>
           <p className="text-lg font-bold">4.2/day</p>
-        </div>
+        </motion.div>
         
-        <div className="bg-amber-50 dark:bg-amber-900/20 p-2 rounded-lg">
+        <motion.div 
+          whileHover={{ scale: 1.05 }}
+          className="bg-amber-50 dark:bg-amber-900/20 p-2 rounded-lg transition-all duration-300 hover:shadow-md"
+        >
           <div className="flex items-center text-amber-600 dark:text-amber-400 mb-1">
             <AlertCircle size={14} className="mr-1" />
             <span className="text-xs font-medium">Wait Time</span>
@@ -119,7 +148,13 @@ const EnhancedICUAvailability: React.FC<EnhancedICUAvailabilityProps> = ({ data 
           <p className="text-lg font-bold">
             {Math.round(data.reduce((acc, curr) => acc + curr.waitTime, 0) / data.length)} min
           </p>
-        </div>
+        </motion.div>
+      </div>
+      
+      {/* Add info tip at the bottom */}
+      <div className="mt-3 text-xs text-gray-500 dark:text-gray-400 flex items-center justify-center">
+        <InfoIcon size={12} className="mr-1" />
+        <span>Click on bars for detailed statistics</span>
       </div>
     </motion.div>
   );
