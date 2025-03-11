@@ -609,12 +609,20 @@ type LanguageContextType = {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-// Create a provider component
-export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Get saved language from localStorage or default to English
+// Create a provider component with defaultLanguage prop
+interface LanguageProviderProps {
+  children: React.ReactNode;
+  defaultLanguage?: Language;
+}
+
+export const LanguageProvider: React.FC<LanguageProviderProps> = ({ 
+  children, 
+  defaultLanguage = 'english' 
+}) => {
+  // Get saved language from localStorage or use defaultLanguage
   const [language, setLanguageState] = useState<Language>(() => {
     const savedLanguage = localStorage.getItem('language');
-    return (savedLanguage as Language) || 'english';
+    return (savedLanguage as Language) || defaultLanguage;
   });
 
   // Update localStorage when language changes
