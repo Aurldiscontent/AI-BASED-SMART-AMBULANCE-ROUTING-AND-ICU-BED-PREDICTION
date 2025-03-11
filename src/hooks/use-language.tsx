@@ -587,23 +587,26 @@ export const translations: Record<Language, Record<string, string>> = {
     "traffic-alerts": "ట్రాఫిక్ పరిస్థితుల్లో గణనీయమైన మార్పులు",
     "mobile-alerts": "మొబైల్ పరికరాలలో అలర్ట్‌లను స్వీకరించండి",
     "voice-announcements": "ముఖ్యమైన అప్‌డేట్‌ల కోసం వాయిస్ ప్రకటనలు",
-    "smart-hospital": "రోగి డేటా ఆధారంగా స్మార్ట్ ఆసుపత్రి ఎంపిక",
+    "smart-hospital": "పేషెంట్ డేటా ఆధారంగా స్మార్ట్ ఆసుపత్రి ఎంపిక",
     "show-survival": "ఆసుపత్రుల కోసం అంచనా వేసిన మనుగడ రేట్లను చూపించండి",
-    "share-data": "వ్యవస్థను మెరుగుపరచడానికి అనామక డేటాను షేర్ చేయండి",
+    "share-data": "వ్యవస్థను మెరుగుపరచడానికి అనామక డేటాను భాగస్వామ్యం చేయండి",
     "performance-metrics": "సమగ్ర పనితీరు మెట్రిక్స్‌ను వీక్షించండి",
     "switch-themes": "లైట్ మరియు డార్క్ థీమ్‌ల మధ్య మారండి",
-    "enable-voice": "హ్యాండ్స్-ఫ్రీ వాయిస్ కంట్రోల్‌ను ఎనేబుల్ చేయండి",
-    "sync-data": "పరికరాల మధ్య డేటాను సింక్ చేయండి",
-    "signed-out": "సైన్ అవుట్ అయ్యారు",
-    "signed-out-success": "మీరు విజయవంతంగా సైన్ అవుట్ అయ్యారు",
-    "profile": "ప్రొఫైల్"
+    "enable-voice": "హ్యాండ్స్-ఫ్రీ వాయిస్ కంట్రోల్‌ను ప్రారంభించండి",
+    "sync-data": "పరికరాల మధ్య డేటాను సమకాలీకరించండి",
+    "signed-out": "సైన్ అవుట్",
+    "signed-out-success": "మీరు విజయవంతంగా సైన్ అవుట్ చేసారు",
+    "profile": "ప్రొఫైల్",
+    "incident-by-region": "ప్రాంతం వారీగా సంఘటనలు",
+    "incident-trends": "సంఘటన ట్రెండ్స్",
+    "response-time": "ప్రతిస్పందన సమయం"
   }
 };
 
-// Create a context for language
+// Define types for context
 type LanguageContextType = {
   language: Language;
-  setLanguage: (language: Language) => void;
+  setLanguage: (lang: Language) => void;
   t: (key: string) => string;
 };
 
@@ -630,16 +633,25 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
     localStorage.setItem('language', language);
   }, [language]);
 
-  // Set language function
-  const setLanguage = (newLanguage: Language) => {
-    setLanguageState(newLanguage);
+  // Function to set language
+  const setLanguage = (lang: Language) => {
+    setLanguageState(lang);
   };
 
-  // Translation function
+  // Function to get translation
   const t = (key: string): string => {
-    return translations[language][key] || key;
+    if (translations[language] && translations[language][key]) {
+      return translations[language][key];
+    }
+    // Fallback to English if translation is missing
+    if (translations.english && translations.english[key]) {
+      return translations.english[key];
+    }
+    // Return key if translation is not found
+    return key;
   };
 
+  // Provide the language value to children
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t }}>
       {children}
@@ -647,7 +659,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
   );
 };
 
-// Hook to use language context
+// Hook to use the language context
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
   if (context === undefined) {

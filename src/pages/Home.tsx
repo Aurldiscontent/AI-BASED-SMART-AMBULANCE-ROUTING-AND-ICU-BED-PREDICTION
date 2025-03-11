@@ -12,10 +12,9 @@ import {
   CheckCircle2, 
   MapPin, 
   BarChart,
-  AlertCircle,
   Upload
 } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useUnits } from '@/hooks/use-units';
 import {
@@ -54,7 +53,7 @@ const Home = () => {
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
   
   // Mock data for geographic distribution
-  const [geoDistributionData, setGeoDistributionData] = useState({
+  const [geoDistributionData] = useState({
     regions: [
       { name: "North Bangalore", incidents: 45, response: 8.3, color: "#8884d8" },
       { name: "Central Bangalore", incidents: 78, response: 6.2, color: "#82ca9d" },
@@ -78,7 +77,6 @@ const Home = () => {
     if (savedAnalysis) {
       setShowAnalysis(true);
       setUploadSuccess(true);
-      // You could also parse and set the geoDistributionData here
     }
   }, []);
   
@@ -88,7 +86,6 @@ const Home = () => {
     if (file) {
       setIsUploading(true);
       setUploadSuccess(false);
-      setShowAnalysis(false);
       
       // Simulate file processing
       setTimeout(() => {
@@ -108,7 +105,7 @@ const Home = () => {
         // Show analysis after a short delay
         setTimeout(() => {
           setShowAnalysis(true);
-        }, 500);
+        }, 200);
       }, 1500);
     }
   };

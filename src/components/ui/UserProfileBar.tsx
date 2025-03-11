@@ -1,24 +1,39 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/hooks/use-language';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
 const UserProfileBar = () => {
-  const { t } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
+  const [userData, setUserData] = useState({
+    name: 'Guest User',
+    email: 'guest@example.com',
+    role: 'User',
+    location: 'Not specified',
+  });
   
-  // Get user data from localStorage (stored during authentication)
-  const userData = {
-    name: localStorage.getItem('userName') || 'Guest User',
-    email: localStorage.getItem('userEmail') || 'guest@example.com',
-    role: localStorage.getItem('userRole') || 'User',
-    location: localStorage.getItem('userLocation') || 'Not specified',
-  };
+  // Load user data from localStorage once when component mounts
+  useEffect(() => {
+    const name = localStorage.getItem('userName');
+    const email = localStorage.getItem('userEmail');
+    const role = localStorage.getItem('userRole');
+    const location = localStorage.getItem('userLocation');
+    
+    if (name && email) {
+      setUserData({
+        name: name,
+        email: email,
+        role: role || 'User',
+        location: location || 'Not specified',
+      });
+    }
+  }, []);
   
   const handleSignOut = () => {
     // Clear user data from localStorage
@@ -37,8 +52,17 @@ const UserProfileBar = () => {
     // Close the dialog
     setOpen(false);
     
-    // Redirect to auth page (this will be caught by RouteGuard)
+    // Redirect to auth page
     window.location.href = '/auth';
+  };
+  
+  const handleLanguageChange = (lang: string) => {
+    setLanguage(lang as any);
+    toast({
+      title: t("language"),
+      description: `${t("language")} ${t("change")}d to ${lang}`,
+      variant: "default",
+    });
   };
   
   return (
@@ -81,6 +105,47 @@ const UserProfileBar = () => {
                 <p className="text-sm">{t("email")}: {userData.email}</p>
                 <p className="text-sm">{t("role")}: {userData.role}</p>
                 <p className="text-sm">{t("location")}: {userData.location}</p>
+              </div>
+              
+              <div className="space-y-2">
+                <p className="text-sm font-medium">{t("language")}</p>
+                <div className="flex flex-wrap gap-2">
+                  <Button 
+                    size="sm" 
+                    variant={language === "english" ? "default" : "outline"}
+                    onClick={() => handleLanguageChange("english")}
+                  >
+                    English
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant={language === "kannada" ? "default" : "outline"}
+                    onClick={() => handleLanguageChange("kannada")}
+                  >
+                    ಕನ್ನಡ
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant={language === "hindi" ? "default" : "outline"}
+                    onClick={() => handleLanguageChange("hindi")}
+                  >
+                    हिंदी
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant={language === "tamil" ? "default" : "outline"}
+                    onClick={() => handleLanguageChange("tamil")}
+                  >
+                    தமிழ்
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant={language === "telugu" ? "default" : "outline"}
+                    onClick={() => handleLanguageChange("telugu")}
+                  >
+                    తెలుగు
+                  </Button>
+                </div>
               </div>
               
               <Button variant="outline" className="w-full" onClick={handleSignOut}>
