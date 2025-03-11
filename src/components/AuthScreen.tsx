@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
-  User, Mail, Phone, Lock, Eye, EyeOff, AlertCircle, 
-  Shield, KeyRound, UserPlus, Ambulance 
+  UserPlus, KeyRound, Mail, Phone, Lock, Eye, EyeOff, 
+  ShieldCheck, AlertCircle, Ambulance
 } from 'lucide-react';
 import ActionButton from './ui/ActionButton';
 import AnimatedLogo from './ui/AnimatedLogo';
@@ -53,16 +53,13 @@ const AuthScreen: React.FC = () => {
         <AnimatedLogo size="md" showEmojis={true} darkMode={true} />
       </motion.div>
 
-      {/* Title with Emojis */}
+      {/* Subtitle */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6, duration: 0.5 }}
         className="text-center mb-6"
       >
-        <h1 className="text-2xl md:text-4xl font-extrabold tracking-wide text-white mb-3">
-          🚑 RAPID 🏥 AID 💓 INNOVATORS 🚀
-        </h1>
         <p className="text-lg md:text-xl font-medium text-cyan-300 drop-shadow-lg mt-2 px-2">
           Smart AI Ambulance Routing for Life-Saving Response! ⚡🚑
         </p>
@@ -75,23 +72,18 @@ const AuthScreen: React.FC = () => {
         transition={{ duration: 0.5 }}
         className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-7 max-w-md w-full mx-auto shadow-lg"
       >
+        {/* ✨ Updated Title with Professional Emojis */}
         <motion.div className="mb-6 text-center">
-          <h1 className="text-2xl font-bold text-white">
-            {isSignup ? (
-              <>
-                <UserPlus size={20} className="inline text-blue-300" /> Create an Account 🚀
-              </>
-            ) : (
-              <>
-                <KeyRound size={20} className="inline text-blue-300" /> Welcome Back 🔑
-              </>
-            )}
+          <h1 className="text-2xl font-bold text-white flex items-center justify-center gap-2">
+            <Ambulance size={24} className="text-red-400" /> 
+            RAPID AID INNOVATORS 
+            <ShieldCheck size={24} className="text-green-400" />
           </h1>
           <p className="text-blue-100 mt-2">
             {isSignup ? (
-              <>Sign up to access emergency services 🚑</>
+              <>Sign up to access emergency services 🚨</>
             ) : (
-              <>Sign in to continue to your account 🔐</>
+              <>Sign in to manage rapid assistance & emergency alerts 🔐</>
             )}
           </p>
         </motion.div>
