@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Define available languages
@@ -577,4 +578,176 @@ export const translations: Record<Language, Record<string, string>> = {
     "view-all-hospitals": "అన్ని ఆసుపత్రులను వీక్షించండి",
     "navigate-to": "నేవిగేట్ చేయండి",
     "calling-hospital": "ఆసుపత్రికి కాల్ చేస్తోంది",
-    "connecting-to
+    "connecting-to": "కనెక్ట్ అవుతోంది",
+    // Upload Dataset
+    "upload-dataset": "డేటాసెట్ అప్‌లోడ్ చేయండి",
+    "dataset-ready": "డేటాసెట్ సిద్ధంగా ఉంది",
+    "uploading": "అప్‌లోడ్ అవుతోంది...",
+    "dataset-uploaded-title": "డేటాసెట్ విజయవంతంగా అప్‌లోడ్ చేయబడింది",
+    "dataset-uploaded-desc": "ఫైల్ ప్రాసెస్ చేయబడింది మరియు విశ్లేషణకు సిద్ధంగా ఉంది",
+    "dataset-reset-title": "డేటాసెట్ రీసెట్",
+    "dataset-reset-desc": "విశ్లేషణ డేటా రీసెట్ చేయబడింది",
+    "dataset-options": "డేటాసెట్ ఎంపికలు",
+    "dataset-options-desc": "మీ అప్‌లోడ్ చేసిన డేటాసెట్‌ను నిర్వహించండి",
+    "analysis-active": "విశ్లేషణ ప్రస్తుతం యాక్టివ్‌గా ఉంది",
+    "reset-analysis": "విశ్లేషణను రీసెట్ చేయండి",
+    // Settings
+    "map-navigation-settings": "మ్యాప్ & నావిగేషన్ సెట్టింగులు",
+    "notifications-alerts": "నోటిఫికేషన్లు & అలర్ట్లు",
+    "performance-data": "పనితీరు & డేటా",
+    "system-preferences": "సిస్టమ్ ప్రాధాన్యతలు",
+    "real-time-traffic-updates": "రియల్-టైమ్ ట్రాఫిక్ అప్‌డేట్‌లు",
+    "smart-rerouting": "స్మార్ట్ రీరూటింగ్",
+    "road-closure-alerts": "రోడ్ మూసివేత అలర్ట్‌లు",
+    "3d-map-visualization": "3D మ్యాప్ విజువలైజేషన్",
+    "lane-guidance": "లేన్ గైడెన్స్",
+    "emergency-alerts": "అత్యవసర అలర్ట్‌లు",
+    "hospital-status-updates": "ఆసుపత్రి స్థితి అప్‌డేట్‌లు",
+    "traffic-condition-alerts": "ట్రాఫిక్ కండిషన్ అలర్ట్‌లు",
+    "push-notifications": "పుష్ నోటిఫికేషన్‌లు",
+    "audio-alerts": "ఆడియో అలర్ట్‌లు",
+    "ai-powered-recommendations": "AI-ఆధారిత సిఫార్సులు",
+    "survival-rate-prediction": "మనుగడ రేటు అంచనా",
+    "anonymous-data-sharing": "అనామక డేటా షేరింగ్",
+    "detailed-analytics": "వివరణాత్మక విశ్లేషణలు",
+    "dark-mode": "డార్క్ మోడ్",
+    "voice-commands": "వాయిస్ కమాండ్‌లు",
+    "data-sync": "డేటా సింక్",
+    "language": "భాష",
+    "current-language": "ప్రస్తుతం",
+    "units": "యూనిట్లు",
+    "metric": "మెట్రిక్",
+    "imperial": "ఇంపీరియల్",
+    "switch-to-light": "లైట్ మోడ్‌కి మారండి",
+    "switch-to-dark": "డార్క్ మోడ్‌కి మారండి",
+    "change": "మార్చు",
+    // Profile
+    "name": "పేరు",
+    "email": "ఇమెయిల్",
+    "role": "పాత్ర",
+    "location": "స్థానం",
+    "edit-profile": "ప్రొఫైల్‌ని సవరించండి",
+    "sign-out": "సైన్ అవుట్",
+    "signed-out": "సైన్ అవుట్ చేయబడింది",
+    "signed-out-success": "మీరు విజయవంతంగా సైన్ అవుట్ చేసారు",
+    "profile": "ప్రొఫైల్",
+    // Geo regions
+    "north-bangalore": "ఉత్తర బెంగళూరు",
+    "central-bangalore": "సెంట్రల్ బెంగళూరు", 
+    "south-bangalore": "దక్షిణ బెంగళూరు",
+    "east-bangalore": "తూర్పు బెంగళూరు",
+    "west-bangalore": "పశ్చిమ బెంగళూరు",
+    
+    // Analysis section
+    "data-analysis": "డేటా విశ్లేషణ",
+    "geographic-distribution": "భౌగోళిక పంపిణీ",
+    "response-metrics": "ప్రతిస్పందన మెట్రిక్స్",
+    "interactive-map-placeholder": "ఇంటరాక్టివ్ మ్యాప్ విజువలైజేషన్ (వివరాలను వీక్షించడానికి ప్రాంతాలపై క్లిక్ చేయండి)",
+    "incident-hotspots": "ఘటన హాట్‌స్పాట్‌లు",
+    "avg-response-time": "సగటు ప్రతిస్పందన సమయం",
+    "incidents": "ఘటనలు",
+    "minutes": "నిమిషాలు",
+    "total-incidents": "మొత్తం సంఘటనలు",
+    "from-previous": "మునుపటి కాలం నుండి",
+    "survival-rate": "మనుగడ రేటు",
+    "response-statistics": "కేసు తీవ్రత ద్వారా ప్రతిస్పందన విజయ రేటు",
+    "critical-cases": "క్రిటికల్ కేసులు",
+    "moderate-cases": "మధ్యస్థ కేసులు",
+    "mild-cases": "తేలికపాటి కేసులు",
+    "dataset-instructions": "విశ్లేషణ కోసం అత్యవసర డేటా కలిగి ఉన్న మీ CSV డేటాసెట్‌ను అప్‌లోడ్ చేయండి",
+    "drag-drop-csv": "మీ CSV ఫైల్‌ను ఇక్కడ డ్రాగ్ చేసి డ్రాప్ చేయండి లేదా బ్రౌజ్ చేయడానికి క్లిక్ చేయండి",
+    "supported-format": "మద్దతు ఉన్న ఫార్మాట్",
+    "max-file-size": "గరిష్ట ఫైల్ పరిమాణం",
+    "upload-successful": "అప్‌లోడ్ విజయవంతమైంది!",
+    
+    // Themes
+    "light": "లైట్",
+    "dark": "డార్క్",
+    
+    // Common actions
+    "search-hospitals": "ఆసుపత్రులను శోధించండి లేదా రూటింగ్ కోసం ప్రమాద స్థానాన్ని నమోదు చేయండి...",
+    "receive-live-traffic": "అత్యుత్తమ రూటింగ్ కోసం లైవ్ ట్రాఫిక్ డేటాను పొందండి",
+    "auto-reroute": "వేగవంతమైన మార్గాలు అందుబాటులో ఉన్నప్పుడు స్వయంచాలకంగా రీరూట్ చేయండి",
+    "get-road-closure": "మీ మార్గంలో మూసివేసిన రోడ్ల గురించి తెలియజేయబడండి",
+    "show-3d-buildings": "3D లో భవనాలు మరియు ల్యాండ్‌మార్క్‌లను చూపించండి",
+    "show-lanes": "వేగవంతమైన నావిగేషన్ కోసం సిఫార్సు చేయబడిన లేన్‌లను చూపండి",
+    "critical-alerts": "క్రిటికల్ పేషెంట్ మరియు అధిక ప్రాధాన్యత అలర్ట్‌లు",
+    "bed-availability": "బెడ్ లభ్యత మరియు వేచి ఉండే సమయాల్లో మార్పులు",
+    "traffic-alerts": "ట్రాఫిక్ పరిస్థితుల్లో గణనీయమైన మార్పులు",
+    "mobile-alerts": "మొబైల్ పరికరాలలో అలర్ట్‌లను స్వీకరించండి",
+    "voice-announcements": "కీలక అప్‌డేట్‌ల కోసం వాయిస్ ప్రకటనలు",
+    "smart-hospital": "పేషెంట్ డేటా ఆధారంగా స్మార్ట్ ఆసుపత్రి ఎంపిక",
+    "show-survival": "ఆసుపత్రుల కోసం అంచనా వేసిన మనుగడ రేట్లను చూపండి",
+    "share-data": "సిస్టమ్‌ను మెరుగుపరచడానికి అనామక డేటాను షేర్ చేయండి",
+    "performance-metrics": "సమగ్ర పనితీరు మెట్రిక్స్‌ను వీక్షించండి",
+    "switch-themes": "లైట్ మరియు డార్క్ థీమ్‌ల మధ్య మారండి",
+    "enable-voice": "హ్యాండ్స్-ఫ్రీ వాయిస్ కంట్రోల్‌ను ప్రారంభించండి",
+    "sync-data": "పరికరాల మధ్య డేటాను సింక్ చేయండి",
+    "incident-by-region": "ప్రాంతం వారీగా సంఘటనలు",
+    "incident-trends": "సంఘటన ధోరణులు",
+    "response-time": "ప్రతిస్పందన సమయం",
+    "incident-distribution-map": "సంఘటన పంపిణీ మ్యాప్"
+  }
+};
+
+// Create context for language settings
+type LanguageContextType = {
+  language: Language;
+  setLanguage: (language: Language) => void;
+  t: (key: string) => string;
+};
+
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+
+// Provider component
+export const LanguageProvider = ({
+  children,
+  defaultLanguage = "english",
+}: {
+  children: React.ReactNode;
+  defaultLanguage?: Language;
+}) => {
+  // Get the language from localStorage or use default
+  const [language, setLanguage] = useState<Language>(() => {
+    const savedLanguage = localStorage.getItem("language") as Language;
+    return savedLanguage || defaultLanguage;
+  });
+
+  // Translation function
+  const t = (key: string): string => {
+    // Return the translation for the current language, or fallback to english,
+    // or return the key itself if no translation is found
+    const translation = translations[language][key] || 
+                         translations["english"][key] || 
+                         key;
+    return translation;
+  };
+
+  // Update localStorage when language changes
+  useEffect(() => {
+    localStorage.setItem("language", language);
+  }, [language]);
+
+  const value = {
+    language,
+    setLanguage,
+    t,
+  };
+
+  return (
+    <LanguageContext.Provider value={value}>
+      {children}
+    </LanguageContext.Provider>
+  );
+};
+
+// Hook to use the language context
+export const useLanguage = (): LanguageContextType => {
+  const context = useContext(LanguageContext);
+  
+  if (context === undefined) {
+    throw new Error("useLanguage must be used within a LanguageProvider");
+  }
+  
+  return context;
+};
