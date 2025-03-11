@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Truck, Helicopter } from 'lucide-react';
+import { Truck, Plane } from 'lucide-react';
 
 interface TransportOptionsProps {
   currentMode: 'ground' | 'air';
@@ -47,7 +47,7 @@ const TransportOptions: React.FC<TransportOptionsProps> = ({
           {isAirRecommended && (
             <div className="absolute inset-0 bg-blue-400 opacity-20 animate-pulse"></div>
           )}
-          <Helicopter size={16} className={`${currentMode === 'air' ? 'text-blue-700' : 'text-gray-700'} mr-2`} />
+          <Plane size={16} className={`${currentMode === 'air' ? 'text-blue-700' : 'text-gray-700'} mr-2`} />
           <span className="text-xs font-medium">Air</span>
         </button>
       </div>

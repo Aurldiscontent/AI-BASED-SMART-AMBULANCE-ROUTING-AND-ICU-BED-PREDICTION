@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { HeartPulse, ThermometerSnow, ThermometerSun, AlertTriangle, AlertCircle } from 'lucide-react';
+import { HeartPulse, Thermometer, ThermometerSun, AlertCircle, AlertTriangle } from 'lucide-react';
 
 interface SeverityDetectorProps {
   currentSeverity: 'Low' | 'Moderate' | 'High' | 'Critical';
@@ -23,7 +23,7 @@ const SeverityDetector: React.FC<SeverityDetectorProps> = ({
               : 'bg-gray-100 border border-transparent hover:bg-gray-200'
           }`}
         >
-          <ThermometerSnow size={14} className="text-green-600 mb-1" />
+          <Thermometer size={14} className="text-green-600 mb-1" />
           <span className="text-xs font-medium">Low</span>
         </button>
         
