@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Define available languages
@@ -584,3 +585,65 @@ export const translations: Record<Language, Record<string, string>> = {
     "critical-alerts": "క్రిటికల్ పేషెంట్ మరియు అధిక ప్రాధాన్యత అలర్ట్‌లు",
     "bed-availability": "బెడ్ లభ్యత మరియు వేచి ఉండే సమయాల్లో మార్పులు",
     "traffic-alerts": "ట్రాఫిక్ పరిస్థితుల్లో గణనీయమైన మార్పులు",
+    "mobile-alerts": "మొబైల్ పరికరాలలో అలర్ట్‌లను స్వీకరించండి",
+    "voice-announcements": "ముఖ్యమైన అప్‌డేట్‌ల కోసం వాయిస్ ప్రకటనలు",
+    "smart-hospital": "రోగి డేటా ఆధారంగా స్మార్ట్ ఆసుపత్రి ఎంపిక",
+    "show-survival": "ఆసుపత్రుల కోసం అంచనా వేసిన మనుగడ రేట్లను చూపించండి",
+    "share-data": "వ్యవస్థను మెరుగుపరచడానికి అనామక డేటాను షేర్ చేయండి",
+    "performance-metrics": "సమగ్ర పనితీరు మెట్రిక్స్‌ను వీక్షించండి",
+    "switch-themes": "లైట్ మరియు డార్క్ థీమ్‌ల మధ్య మారండి",
+    "enable-voice": "హ్యాండ్స్-ఫ్రీ వాయిస్ కంట్రోల్‌ను ఎనేబుల్ చేయండి",
+    "sync-data": "పరికరాల మధ్య డేటాను సింక్ చేయండి",
+    "signed-out": "సైన్ అవుట్ అయ్యారు",
+    "signed-out-success": "మీరు విజయవంతంగా సైన్ అవుట్ అయ్యారు",
+    "profile": "ప్రొఫైల్"
+  }
+};
+
+// Create a context for language
+type LanguageContextType = {
+  language: Language;
+  setLanguage: (language: Language) => void;
+  t: (key: string) => string;
+};
+
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+
+// Create a provider component
+export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Get saved language from localStorage or default to English
+  const [language, setLanguageState] = useState<Language>(() => {
+    const savedLanguage = localStorage.getItem('language');
+    return (savedLanguage as Language) || 'english';
+  });
+
+  // Update localStorage when language changes
+  useEffect(() => {
+    localStorage.setItem('language', language);
+  }, [language]);
+
+  // Set language function
+  const setLanguage = (newLanguage: Language) => {
+    setLanguageState(newLanguage);
+  };
+
+  // Translation function
+  const t = (key: string): string => {
+    return translations[language][key] || key;
+  };
+
+  return (
+    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+};
+
+// Hook to use language context
+export const useLanguage = () => {
+  const context = useContext(LanguageContext);
+  if (context === undefined) {
+    throw new Error('useLanguage must be used within a LanguageProvider');
+  }
+  return context;
+};
