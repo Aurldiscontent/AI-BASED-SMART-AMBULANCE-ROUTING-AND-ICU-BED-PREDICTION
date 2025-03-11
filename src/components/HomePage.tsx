@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Bell, User, Phone, AlertTriangle, MapPin, HeartPulse, Zap, LayoutDashboard, Hospital, Gauge, Map as MapIcon, FileText, Settings, Activity, Mic, Moon, Sun, Navigation, TrendingUp } from 'lucide-react';
+import { Search, Bell, User, Phone, AlertTriangle, MapPin, HeartPulse, Zap, LayoutDashboard, Hospital, Gauge, Map as MapIcon, FileText, Settings, Activity, Mic, Moon, Sun, Navigation, TrendingUp, Clock, Users } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import MapView from './ui/MapView';
 import HospitalCard from './ui/HospitalCard';
@@ -13,8 +13,9 @@ import UserHeader from './ui/UserHeader';
 import SearchBar from './ui/SearchBar';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { useTheme } from '@/hooks/use-theme';
-import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, Clock, Users, TrendingUp as TrendingUpIcon } from 'recharts';
+import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, PieChart, Pie, Cell } from 'recharts';
 import Toggle from 'react-toggle';
+import 'react-toggle/style.css';
 
 const hospitals = [
   {
@@ -525,7 +526,7 @@ const HomePage: React.FC = () => {
                   : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100'
               }`}
             >
-              <FileText size={16} className="inline-block mr-1 -mt-0.5" />
+              <FileText size={18} className="inline-block mr-1 -mt-0.5" />
               Reports
             </button>
             <button 
@@ -988,7 +989,7 @@ const HomePage: React.FC = () => {
                     <p className="text-sm text-gray-500 dark:text-gray-400">Receive live traffic data for optimal routing</p>
                   </div>
                   <Toggle
-                    defaultPressed
+                    defaultChecked
                     aria-label="Toggle traffic updates"
                     className="data-[state=on]:bg-blue-500"
                   />
@@ -1000,7 +1001,7 @@ const HomePage: React.FC = () => {
                     <p className="text-sm text-gray-500 dark:text-gray-400">Automatically reroute when faster paths are available</p>
                   </div>
                   <Toggle
-                    defaultPressed
+                    defaultChecked
                     aria-label="Toggle smart rerouting"
                     className="data-[state=on]:bg-blue-500"
                   />
@@ -1012,7 +1013,7 @@ const HomePage: React.FC = () => {
                     <p className="text-sm text-gray-500 dark:text-gray-400">Get notified of closed roads along your route</p>
                   </div>
                   <Toggle
-                    defaultPressed
+                    defaultChecked
                     aria-label="Toggle road closure alerts"
                     className="data-[state=on]:bg-blue-500"
                   />
@@ -1035,7 +1036,7 @@ const HomePage: React.FC = () => {
                     <p className="text-sm text-gray-500 dark:text-gray-400">Show recommended lanes for faster navigation</p>
                   </div>
                   <Toggle
-                    defaultPressed
+                    defaultChecked
                     aria-label="Toggle lane guidance"
                     className="data-[state=on]:bg-blue-500"
                   />
@@ -1057,7 +1058,7 @@ const HomePage: React.FC = () => {
                     <p className="text-sm text-gray-500 dark:text-gray-400">Critical patient and high priority alerts</p>
                   </div>
                   <Toggle
-                    defaultPressed
+                    defaultChecked
                     aria-label="Toggle emergency alerts"
                     className="data-[state=on]:bg-red-500"
                   />
@@ -1069,7 +1070,7 @@ const HomePage: React.FC = () => {
                     <p className="text-sm text-gray-500 dark:text-gray-400">Changes in bed availability and wait times</p>
                   </div>
                   <Toggle
-                    defaultPressed
+                    defaultChecked
                     aria-label="Toggle hospital updates"
                     className="data-[state=on]:bg-blue-500"
                   />
@@ -1081,7 +1082,7 @@ const HomePage: React.FC = () => {
                     <p className="text-sm text-gray-500 dark:text-gray-400">Significant changes in traffic conditions</p>
                   </div>
                   <Toggle
-                    defaultPressed
+                    defaultChecked
                     aria-label="Toggle traffic alerts"
                     className="data-[state=on]:bg-blue-500"
                   />
@@ -1093,7 +1094,7 @@ const HomePage: React.FC = () => {
                     <p className="text-sm text-gray-500 dark:text-gray-400">Receive alerts on mobile devices</p>
                   </div>
                   <Toggle
-                    defaultPressed
+                    defaultChecked
                     aria-label="Toggle push notifications"
                     className="data-[state=on]:bg-blue-500"
                   />
@@ -1105,7 +1106,7 @@ const HomePage: React.FC = () => {
                     <p className="text-sm text-gray-500 dark:text-gray-400">Voice announcements for critical updates</p>
                   </div>
                   <Toggle
-                    defaultPressed
+                    defaultChecked
                     aria-label="Toggle audio alerts"
                     className="data-[state=on]:bg-blue-500"
                   />
@@ -1127,7 +1128,7 @@ const HomePage: React.FC = () => {
                     <p className="text-sm text-gray-500 dark:text-gray-400">Smart hospital selection based on patient data</p>
                   </div>
                   <Toggle
-                    defaultPressed
+                    defaultChecked
                     aria-label="Toggle AI recommendations"
                     className="data-[state=on]:bg-blue-500"
                   />
@@ -1139,7 +1140,7 @@ const HomePage: React.FC = () => {
                     <p className="text-sm text-gray-500 dark:text-gray-400">Show predicted survival rates for hospitals</p>
                   </div>
                   <Toggle
-                    defaultPressed
+                    defaultChecked
                     aria-label="Toggle survival predictions"
                     className="data-[state=on]:bg-blue-500"
                   />
@@ -1151,7 +1152,7 @@ const HomePage: React.FC = () => {
                     <p className="text-sm text-gray-500 dark:text-gray-400">Share anonymized data to improve the system</p>
                   </div>
                   <Toggle
-                    defaultPressed
+                    defaultChecked
                     aria-label="Toggle data sharing"
                     className="data-[state=on]:bg-blue-500"
                   />
@@ -1163,7 +1164,7 @@ const HomePage: React.FC = () => {
                     <p className="text-sm text-gray-500 dark:text-gray-400">View comprehensive performance metrics</p>
                   </div>
                   <Toggle
-                    defaultPressed
+                    defaultChecked
                     aria-label="Toggle analytics"
                     className="data-[state=on]:bg-blue-500"
                   />
@@ -1198,7 +1199,7 @@ const HomePage: React.FC = () => {
                     <p className="text-sm text-gray-500 dark:text-gray-400">Enable hands-free voice control</p>
                   </div>
                   <Toggle
-                    defaultPressed
+                    defaultChecked
                     aria-label="Toggle voice commands"
                     className="data-[state=on]:bg-blue-500"
                   />
@@ -1210,7 +1211,7 @@ const HomePage: React.FC = () => {
                     <p className="text-sm text-gray-500 dark:text-gray-400">Sync data across devices</p>
                   </div>
                   <Toggle
-                    defaultPressed
+                    defaultChecked
                     aria-label="Toggle data sync"
                     className="data-[state=on]:bg-blue-500"
                   />
