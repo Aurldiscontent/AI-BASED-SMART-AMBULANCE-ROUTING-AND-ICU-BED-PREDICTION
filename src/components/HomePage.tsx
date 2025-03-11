@@ -946,7 +946,7 @@ const HomePage: React.FC = () => {
                 </div>
                 <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
                   <div className="flex items-center mb-2">
-                    <TrendingUpIcon className="text-purple-500 mr-2" size={18} />
+                    <TrendingUp className="text-purple-500 mr-2" size={18} />
                     <h4 className="font-semibold">AI Accuracy</h4>
                   </div>
                   <p className="text-3xl font-bold text-purple-700 dark:text-purple-400">96.3%</p>
