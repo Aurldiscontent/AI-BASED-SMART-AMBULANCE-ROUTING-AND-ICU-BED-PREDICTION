@@ -85,12 +85,75 @@ const WelcomeScreen: React.FC = () => {
           </p>
         </motion.div>
 
+        {/* 🔥 What We Do Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.5 }}
+          className="w-full mb-6 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 p-5 shadow-lg"
+        >
+          <h2 className="text-xl font-bold text-cyan-300 mb-3 flex items-center justify-center gap-2">
+            <span className="inline-block text-2xl">⏳</span> What We Do
+          </h2>
+          <ul className="text-left space-y-3 text-blue-100">
+            <li className="flex items-start">
+              <span className="inline-block text-xl mr-2">🗺️</span> 
+              <span>AI-powered system finds the fastest routes for ambulances through traffic</span>
+            </li>
+            <li className="flex items-start">
+              <span className="inline-block text-xl mr-2">🏥</span> 
+              <span>Real-time hospital bed availability tracking</span>
+            </li>
+            <li className="flex items-start">
+              <span className="inline-block text-xl mr-2">⏳</span> 
+              <span>Helps save precious minutes during emergencies</span>
+            </li>
+            <li className="flex items-start">
+              <span className="inline-block text-xl mr-2">❤️</span> 
+              <span>Every second counts when saving lives!</span>
+            </li>
+          </ul>
+        </motion.div>
+
+        {/* 🚀 Feature Tags */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.9, duration: 0.5 }}
+          className="w-full mb-6"
+        >
+          <div className="flex flex-wrap justify-center gap-2">
+            {[
+              { label: "Emergency Response", emoji: "🚑" },
+              { label: "Smart AI Routing", emoji: "🗺️" },
+              { label: "Hospital Network", emoji: "🏥" },
+              { label: "Real-time Updates", emoji: "⏳" },
+              { label: "Accuracy Focused", emoji: "🎯" },
+              { label: "AI Powered", emoji: "🧠" },
+              { label: "AI Technology", emoji: "🤖" },
+              { label: "Saving Lives Together", emoji: "👨‍⚕️" },
+              { label: "Fast & Reliable", emoji: "⚡" },
+            ].map((tag, index) => (
+              <motion.span 
+                key={index}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.9 + (index * 0.05), duration: 0.3 }}
+                className="inline-flex items-center px-3 py-1.5 m-1 rounded-full bg-white/10 
+                backdrop-blur-sm border border-cyan-500/30 text-cyan-100 shadow-lg"
+              >
+                <span className="mr-1 text-lg">{tag.emoji}</span> {tag.label}
+              </motion.span>
+            ))}
+          </div>
+        </motion.div>
+
         {/* 🚀 Get Started Button */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.5 }}
-          className="mt-8 w-full"
+          className="mt-2 w-full"
         >
           <Button 
             onClick={handleGetStarted}
