@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { Search, Bell, User, Phone, AlertTriangle, MapPin, HeartPulse, Zap, LayoutDashboard, Hospital, Gauge, Map as MapIcon, FileText, Settings, Activity, Mic, Moon, Sun, Navigation } from 'lucide-react';
+import { Search, Bell, User, Phone, AlertTriangle, MapPin, HeartPulse, Zap, LayoutDashboard, Hospital, Gauge, Map as MapIcon, FileText, Settings, Activity, Mic, Moon, Sun, Navigation, TrendingUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import MapView from './ui/MapView';
 import HospitalCard from './ui/HospitalCard';
@@ -14,6 +13,8 @@ import UserHeader from './ui/UserHeader';
 import SearchBar from './ui/SearchBar';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { useTheme } from '@/hooks/use-theme';
+import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, Clock, Users, TrendingUp as TrendingUpIcon } from 'recharts';
+import Toggle from 'react-toggle';
 
 const hospitals = [
   {
@@ -337,7 +338,7 @@ const HomePage: React.FC = () => {
     toast({
       title: "Traffic Alert",
       description: "Heavy congestion detected on main route. Alternative routes suggested.",
-      variant: "destructive", // Changed from "warning" to "destructive" to fix the build error
+      variant: "destructive",
     });
   };
   
@@ -582,7 +583,6 @@ const HomePage: React.FC = () => {
         </div>
       </motion.div>
       
-      
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -702,7 +702,6 @@ const HomePage: React.FC = () => {
         </motion.div>
       )}
       
-      
       {activeTab === 'live-route' && (
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -793,15 +792,177 @@ const HomePage: React.FC = () => {
           transition={{ delay: 0.2, duration: 0.5 }}
           className="px-4 py-2"
         >
-          <div className="glass-card rounded-2xl p-6 flex items-center justify-center h-64 dark:bg-gray-800/50 dark:border-gray-700">
-            <div className="text-center">
-              <FileText size={48} className="text-gray-400 dark:text-gray-500 mx-auto mb-3" />
-              <h3 className="font-semibold text-xl mb-2">Reports Coming Soon</h3>
-              <p className="text-gray-500 dark:text-gray-400 max-w-md">
-                Detailed emergency reports, transport analytics, and hospital performance metrics will be available in the next update.
-              </p>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <Card className="dark:bg-gray-800/50 dark:border-gray-700">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg flex items-center">
+                  <TrendingUp size={18} className="text-blue-500 mr-2" />
+                  Emergency Response Times
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart
+                      data={[
+                        { month: 'Jan', response: 12.3 },
+                        { month: 'Feb', response: 11.8 },
+                        { month: 'Mar', response: 10.5 },
+                        { month: 'Apr', response: 9.8 },
+                        { month: 'May', response: 8.5 },
+                        { month: 'Jun', response: 7.9 },
+                        { month: 'Jul', response: 8.2 },
+                      ]}
+                      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="month" />
+                      <YAxis label={{ value: 'Minutes', angle: -90, position: 'insideLeft' }} />
+                      <Tooltip />
+                      <Line type="monotone" dataKey="response" stroke="#3b82f6" strokeWidth={2} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="mt-3 text-sm text-gray-600 dark:text-gray-300">
+                  <p className="font-semibold">Analysis:</p>
+                  <p>Average response time has decreased by 33% in the past 6 months due to AI routing implementation. The current average is 8.2 minutes, compared to the national average of 12.5 minutes.</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="dark:bg-gray-800/50 dark:border-gray-700">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg flex items-center">
+                  <HeartPulse size={18} className="text-red-500 mr-2" />
+                  Patient Outcomes
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Positive', value: 78 },
+                          { name: 'Stable', value: 15 },
+                          { name: 'Critical', value: 7 },
+                        ]}
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={80}
+                        fill="#8884d8"
+                        dataKey="value"
+                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      >
+                        <Cell fill="#4ade80" />
+                        <Cell fill="#facc15" />
+                        <Cell fill="#f87171" />
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="mt-3 text-sm text-gray-600 dark:text-gray-300">
+                  <p className="font-semibold">Analysis:</p>
+                  <p>78% of patients transported using AI routing had positive outcomes, representing a 23% improvement over traditional routing methods. Critical outcome cases have reduced from 12% to 7%.</p>
+                </div>
+              </CardContent>
+            </Card>
           </div>
+
+          <Card className="dark:bg-gray-800/50 dark:border-gray-700 mb-4">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg flex items-center">
+                <MapPin size={18} className="text-green-500 mr-2" />
+                Geographic Distribution
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="col-span-2">
+                  <div className="h-64 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                    <MapIcon size={48} className="text-gray-400 dark:text-gray-500" />
+                    <span className="ml-2 text-gray-500 dark:text-gray-400">Interactive map visualization</span>
+                  </div>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2">Incident Hotspots</h4>
+                  <ul className="space-y-2">
+                    <li className="flex justify-between items-center">
+                      <span>Downtown</span>
+                      <span className="bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 px-2 py-1 rounded text-xs font-medium">32%</span>
+                    </li>
+                    <li className="flex justify-between items-center">
+                      <span>Highway 101</span>
+                      <span className="bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400 px-2 py-1 rounded text-xs font-medium">24%</span>
+                    </li>
+                    <li className="flex justify-between items-center">
+                      <span>Industrial Zone</span>
+                      <span className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 px-2 py-1 rounded text-xs font-medium">18%</span>
+                    </li>
+                    <li className="flex justify-between items-center">
+                      <span>Residential Areas</span>
+                      <span className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 px-2 py-1 rounded text-xs font-medium">16%</span>
+                    </li>
+                    <li className="flex justify-between items-center">
+                      <span>Others</span>
+                      <span className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 px-2 py-1 rounded text-xs font-medium">10%</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div className="mt-3 text-sm text-gray-600 dark:text-gray-300">
+                <p className="font-semibold">Analysis:</p>
+                <p>Downtown and Highway 101 account for over 50% of all emergency incidents. The system has optimized routing to these areas by positioning ambulances strategically, reducing response times by 42% in high-incident zones.</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="dark:bg-gray-800/50 dark:border-gray-700">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg flex items-center">
+                <FileText size={18} className="text-purple-500 mr-2" />
+                Monthly Performance Report
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                  <div className="flex items-center mb-2">
+                    <Clock className="text-blue-500 mr-2" size={18} />
+                    <h4 className="font-semibold">Average Response Time</h4>
+                  </div>
+                  <p className="text-3xl font-bold text-blue-700 dark:text-blue-400">8.2 min</p>
+                  <p className="text-green-600 dark:text-green-400 text-sm mt-1">▼ 1.3 min from last month</p>
+                </div>
+                <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+                  <div className="flex items-center mb-2">
+                    <Users className="text-green-500 mr-2" size={18} />
+                    <h4 className="font-semibold">Patients Served</h4>
+                  </div>
+                  <p className="text-3xl font-bold text-green-700 dark:text-green-400">287</p>
+                  <p className="text-green-600 dark:text-green-400 text-sm mt-1">▲ 12% from last month</p>
+                </div>
+                <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
+                  <div className="flex items-center mb-2">
+                    <TrendingUpIcon className="text-purple-500 mr-2" size={18} />
+                    <h4 className="font-semibold">AI Accuracy</h4>
+                  </div>
+                  <p className="text-3xl font-bold text-purple-700 dark:text-purple-400">96.3%</p>
+                  <p className="text-green-600 dark:text-green-400 text-sm mt-1">▲ 2.1% from last month</p>
+                </div>
+              </div>
+              <div className="text-sm text-gray-600 dark:text-gray-300">
+                <p className="font-semibold">Monthly Highlights:</p>
+                <ul className="list-disc pl-5 mt-1 space-y-1">
+                  <li>Successfully integrated traffic pattern prediction, improving ETA accuracy by 18%</li>
+                  <li>Reduced hospital diversion rates by 24% through better load balancing</li>
+                  <li>Implemented new severity assessment algorithm with 96.3% match to clinical outcomes</li>
+                  <li>Expanded coverage to 3 new rural areas with specialized routing</li>
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
         </motion.div>
       )}
       
@@ -812,14 +973,270 @@ const HomePage: React.FC = () => {
           transition={{ delay: 0.2, duration: 0.5 }}
           className="px-4 py-2"
         >
-          <div className="glass-card rounded-2xl p-6 flex items-center justify-center h-64 dark:bg-gray-800/50 dark:border-gray-700">
-            <div className="text-center">
-              <Settings size={48} className="text-gray-400 dark:text-gray-500 mx-auto mb-3" />
-              <h3 className="font-semibold text-xl mb-2">Settings Coming Soon</h3>
-              <p className="text-gray-500 dark:text-gray-400 max-w-md">
-                Personalization and system configuration options will be available in the next update.
-              </p>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Card className="dark:bg-gray-800/50 dark:border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center">
+                  <MapIcon size={18} className="text-blue-500 mr-2" />
+                  Map & Navigation Settings
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">Real-time Traffic Updates</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Receive live traffic data for optimal routing</p>
+                  </div>
+                  <Toggle
+                    defaultPressed
+                    aria-label="Toggle traffic updates"
+                    className="data-[state=on]:bg-blue-500"
+                  />
+                </div>
+                
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">Smart Rerouting</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Automatically reroute when faster paths are available</p>
+                  </div>
+                  <Toggle
+                    defaultPressed
+                    aria-label="Toggle smart rerouting"
+                    className="data-[state=on]:bg-blue-500"
+                  />
+                </div>
+                
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">Road Closure Alerts</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Get notified of closed roads along your route</p>
+                  </div>
+                  <Toggle
+                    defaultPressed
+                    aria-label="Toggle road closure alerts"
+                    className="data-[state=on]:bg-blue-500"
+                  />
+                </div>
+                
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">3D Map Visualization</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Show buildings and landmarks in 3D</p>
+                  </div>
+                  <Toggle
+                    aria-label="Toggle 3D map"
+                    className="data-[state=on]:bg-blue-500"
+                  />
+                </div>
+                
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">Lane Guidance</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Show recommended lanes for faster navigation</p>
+                  </div>
+                  <Toggle
+                    defaultPressed
+                    aria-label="Toggle lane guidance"
+                    className="data-[state=on]:bg-blue-500"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="dark:bg-gray-800/50 dark:border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center">
+                  <Bell size={18} className="text-blue-500 mr-2" />
+                  Notifications & Alerts
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">Emergency Alerts</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Critical patient and high priority alerts</p>
+                  </div>
+                  <Toggle
+                    defaultPressed
+                    aria-label="Toggle emergency alerts"
+                    className="data-[state=on]:bg-red-500"
+                  />
+                </div>
+                
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">Hospital Status Updates</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Changes in bed availability and wait times</p>
+                  </div>
+                  <Toggle
+                    defaultPressed
+                    aria-label="Toggle hospital updates"
+                    className="data-[state=on]:bg-blue-500"
+                  />
+                </div>
+                
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">Traffic Condition Alerts</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Significant changes in traffic conditions</p>
+                  </div>
+                  <Toggle
+                    defaultPressed
+                    aria-label="Toggle traffic alerts"
+                    className="data-[state=on]:bg-blue-500"
+                  />
+                </div>
+                
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">Push Notifications</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Receive alerts on mobile devices</p>
+                  </div>
+                  <Toggle
+                    defaultPressed
+                    aria-label="Toggle push notifications"
+                    className="data-[state=on]:bg-blue-500"
+                  />
+                </div>
+                
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">Audio Alerts</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Voice announcements for critical updates</p>
+                  </div>
+                  <Toggle
+                    defaultPressed
+                    aria-label="Toggle audio alerts"
+                    className="data-[state=on]:bg-blue-500"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="dark:bg-gray-800/50 dark:border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center">
+                  <Gauge size={18} className="text-blue-500 mr-2" />
+                  Performance & Data
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">AI-Powered Recommendations</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Smart hospital selection based on patient data</p>
+                  </div>
+                  <Toggle
+                    defaultPressed
+                    aria-label="Toggle AI recommendations"
+                    className="data-[state=on]:bg-blue-500"
+                  />
+                </div>
+                
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">Survival Rate Prediction</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Show predicted survival rates for hospitals</p>
+                  </div>
+                  <Toggle
+                    defaultPressed
+                    aria-label="Toggle survival predictions"
+                    className="data-[state=on]:bg-blue-500"
+                  />
+                </div>
+                
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">Anonymous Data Sharing</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Share anonymized data to improve the system</p>
+                  </div>
+                  <Toggle
+                    defaultPressed
+                    aria-label="Toggle data sharing"
+                    className="data-[state=on]:bg-blue-500"
+                  />
+                </div>
+                
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">Detailed Analytics</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">View comprehensive performance metrics</p>
+                  </div>
+                  <Toggle
+                    defaultPressed
+                    aria-label="Toggle analytics"
+                    className="data-[state=on]:bg-blue-500"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="dark:bg-gray-800/50 dark:border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center">
+                  <Settings size={18} className="text-blue-500 mr-2" />
+                  System Preferences
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">Dark Mode</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Switch between light and dark themes</p>
+                  </div>
+                  <Toggle
+                    pressed={theme === 'dark'}
+                    onPressedChange={() => handleThemeToggle()}
+                    aria-label="Toggle dark mode"
+                    className="data-[state=on]:bg-blue-500"
+                  />
+                </div>
+                
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">Voice Commands</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Enable hands-free voice control</p>
+                  </div>
+                  <Toggle
+                    defaultPressed
+                    aria-label="Toggle voice commands"
+                    className="data-[state=on]:bg-blue-500"
+                  />
+                </div>
+                
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">Data Sync</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Sync data across devices</p>
+                  </div>
+                  <Toggle
+                    defaultPressed
+                    aria-label="Toggle data sync"
+                    className="data-[state=on]:bg-blue-500"
+                  />
+                </div>
+                
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">Language</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Current: English</p>
+                  </div>
+                  <button className="text-sm text-blue-500 hover:underline">
+                    Change
+                  </button>
+                </div>
+                
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">Units</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Distance and speed measurement units</p>
+                  </div>
+                  <button className="text-sm text-blue-500 hover:underline">
+                    Metric
+                  </button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </motion.div>
       )}
