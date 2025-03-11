@@ -34,10 +34,22 @@ const Home = () => {
     ]
   });
   
-  // Check if analysis data exists on component mount
+  // Check if analysis data exists on component mount and when localStorage changes
   useEffect(() => {
-    const hasAnalysisData = localStorage.getItem('analysisData') === 'true';
-    setShowAnalysis(hasAnalysisData);
+    const checkAnalysisData = () => {
+      const hasAnalysisData = localStorage.getItem('analysisData') === 'true';
+      setShowAnalysis(hasAnalysisData);
+    };
+
+    // Check on mount
+    checkAnalysisData();
+
+    // Listen for storage events (if localStorage changes in another tab)
+    window.addEventListener('storage', checkAnalysisData);
+    
+    return () => {
+      window.removeEventListener('storage', checkAnalysisData);
+    };
   }, []);
   
   // Handle when analysis is ready
@@ -81,19 +93,11 @@ const Home = () => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3 }}
             >
-              {showAnalysis ? (
-                <DataUploadDialog 
-                  onAnalysisReady={handleAnalysisReady} 
-                  onResetAnalysis={handleResetAnalysis}
-                  analysisExists={true}
-                />
-              ) : (
-                <DataUploadDialog 
-                  onAnalysisReady={handleAnalysisReady}
-                  onResetAnalysis={handleResetAnalysis}
-                  analysisExists={false}
-                />
-              )}
+              <DataUploadDialog 
+                onAnalysisReady={handleAnalysisReady} 
+                onResetAnalysis={handleResetAnalysis}
+                analysisExists={showAnalysis}
+              />
             </motion.div>
           </motion.div>
         </div>
@@ -104,7 +108,7 @@ const Home = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="w-full"
         >
-          {showAnalysis && (
+          {showAnalysis ? (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -112,6 +116,20 @@ const Home = () => {
               className="container mx-auto px-4"
             >
               <DataAnalysisSection geoDistributionData={geoDistributionData} />
+            </motion.div>
+          ) : (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="container mx-auto px-4 py-8 text-center"
+            >
+              <h2 className="text-xl md:text-2xl font-bold mb-6 text-medical-500 dark:text-medical-400">
+                {t("ai-smart-ambulance-routing")}
+              </h2>
+              <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                {t("dataset-instructions")}
+              </p>
             </motion.div>
           )}
           

@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Define available languages
@@ -37,6 +36,12 @@ export const translations: Record<Language, Record<string, string>> = {
     "uploading": "Uploading...",
     "dataset-uploaded-title": "Dataset Uploaded Successfully",
     "dataset-uploaded-desc": "File has been processed and is ready for analysis",
+    "dataset-reset-title": "Dataset Reset",
+    "dataset-reset-desc": "Analysis data has been reset",
+    "dataset-options": "Dataset Options",
+    "dataset-options-desc": "Manage your uploaded dataset",
+    "analysis-active": "Analysis is currently active",
+    "reset-analysis": "Reset Analysis",
     
     // Settings
     "map-navigation-settings": "Map & Navigation Settings",
@@ -76,6 +81,9 @@ export const translations: Record<Language, Record<string, string>> = {
     "location": "Location",
     "edit-profile": "Edit Profile",
     "sign-out": "Sign Out",
+    "signed-out": "Signed Out",
+    "signed-out-success": "You have been successfully signed out",
+    "profile": "Profile",
     
     // Analysis section
     "data-analysis": "Data Analysis",
@@ -122,6 +130,19 @@ export const translations: Record<Language, Record<string, string>> = {
     "switch-themes": "Switch between light and dark themes",
     "enable-voice": "Enable hands-free voice control",
     "sync-data": "Sync data across devices",
+    
+    // Geo regions
+    "north-bangalore": "North Bangalore",
+    "central-bangalore": "Central Bangalore", 
+    "south-bangalore": "South Bangalore",
+    "east-bangalore": "East Bangalore",
+    "west-bangalore": "West Bangalore",
+    
+    // Analysis section
+    "incident-by-region": "Incidents by Region",
+    "incident-trends": "Incident Trends",
+    "response-time": "Response Time",
+    "incident-distribution-map": "Incident Distribution Map"
   },
   
   kannada: {
@@ -133,7 +154,7 @@ export const translations: Record<Language, Record<string, string>> = {
     "settings": "ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
     
     // Page Titles
-    "ai-smart-ambulance-routing": "AI ಸ್ಮಾರ್ಟ್ ಆಂಬುಲೆನ್ಸ್ ಮಾರ್ಗ",
+    "ai-smart-ambulance-routing": "AI ಸ್ಮಾರ್ಟ್ ಆಂಬುಲೆನ್ಸ್ ಮಾರ್ಗದರ್ಶನ",
     "emergency-route": "ತುರ್ತು ಮಾರ್ಗ",
     "hospitals-near-you": "ನಿಮ್ಮ ಹತ್ತಿರದ ಆಸ್ಪತ್ರೆಗಳು",
     
@@ -155,6 +176,12 @@ export const translations: Record<Language, Record<string, string>> = {
     "uploading": "ಅಪ್‌ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
     "dataset-uploaded-title": "ಡೇಟಾಸೆಟ್ ಯಶಸ್ವಿಯಾಗಿ ಅಪ್‌ಲೋಡ್ ಆಗಿದೆ",
     "dataset-uploaded-desc": "ಫೈಲ್ ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಲಾಗಿದೆ ಮತ್ತು ವಿಶ್ಲೇಷಣೆಗೆ ಸಿದ್ಧವಾಗಿದೆ",
+    "dataset-reset-title": "ಡೇಟಾಸೆಟ್ ರೀಸೆಟ್",
+    "dataset-reset-desc": "ವಿಶ್ಲೇಷಣಾ ಡೇಟಾವನ್ನು ರೀಸೆಟ್ ಮಾಡಲಾಗಿದೆ",
+    "dataset-options": "ಡೇಟಾಸೆಟ್ ಆಯ್ಕೆಗಳು",
+    "dataset-options-desc": "ನಿಮ್ಮ ಅಪ್ಲೋಡ್ ಮಾಡಿದ ಡೇಟಾಸೆಟ್ ನಿರ್ವಹಿಸಿ",
+    "analysis-active": "ವಿಶ್ಲೇಷಣೆ ಪ್ರಸ್ತುತ ಸಕ್ರಿಯವಾಗಿದೆ",
+    "reset-analysis": "ವಿಶ್ಲೇಷಣೆಯನ್ನು ಮರುಹೊಂದಿಸಿ",
     
     // Settings
     "map-navigation-settings": "ನಕ್ಷೆ ಮತ್ತು ನ್ಯಾವಿಗೇಶನ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
@@ -194,6 +221,9 @@ export const translations: Record<Language, Record<string, string>> = {
     "location": "ಸ್ಥಳ",
     "edit-profile": "ಪ್ರೊಫೈಲ್ ಎಡಿಟ್ ಮಾಡಿ",
     "sign-out": "ಸೈನ್ ಔಟ್",
+    "signed-out": "ಸೈನ್ ಔಟ್ ಮಾಡಲಾಗಿದೆ",
+    "signed-out-success": "ನೀವು ಯಶಸ್ವಿಯಾಗಿ ಸೈನ್ ಔಟ್ ಮಾಡಿದ್ದೀರಿ",
+    "profile": "ಪ್ರೊಫೈಲ್",
     
     // Analysis section
     "data-analysis": "ಡೇಟಾ ವಿಶ್ಲೇಷಣೆ",
@@ -240,6 +270,19 @@ export const translations: Record<Language, Record<string, string>> = {
     "switch-themes": "ಲೈಟ್ ಮತ್ತು ಡಾರ್ಕ್ ಥೀಮ್‌ಗಳ ನಡುವೆ ಬದಲಾಯಿಸಿ",
     "enable-voice": "ಹ್ಯಾಂಡ್‌ಫ್ರೀ ಧ್ವನಿ ನಿಯಂತ್ರಣವನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ",
     "sync-data": "ಸಾಧನಗಳ ನಡುವೆ ಡೇಟಾವನ್ನು ಸಿಂಕ್ ಮಾಡಿ",
+    
+    // Geo regions
+    "north-bangalore": "ಉತ್ತರ ಬೆಂಗಳೂರು",
+    "central-bangalore": "ಕೇಂದ್ರ ಬೆಂಗಳೂರು", 
+    "south-bangalore": "ದಕ್ಷಿಣ ಬೆಂಗಳೂರು",
+    "east-bangalore": "ಪೂರ್ವ ಬೆಂಗಳೂರು",
+    "west-bangalore": "ಪಶ್ಚಿಮ ಬೆಂಗಳೂರು",
+    
+    // Analysis section
+    "incident-by-region": "ಪ್ರದೇಶವಾರು ಘಟನೆಗಳು",
+    "incident-trends": "ಘಟನೆ ಪ್ರವೃತ್ತಿಗಳು",
+    "response-time": "ಪ್ರತಿಕ್ರಿಯೆ ಸಮಯ",
+    "incident-distribution-map": "ಘಟನೆ ವಿತರಣೆ ನಕ್ಷೆ"
   },
   
   hindi: {
@@ -249,16 +292,13 @@ export const translations: Record<Language, Record<string, string>> = {
     "hospitals": "अस्पताल",
     "reports": "रिपोर्ट्स",
     "settings": "सेटिंग्स",
-    
     // Page Titles
     "ai-smart-ambulance-routing": "AI स्मार्ट एम्बुलेंस मार्गदर्शन",
     "emergency-route": "आपातकालीन मार्ग",
     "hospitals-near-you": "आपके पास के अस्पताल",
-    
     // Patient Status
     "patient-status": "मरीज की स्थिति",
     "critical": "गंभीर",
-    
     // Hospital Info
     "icu-availability": "ICU उपलब्धता",
     "total-icu-beds": "कुल ICU बेड",
@@ -266,14 +306,18 @@ export const translations: Record<Language, Record<string, string>> = {
     "navigate-to": "नेविगेट करें",
     "calling-hospital": "अस्पताल को कॉल कर रहे हैं",
     "connecting-to": "से जुड़ रहे हैं",
-    
     // Upload Dataset
     "upload-dataset": "डेटासेट अपलोड करें",
     "dataset-ready": "डेटासेट तैयार है",
     "uploading": "अपलोड हो रहा है...",
     "dataset-uploaded-title": "डेटासेट सफलतापूर्वक अपलोड किया गया",
     "dataset-uploaded-desc": "फ़ाइल को संसाधित किया गया है और विश्लेषण के लिए तैयार है",
-    
+    "dataset-reset-title": "डेटासेट रीसेट",
+    "dataset-reset-desc": "विश्लेषण डेटा रीसेट किया गया है",
+    "dataset-options": "डेटासेट विकल्प",
+    "dataset-options-desc": "अपने अपलोड किए गए डेटासेट का प्रबंधन करें",
+    "analysis-active": "विश्लेषण वर्तमान में सक्रिय है",
+    "reset-analysis": "विश्लेषण रीसेट करें",
     // Settings
     "map-navigation-settings": "मैप और नेविगेशन सेटिंग्स",
     "notifications-alerts": "नोटिफिकेशन और अलर्ट",
@@ -304,7 +348,6 @@ export const translations: Record<Language, Record<string, string>> = {
     "switch-to-light": "लाइट मोड में स्विच करें",
     "switch-to-dark": "डार्क मोड में स्विच करें",
     "change": "बदलें",
-    
     // Profile
     "name": "नाम",
     "email": "ईमेल",
@@ -312,7 +355,14 @@ export const translations: Record<Language, Record<string, string>> = {
     "location": "स्थान",
     "edit-profile": "प्रोफाइल एडिट करें",
     "sign-out": "साइन आउट",
-    
+    "signed-out": "साइन आउट",
+    "signed-out-success": "आप सफलतापूर्वक साइन आउट हो गए हैं",
+    "profile": "प्रोफाइल",
+    "north-bangalore": "उत्तर बैंगलोर",
+    "central-bangalore": "मध्य बैंगलोर",
+    "south-bangalore": "दक्षिण बैंगलोर",
+    "east-bangalore": "पूर्व बैंगलोर",
+    "west-bangalore": "पश्चिम बैंगलोर",
     // Analysis section
     "data-analysis": "डेटा विश्लेषण",
     "geographic-distribution": "भौगोलिक वितरण",
@@ -334,11 +384,9 @@ export const translations: Record<Language, Record<string, string>> = {
     "supported-format": "समर्थित प्रारूप",
     "max-file-size": "अधिकतम फ़ाइल आकार",
     "upload-successful": "अपलोड सफल!",
-    
     // Themes
     "light": "लाइट",
     "dark": "डार्क",
-    
     // Common actions
     "search-hospitals": "अस्पतालों को खोजें या रूटिंग के लिए दुर्घटना स्थान दर्ज करें...",
     "receive-live-traffic": "इष्टतम रूटिंग के लिए लाइव ट्रैफिक डेटा प्राप्त करें",
@@ -358,6 +406,19 @@ export const translations: Record<Language, Record<string, string>> = {
     "switch-themes": "लाइट और डार्क थीम के बीच स्विच करें",
     "enable-voice": "हैंड्स-फ्री वॉइस कंट्रोल सक्षम करें",
     "sync-data": "डिवाइसों के बीच डेटा सिंक करें",
+    "dataset-reset-title": "डेटासेट रीसेट",
+    "dataset-reset-desc": "विश्लेषण डेटा रीसेट किया गया है",
+    "dataset-options": "डेटासेट विकल्प",
+    "dataset-options-desc": "अपने अपलोड किए गए डेटासेट का प्रबंधन करें",
+    "analysis-active": "विश्लेषण वर्तमान में सक्रिय है",
+    "reset-analysis": "विश्लेषण रीसेट करें",
+    "signed-out": "साइन आउट",
+    "signed-out-success": "आप सफलतापूर्वक साइन आउट हो गए हैं",
+    "profile": "प्रोफाइल",
+    "incident-by-region": "क्षेत्र के अनुसार घटनाएँ",
+    "incident-trends": "घटना रुझान",
+    "response-time": "प्रतिक्रिया समय",
+    "incident-distribution-map": "घटना वितरण मानचित्र"
   },
   
   tamil: {
@@ -367,16 +428,13 @@ export const translations: Record<Language, Record<string, string>> = {
     "hospitals": "மருத்துவமனைகள்",
     "reports": "அறிக்கைகள்",
     "settings": "அமைப்புகள்",
-    
     // Page Titles
     "ai-smart-ambulance-routing": "AI ஸ்மார்ட் ஆம்புலன்ஸ் வழித்தடம்",
     "emergency-route": "அவசர வழித்தடம்",
     "hospitals-near-you": "உங்களுக்கு அருகிலுள்ள மருத்துவமனைகள்",
-    
     // Patient Status
     "patient-status": "நோயாளி நிலை",
     "critical": "கடுமையான",
-    
     // Hospital Info
     "icu-availability": "ICU கிடைக்கும் தன்மை",
     "total-icu-beds": "மொத்த ICU படுக்கைகள்",
@@ -384,14 +442,18 @@ export const translations: Record<Language, Record<string, string>> = {
     "navigate-to": "வழிசெலுத்து",
     "calling-hospital": "மருத்துவமனைக்கு அழைக்கிறது",
     "connecting-to": "இணைக்கிறது",
-    
     // Upload Dataset
     "upload-dataset": "தரவுத்தொகுப்பை பதிவேற்றுக",
     "dataset-ready": "தரவுத்தொகுப்பு தயார்",
     "uploading": "பதிவேற்றுகிறது...",
     "dataset-uploaded-title": "தரவுத்தொகுப்பு வெற்றிகரமாக பதிவேற்றப்பட்டது",
     "dataset-uploaded-desc": "கோப்பு செயலாக்கப்பட்டு பகுப்பாய்வுக்கு தயாராக உள்ளது",
-    
+    "dataset-reset-title": "தரவுத்தொகுப்பு மீட்டமைக்கப்பட்டது",
+    "dataset-reset-desc": "பகுப்பாய்வு தரவு மீட்டமைக்கப்பட்டது",
+    "dataset-options": "தரவுத்தொகுப்பு விருப்பங்கள்",
+    "dataset-options-desc": "பதிவேற்றிய தரவுத்தொகுப்பை நிர்வகிக்கவும்",
+    "analysis-active": "பகுப்பாய்வு தற்போது செயலில் உள்ளது",
+    "reset-analysis": "பகுப்பாய்வை மீட்டமைக்கவும்",
     // Settings
     "map-navigation-settings": "வரைபட மற்றும் வழிசெலுத்தல் அமைப்புகள்",
     "notifications-alerts": "அறிவிப்புகள் மற்றும் எச்சரிக்கைகள்",
@@ -422,7 +484,6 @@ export const translations: Record<Language, Record<string, string>> = {
     "switch-to-light": "லைட் மோடுக்கு மாறவும்",
     "switch-to-dark": "டார்க் மோடுக்கு மாறவும்",
     "change": "மாற்று",
-    
     // Profile
     "name": "பெயர்",
     "email": "மின்னஞ்சல்",
@@ -430,7 +491,14 @@ export const translations: Record<Language, Record<string, string>> = {
     "location": "இடம்",
     "edit-profile": "சுயவிவரத்தைத் திருத்து",
     "sign-out": "வெளியேறு",
-    
+    "signed-out": "வெளியேறியுள்ளீர்கள்",
+    "signed-out-success": "நீங்கள் வெற்றிகரமாக வெளியேறியுள்ளீர்கள்",
+    "profile": "சுயவிவரம்",
+    "north-bangalore": "வடக்கு பெங்களூரு",
+    "central-bangalore": "மத்திய பெங்களூரு",
+    "south-bangalore": "தெற்கு பெங்களூரு",
+    "east-bangalore": "கிழக்கு பெங்களூரு",
+    "west-bangalore": "மேற்கு பெங்களூரு",
     // Analysis section
     "data-analysis": "தரவு பகுப்பாய்வு",
     "geographic-distribution": "புவியியல் பரவல்",
@@ -452,11 +520,9 @@ export const translations: Record<Language, Record<string, string>> = {
     "supported-format": "ஆதரிக்கப்படும் வடிவம்",
     "max-file-size": "அதிகபட்ச கோப்பு அளவு",
     "upload-successful": "பதிவேற்றம் வெற்றிகரமாக முடிந்தது!",
-    
     // Themes
     "light": "வெளிச்சம்",
     "dark": "இருள்",
-    
     // Common actions
     "search-hospitals": "மருத்துவமனைகளைத் தேடுங்கள் அல்லது வழிசெலுத்துவதற்கு விபத்து இடத்தை உள்ளிடவும்...",
     "receive-live-traffic": "சிறந்த வழிசெலுத்தலுக்கு நேரடி போக்குவரத்து தரவைப் பெறுங்கள்",
@@ -476,6 +542,19 @@ export const translations: Record<Language, Record<string, string>> = {
     "switch-themes": "லைட் மற்றும் டார்க் தீம்களுக்கு இடையே மாறவும்",
     "enable-voice": "ஹேண்ட்ஸ்-ஃப்ரீ குரல் கட்டுப்பாட்டை இயக்கவும்",
     "sync-data": "சாதனங்களுக்கு இடையில் தரவை ஒத்திசைக்கவும்",
+    "dataset-reset-title": "தரவுத்தொகுப்பு மீட்டமைக்கப்பட்டது",
+    "dataset-reset-desc": "பகுப்பாய்வு தரவு மீட்டமைக்கப்பட்டது",
+    "dataset-options": "தரவுத்தொகுப்பு விருப்பங்கள்",
+    "dataset-options-desc": "பதிவேற்றிய தரவுத்தொகுப்பை நிர்வகிக்கவும்",
+    "analysis-active": "பகுப்பாய்வு தற்போது செயலில் உள்ளது",
+    "reset-analysis": "பகுப்பாய்வை மீட்டமைக்கவும்",
+    "signed-out": "வெளியேறியுள்ளீர்கள்",
+    "signed-out-success": "நீங்கள் வெற்றிகரமாக வெளியேறியுள்ளீர்கள்",
+    "profile": "சுயவிவரம்",
+    "incident-by-region": "பகுதி வாரியாக சம்பவங்கள்",
+    "incident-trends": "சம்பவ போக்குகள்",
+    "response-time": "பதிலளிப்பு நேரம்",
+    "incident-distribution-map": "சம்பவ விநியோக வரைபடம்"
   },
   
   telugu: {
@@ -485,186 +564,17 @@ export const translations: Record<Language, Record<string, string>> = {
     "hospitals": "ఆసుపత్రులు",
     "reports": "నివేదికలు",
     "settings": "సెట్టింగ్‌లు",
-    
     // Page Titles
     "ai-smart-ambulance-routing": "AI స్మార్ట్ అంబులెన్స్ రూటింగ్",
     "emergency-route": "అత్యవసర మార్గం",
     "hospitals-near-you": "మీ దగ్గరలో ఉన్న ఆసుపత్రులు",
-    
     // Patient Status
     "patient-status": "రోగి స్థితి",
     "critical": "క్రిటికల్",
-    
     // Hospital Info
     "icu-availability": "ICU లభ్యత",
     "total-icu-beds": "మొత్తం ICU పడకలు",
     "view-all-hospitals": "అన్ని ఆసుపత్రులను వీక్షించండి",
     "navigate-to": "నేవిగేట్ చేయండి",
     "calling-hospital": "ఆసుపత్రికి కాల్ చేస్తోంది",
-    "connecting-to": "కనెక్ట్ అవుతోంది",
-    
-    // Upload Dataset
-    "upload-dataset": "డేటాసెట్‌ను అప్‌లోడ్ చేయండి",
-    "dataset-ready": "డేటాసెట్ సిద్ధంగా ఉంది",
-    "uploading": "అప్‌లోడ్ అవుతోంది...",
-    "dataset-uploaded-title": "డేటాసెట్ విజయవంతంగా అప్‌లోడ్ చేయబడింది",
-    "dataset-uploaded-desc": "ఫైల్ ప్రాసెస్ చేయబడింది మరియు విశ్లేషణకు సిద్ధంగా ఉంది",
-    
-    // Settings
-    "map-navigation-settings": "మ్యాప్ & నావిగేషన్ సెట్టింగ్‌లు",
-    "notifications-alerts": "నోటిఫికేషన్‌లు & అలర్ట్‌లు",
-    "performance-data": "పనితీరు & డేటా",
-    "system-preferences": "సిస్టమ్ ప్రిఫరెన్సెస్",
-    "real-time-traffic-updates": "రియల్-టైమ్ ట్రాఫిక్ అప్‌డేట్‌లు",
-    "smart-rerouting": "స్మార్ట్ రీరూటింగ్",
-    "road-closure-alerts": "రోడ్ మూసివేత అలర్ట్‌లు",
-    "3d-map-visualization": "3D మ్యాప్ విజువలైజేషన్",
-    "lane-guidance": "లేన్ గైడెన్స్",
-    "emergency-alerts": "అత్యవసర అలర్ట్‌లు",
-    "hospital-status-updates": "ఆసుపత్రి స్థితి అప్‌డేట్‌లు",
-    "traffic-condition-alerts": "ట్రాఫిక్ పరిస్థితి అలర్ట్‌లు",
-    "push-notifications": "పుష్ నోటిఫికేషన్‌లు",
-    "audio-alerts": "ఆడియో అలర్ట్‌లు",
-    "ai-powered-recommendations": "AI-ఆధారిత సిఫార్సులు",
-    "survival-rate-prediction": "సర్వైవల్ రేట్ ప్రెడిక్షన్",
-    "anonymous-data-sharing": "అనానిమస్ డేటా షేరింగ్",
-    "detailed-analytics": "వివరణాత్మక విశ్లేషణలు",
-    "dark-mode": "డార్క్ మోడ్",
-    "voice-commands": "వాయిస్ కమాండ్‌లు",
-    "data-sync": "డేటా సింక్",
-    "language": "భాష",
-    "current-language": "ప్రస్తుతం",
-    "units": "యూనిట్లు",
-    "metric": "మెట్రిక్",
-    "imperial": "ఇంపీరియల్",
-    "switch-to-light": "లైట్ మోడ్‌కి మారండి",
-    "switch-to-dark": "డార్క్ మోడ్‌కి మారండి",
-    "change": "మార్చు",
-    
-    // Profile
-    "name": "పేరు",
-    "email": "ఇమెయిల్",
-    "role": "పాత్ర",
-    "location": "స్థానం",
-    "edit-profile": "ప్రొఫైల్‌ని సవరించండి",
-    "sign-out": "సైన్ అవుట్",
-    
-    // Analysis section
-    "data-analysis": "డేటా విశ్లేషణ",
-    "geographic-distribution": "భౌగోళిక పంపిణీ",
-    "response-metrics": "ప్రతిస్పందన మెట్రిక్స్",
-    "interactive-map-placeholder": "ఇంటరాక్టివ్ మ్యాప్ విజువలైజేషన్ (వివరాలను చూడటానికి ప్రాంతాలపై క్లిక్ చేయండి)",
-    "incident-hotspots": "ఘటన హాట్‌స్పాట్‌లు",
-    "avg-response-time": "సగటు ప్రతిస్పందన సమయం",
-    "incidents": "సంఘటనలు",
-    "minutes": "నిమిషాలు",
-    "total-incidents": "మొత్తం సంఘటనలు",
-    "from-previous": "మునుపటి కాలం నుండి",
-    "survival-rate": "మనుగడ రేటు",
-    "response-statistics": "కేసు తీవ్రత ద్వారా ప్రతిస్పందన విజయ రేటు",
-    "critical-cases": "క్రిటికల్ కేసులు",
-    "moderate-cases": "మోస్తరు కేసులు",
-    "mild-cases": "తేలికపాటి కేసులు",
-    "dataset-instructions": "విశ్లేషణ కోసం అత్యవసర డేటాను కలిగి ఉన్న మీ CSV డేటాసెట్‌ను అప్‌లోడ్ చేయండి",
-    "drag-drop-csv": "మీ CSV ఫైల్‌ను ఇక్కడ డ్రాగ్ చేసి డ్రాప్ చేయండి, లేదా బ్రౌజ్ చేయడానికి క్లిక్ చేయండి",
-    "supported-format": "మద్దతు ఉన్న ఫార్మాట్",
-    "max-file-size": "గరిష్ట ఫైల్ పరిమాణం",
-    "upload-successful": "అప్‌లోడ్ విజయవంతంగా పూర్తయింది!",
-    
-    // Themes
-    "light": "లైట్",
-    "dark": "డార్క్",
-    
-    // Common actions
-    "search-hospitals": "ఆసుపత్రులను శోధించండి లేదా రూటింగ్ కోసం ప్రమాద స్థలాన్ని నమోదు చేయండి...",
-    "receive-live-traffic": "అత్యుత్తమ రూటింగ్ కోసం లైవ్ ట్రాఫిక్ డేటాను స్వీకరించండి",
-    "auto-reroute": "వేగవంతమైన మార్గాలు అందుబాటులో ఉన్నప్పుడు స్వయంచాలకంగా రీరూట్ చేయండి",
-    "get-road-closure": "మీ మార్గంలో మూసివేసిన రోడ్ల గురించి తెలియజేయబడండి",
-    "show-3d-buildings": "3D లో భవనాలు మరియు ల్యాండ్‌మార్క్‌లను చూపించు",
-    "show-lanes": "వేగవంతమైన నావిగేషన్ కోసం సిఫార్సు చేయబడిన లేన్‌లను చూపించండి",
-    "critical-alerts": "క్రిటికల్ పేషెంట్ మరియు అధిక ప్రాధాన్యత అలర్ట్‌లు",
-    "bed-availability": "బెడ్ లభ్యత మరియు వేచి ఉండే సమయాల్లో మార్పులు",
-    "traffic-alerts": "ట్రాఫిక్ పరిస్థితుల్లో గణనీయమైన మార్పులు",
-    "mobile-alerts": "మొబైల్ పరికరాలలో అలర్ట్‌లను స్వీకరించండి",
-    "voice-announcements": "ముఖ్యమైన అప్‌డేట్‌ల కోసం వాయిస్ ప్రకటనలు",
-    "smart-hospital": "పేషెంట్ డేటా ఆధారంగా స్మార్ట్ ఆసుపత్రి ఎంపిక",
-    "show-survival": "ఆసుపత్రుల కోసం అంచనా వేసిన మనుగడ రేట్లను చూపించండి",
-    "share-data": "వ్యవస్థను మెరుగుపరచడానికి అనామక డేటాను భాగస్వామ్యం చేయండి",
-    "performance-metrics": "సమగ్ర పనితీరు మెట్రిక్స్‌ను వీక్షించండి",
-    "switch-themes": "లైట్ మరియు డార్క్ థీమ్‌ల మధ్య మారండి",
-    "enable-voice": "హ్యాండ్స్-ఫ్రీ వాయిస్ కంట్రోల్‌ను ప్రారంభించండి",
-    "sync-data": "పరికరాల మధ్య డేటాను సమకాలీకరించండి",
-    "signed-out": "సైన్ అవుట్",
-    "signed-out-success": "మీరు విజయవంతంగా సైన్ అవుట్ చేసారు",
-    "profile": "ప్రొఫైల్",
-    "incident-by-region": "ప్రాంతం వారీగా సంఘటనలు",
-    "incident-trends": "సంఘటన ట్రెండ్స్",
-    "response-time": "ప్రతిస్పందన సమయం",
-    "incident-distribution-map": "ఘటన పంపిణీ మ్యాప్"
-  }
-};
-
-// Define types for context
-type LanguageContextType = {
-  language: Language;
-  setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
-};
-
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
-
-// Create a provider component with defaultLanguage prop
-export interface LanguageProviderProps {
-  children: React.ReactNode;
-  defaultLanguage?: Language;
-}
-
-export const LanguageProvider: React.FC<LanguageProviderProps> = ({ 
-  children, 
-  defaultLanguage = 'english' 
-}) => {
-  // Get saved language from localStorage or use defaultLanguage
-  const [language, setLanguageState] = useState<Language>(() => {
-    const savedLanguage = localStorage.getItem('language');
-    return (savedLanguage as Language) || defaultLanguage;
-  });
-
-  // Update localStorage when language changes
-  useEffect(() => {
-    localStorage.setItem('language', language);
-  }, [language]);
-
-  // Function to set language
-  const setLanguage = (lang: Language) => {
-    setLanguageState(lang);
-  };
-
-  // Function to get translation
-  const t = (key: string): string => {
-    if (translations[language] && translations[language][key]) {
-      return translations[language][key];
-    }
-    // Fallback to English if translation is missing
-    if (translations.english && translations.english[key]) {
-      return translations.english[key];
-    }
-    // Return key if translation is not found
-    return key;
-  };
-
-  // Provide the language value to children
-  return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
-      {children}
-    </LanguageContext.Provider>
-  );
-};
-
-// Hook to use the language context
-export const useLanguage = () => {
-  const context = useContext(LanguageContext);
-  if (context === undefined) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
-  }
-  return context;
-};
+    "connecting-to

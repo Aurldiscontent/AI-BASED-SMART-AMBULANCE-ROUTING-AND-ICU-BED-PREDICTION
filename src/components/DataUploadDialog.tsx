@@ -16,26 +16,19 @@ import {
 interface DataUploadDialogProps {
   onAnalysisReady: () => void;
   onResetAnalysis: () => void;
-  analysisExists?: boolean;
+  analysisExists: boolean;
 }
 
 const DataUploadDialog: React.FC<DataUploadDialogProps> = ({ 
   onAnalysisReady, 
   onResetAnalysis,
-  analysisExists = false 
+  analysisExists
 }) => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [isUploading, setIsUploading] = useState(false);
-  const [uploadSuccess, setUploadSuccess] = useState(false);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
   
-  // Check if analysis data already exists
-  useEffect(() => {
-    const hasData = localStorage.getItem('analysisData') === 'true';
-    setUploadSuccess(hasData);
-  }, []);
-
   // Handle CSV upload
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -45,7 +38,6 @@ const DataUploadDialog: React.FC<DataUploadDialogProps> = ({
       // Simulate file processing
       setTimeout(() => {
         setIsUploading(false);
-        setUploadSuccess(true);
         setUploadDialogOpen(false);
         
         toast({
@@ -62,7 +54,6 @@ const DataUploadDialog: React.FC<DataUploadDialogProps> = ({
 
   // Handle reset analysis
   const handleReset = () => {
-    setUploadSuccess(false);
     onResetAnalysis();
     
     toast({
@@ -78,7 +69,7 @@ const DataUploadDialog: React.FC<DataUploadDialogProps> = ({
     <Dialog open={uploadDialogOpen} onOpenChange={setUploadDialogOpen}>
       <DialogTrigger asChild>
         <Button 
-          variant={uploadSuccess ? "default" : "outline"} 
+          variant={analysisExists ? "default" : "outline"} 
           className={`flex items-center gap-2 backdrop-blur-sm transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md`}
           disabled={isUploading}
         >
@@ -87,7 +78,7 @@ const DataUploadDialog: React.FC<DataUploadDialogProps> = ({
               <div className="animate-spin mr-2 h-4 w-4 border-2 border-current border-t-transparent rounded-full"></div>
               {t("uploading")}
             </>
-          ) : uploadSuccess ? (
+          ) : analysisExists ? (
             <>
               <CheckCircle2 size={16} className="text-white" /> 
               {t("dataset-ready")}
@@ -102,13 +93,13 @@ const DataUploadDialog: React.FC<DataUploadDialogProps> = ({
       </DialogTrigger>
       <DialogContent className="sm:max-w-md dark:bg-gray-800 dark:text-gray-200">
         <DialogHeader>
-          <DialogTitle>{uploadSuccess ? t("dataset-options") : t("upload-dataset")}</DialogTitle>
+          <DialogTitle>{analysisExists ? t("dataset-options") : t("upload-dataset")}</DialogTitle>
           <DialogDescription className="dark:text-gray-400">
-            {uploadSuccess ? t("dataset-options-desc") : t("dataset-instructions")}
+            {analysisExists ? t("dataset-options-desc") : t("dataset-instructions")}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          {uploadSuccess ? (
+          {analysisExists ? (
             <div className="flex flex-col gap-4">
               <div className="flex flex-col items-center justify-center text-green-500 p-6">
                 <CheckCircle2 size={48} className="mb-2" />
