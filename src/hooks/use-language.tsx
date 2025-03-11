@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Define available languages
@@ -23,9 +24,9 @@ export const translations: Record<Language, Record<string, string>> = {
     "icu-availability": "ICU Availability",
     "total-icu-beds": "Total ICU Beds",
     "view-all-hospitals": "View All Hospitals",
-    "navigate-to": "Navigate to",
-    "calling-hospital": "Calling Hospital",
-    "connecting-to": "Connecting to",
+    "navigate": "Navigate to",
+    "calling": "Calling Hospital",
+    "connecting": "Connecting to",
     // Upload Dataset
     "upload-dataset": "Upload Dataset",
     "dataset-ready": "Dataset Ready",
@@ -87,9 +88,6 @@ export const translations: Record<Language, Record<string, string>> = {
     // Search Page
     "search-hospitals": "Search Hospitals...",
     // Map Page
-    "navigate-to": "Navigate to",
-    "calling-hospital": "Calling Hospital",
-    "connecting-to": "Connecting to",
     // Welcome Page
     "welcome-title": "Welcome to MedResponse",
     "welcome-description": "Your AI-powered emergency response assistant",
@@ -123,9 +121,9 @@ export const translations: Record<Language, Record<string, string>> = {
     "icu-availability": "ಐಸಿಯು ಲಭ್ಯತೆ",
     "total-icu-beds": "ಒಟ್ಟು ಐಸಿಯು ಹಾಸಿಗೆಗಳು",
     "view-all-hospitals": "ಎಲ್ಲಾ ಆಸ್ಪತ್ರೆಗಳನ್ನು ವೀಕ್ಷಿಸಿ",
-    "navigate-to": "ನ್ಯಾವಿಗೇಟ್ ಮಾಡಲು",
-    "calling-hospital": "ಆಸ್ಪತ್ರೆಗೆ ಕರೆ ಮಾಡಲಾಗುತ್ತಿದೆ",
-    "connecting-to": "ಸಂಪರ್ಕಿಸಲಾಗುತ್ತಿದೆ",
+    "navigate": "ನ್ಯಾವಿಗೇಟ್ ಮಾಡಲು",
+    "calling": "ಆಸ್ಪತ್ರೆಗೆ ಕರೆ ಮಾಡಲಾಗುತ್ತಿದೆ",
+    "connecting": "ಸಂಪರ್ಕಿಸಲಾಗುತ್ತಿದೆ",
     // Upload Dataset
     "upload-dataset": "ಡೇಟಾಸೆಟ್ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
     "dataset-ready": "ಡೇಟಾಸೆಟ್ ಸಿದ್ಧವಾಗಿದೆ",
@@ -177,7 +175,7 @@ export const translations: Record<Language, Record<string, string>> = {
     "performance-metrics": "ಕಾರ್ಯಕ್ಷಮತೆ ಮೆಟ್ರಿಕ್‌ಗಳನ್ನು ಟ್ರ್ಯಾಕ್ ಮಾಡಿ",
     // Profile Page
     "profile": "ಪ್ರೊಫೈಲ್",
-    "email": "ಇಮೇಲ್",
+    "email": "ಇಮೇಲ್",
     "role": "ಪಾತ್ರ",
     "location": "ಸ್ಥಳ",
     "edit-profile": "ಪ್ರೊಫೈಲ್ ಸಂಪಾದಿಸಿ",
@@ -187,9 +185,6 @@ export const translations: Record<Language, Record<string, string>> = {
     // Search Page
     "search-hospitals": "ಆಸ್ಪತ್ರೆಗಳನ್ನು ಹುಡುಕಿ...",
     // Map Page
-    "navigate-to": "ನ್ಯಾವಿಗೇಟ್ ಮಾಡಲು",
-    "calling-hospital": "ಆಸ್ಪತ್ರೆಗೆ ಕರೆ ಮಾಡಲಾಗುತ್ತಿದೆ",
-    "connecting-to": "ಸಂಪರ್ಕಿಸಲಾಗುತ್ತಿದೆ",
     // Welcome Page
     "welcome-title": "ಮೆಡ್‌ರೆಸ್ಪಾನ್ಸ್‌ಗೆ ಸ್ವಾಗತ",
     "welcome-description": "ನಿಮ್ಮ AI-ಚಾಲಿತ ತುರ್ತು ಪ್ರತಿಕ್ರಿಯೆ ಸಹಾಯಕ",
@@ -223,9 +218,9 @@ export const translations: Record<Language, Record<string, string>> = {
     "icu-availability": "आईसीयू उपलब्धता",
     "total-icu-beds": "कुल आईसीयू बिस्तर",
     "view-all-hospitals": "सभी अस्पतालों को देखें",
-    "navigate-to": "नेविगेट करने के लिए",
-    "calling-hospital": "अस्पताल को कॉल किया जा रहा है",
-    "connecting-to": "कनेक्ट हो रहा है",
+    "navigate": "नेविगेट करने के लिए",
+    "calling": "अस्पताल को कॉल किया जा रहा है",
+    "connecting": "कनेक्ट हो रहा है",
     // Upload Dataset
     "upload-dataset": "डेटासेट अपलोड करें",
     "dataset-ready": "डेटासेट तैयार है",
@@ -287,9 +282,6 @@ export const translations: Record<Language, Record<string, string>> = {
     // Search Page
     "search-hospitals": "अस्पतालों को खोजें...",
     // Map Page
-    "navigate-to": "नेविगेट करने के लिए",
-    "calling-hospital": "अस्पताल को कॉल किया जा रहा है",
-    "connecting-to": "कनेक्ट हो रहा है",
     // Welcome Page
     "welcome-title": "मेडरेस्पॉन्स में आपका स्वागत है",
     "welcome-description": "आपका एआई-संचालित आपातकालीन प्रतिक्रिया सहायक",
@@ -323,9 +315,9 @@ export const translations: Record<Language, Record<string, string>> = {
     "icu-availability": "ICU கிடைக்கும் தன்மை",
     "total-icu-beds": "மொத்த ICU படுக்கைகள்",
     "view-all-hospitals": "எல்லா மருத்துவமனைகளையும் காட்டு",
-    "navigate-to": "வழிசெலுத்த",
-    "calling-hospital": "மருத்துவமனைக்கு அழைக்கப்படுகிறது",
-    "connecting-to": "இணைக்கிறது",
+    "navigate": "வழிசெலுத்த",
+    "calling": "மருத்துவமனைக்கு அழைக்கப்படுகிறது",
+    "connecting": "இணைக்கிறது",
     // Upload Dataset
     "upload-dataset": "தரவுத்தொகுப்பை பதிவேற்றவும்",
     "dataset-ready": "தரவுத்தொகுப்பு தயாராக உள்ளது",
@@ -340,7 +332,7 @@ export const translations: Record<Language, Record<string, string>> = {
     "reset-analysis": "பகுப்பாய்வை மீட்டமை",
     // Settings Page
     "system-preferences": "கணினி விருப்பத்தேர்வுகள்",
-    "language": "மொழி",
+    "language": "மொழி",
     "units": "அலகுகள்",
     "metric": "மெட்ரிக்",
     "imperial": "ஏகாதிபத்தியம்",
@@ -387,9 +379,6 @@ export const translations: Record<Language, Record<string, string>> = {
     // Search Page
     "search-hospitals": "மருத்துவமனைகளைத் தேடு...",
     // Map Page
-    "navigate-to": "வழிசெலுத்த",
-    "calling-hospital": "மருத்துவமனைக்கு அழைக்கப்படுகிறது",
-    "connecting-to": "இணைக்கிறது",
     // Welcome Page
     "welcome-title": "MedResponse க்கு வரவேற்கிறோம்",
     "welcome-description": "உங்கள் AI- இயங்கும் அவசர பதில் உதவியாளர்",
@@ -423,9 +412,9 @@ export const translations: Record<Language, Record<string, string>> = {
     "icu-availability": "ICU లభ్యత",
     "total-icu-beds": "మొత్తం ICU పడకలు",
     "view-all-hospitals": "అన్ని ఆసుపత్రులను వీక్షించండి",
-    "navigate-to": "నేవిగేట్ చేయండి",
-    "calling-hospital": "ఆసుపత్రికి కాల్ చేస్తోంది",
-    "connecting-to": "కనెక్ట్ అవుతోంది",
+    "navigate": "నేవిగేట్ చేయండి",
+    "calling": "ఆసుపత్రికి కాల్ చేస్తోంది",
+    "connecting": "కనెక్ట్ అవుతోంది",
     // Upload Dataset
     "upload-dataset": "డేటాసెట్ అప్‌లోడ్ చేయండి",
     "dataset-ready": "డేటాసెట్ సిద్ధంగా ఉంది",
@@ -476,7 +465,7 @@ export const translations: Record<Language, Record<string, string>> = {
     "detailed-analytics": "వివరణాత్మక విశ్లేషణలు",
     "performance-metrics": "పనితీరు కొలమానాలను ట్రాక్ చేయండి",
     // Profile Page
-    "profile": "ప్రొఫైల్",
+    "profile": "ప్రొఫైల్",
     "email": "ఇమెయిల్",
     "role": "పాత్ర",
     "location": "స్థానం",
@@ -487,9 +476,6 @@ export const translations: Record<Language, Record<string, string>> = {
     // Search Page
     "search-hospitals": "ఆసుపత్రుల కోసం వెతకండి...",
     // Map Page
-    "navigate-to": "నేవిగేట్ చేయండి",
-    "calling-hospital": "ఆసుపత్రికి కాల్ చేస్తోంది",
-    "connecting-to": "కనెక్ట్ అవుతోంది",
     // Welcome Page
     "welcome-title": "MedResponse కు స్వాగతం",
     "welcome-description": "మీ AI- ఆధారిత అత్యవసర ప్రతిస్పందన సహాయకుడు",
@@ -568,3 +554,4 @@ export const useLanguage = () => {
 
   return context;
 };
+

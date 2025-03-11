@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useTheme } from '@/hooks/use-theme';
 import { useLanguage } from '@/hooks/use-language';
@@ -85,7 +84,6 @@ const Profile = () => {
           ? 'bg-gradient-to-br from-gray-900/90 via-purple-900/70 to-gray-900/90' 
           : 'bg-gradient-to-br from-blue-50/90 via-purple-100/70 to-blue-50/90'
       }`}>
-        {/* Top Header */}
         <TopHeader />
         
         <div className="container mx-auto px-4 pt-4 pb-20">
@@ -95,7 +93,6 @@ const Profile = () => {
             transition={{ duration: 0.5 }}
             className="max-w-lg mx-auto"
           >
-            {/* Profile Card */}
             <div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg mb-6">
               <div className="bg-gradient-to-r from-medical-500 to-medical-600 p-6 text-white">
                 <h1 className="text-2xl font-bold">{t("profile")}</h1>
@@ -138,7 +135,6 @@ const Profile = () => {
               </div>
             </div>
             
-            {/* Actions */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <DataUploadDialog 
                 onAnalysisReady={handleAnalysisReady}
@@ -163,7 +159,6 @@ const Profile = () => {
           </motion.div>
         </div>
         
-        {/* Bottom Navigation */}
         <Navbar />
       </div>
     </div>
