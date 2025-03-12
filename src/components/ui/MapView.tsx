@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import { MapPin, Navigation, Loader2, Map, Zap, AlertTriangle } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -56,7 +55,6 @@ const MapView: React.FC<MapViewProps> = ({
   const [selectedDestinations, setSelectedDestinations] = useState<string[]>([]);
   const mapRef = useRef<HTMLDivElement>(null);
   
-  // Load map with a slight delay to ensure proper rendering
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -65,12 +63,10 @@ const MapView: React.FC<MapViewProps> = ({
     return () => clearTimeout(timer);
   }, []);
   
-  // Update navigation animation when activeNavigation changes
   useEffect(() => {
     if (activeNavigation) {
       setNavigationActive(true);
       
-      // Animate route progress
       setRouteProgress(0);
       const interval = setInterval(() => {
         setRouteProgress(prev => {
@@ -89,7 +85,6 @@ const MapView: React.FC<MapViewProps> = ({
     }
   }, [activeNavigation]);
   
-  // Handle multi-destination selection
   const toggleDestinationSelection = (id: string) => {
     if (multiSelectionMode) {
       setSelectedDestinations(prev => {
@@ -104,20 +99,17 @@ const MapView: React.FC<MapViewProps> = ({
     }
   };
   
-  // Submit selected destinations for navigation
   const handleMultiDestinationNavigate = () => {
     if (onMultiDestinationSelect && selectedDestinations.length > 0) {
       onMultiDestinationSelect(selectedDestinations);
     }
   };
   
-  // Recenter map when selection changes
   useEffect(() => {
     if (centerMapOnSelection && selectedHospitalId) {
       const selectedDest = destinations.find(d => d.id === selectedHospitalId);
       
       if (selectedDest) {
-        // These are mock positions, in a real app we'd calculate the actual position
         const positions = [
           { x: 120, y: 220 },  // Hospital 1
           { x: 160, y: 170 },  // Hospital 2
@@ -128,7 +120,6 @@ const MapView: React.FC<MapViewProps> = ({
         
         const index = parseInt(selectedDest.id) - 1;
         if (index >= 0 && index < positions.length) {
-          // Interpolate between user location (230, 130) and hospital position
           const pos = positions[index];
           setMapCenter({
             x: (pos.x + 230) / 2,
@@ -242,9 +233,7 @@ const MapView: React.FC<MapViewProps> = ({
     onNavigate(selectedDestination.id);
   };
 
-  // Create a route path with transition animation  
   const getRoutePath = () => {
-    // Create a more complex path for better visualization
     const pathString = selectedHospitalId === '1' ? 
       `M 230 130 L 210 120 L 190 130 L 170 140 L 150 160 L 140 180 L 130 200 L 120 220` :
       selectedHospitalId === '2' ? 
@@ -256,8 +245,7 @@ const MapView: React.FC<MapViewProps> = ({
       `M 230 130 L 225 120 L 220 110 L 215 100 L 212 95 L 210 90`;
     
     if (navigationActive) {
-      // Calculate path length and dash offset for animation
-      const pathLength = 320; // Approximate path length
+      const pathLength = 320;
       const dashOffset = pathLength - (pathLength * (routeProgress / 100));
       
       return (
@@ -293,7 +281,6 @@ const MapView: React.FC<MapViewProps> = ({
     );
   };
   
-  // Generate waypoints along the route
   const getWaypoints = () => {
     const waypoints = [
       { x: 210, y: 120 },
@@ -526,7 +513,7 @@ const MapView: React.FC<MapViewProps> = ({
           <div className="absolute bottom-4 right-4 flex flex-col gap-2">
             {multiSelectionMode && (
               <ActionButton
-                variant="info"
+                variant="outline"
                 icon={<span className="text-xs font-bold">{selectedDestinations.length}</span>}
                 onClick={handleMultiDestinationNavigate}
                 disabled={selectedDestinations.length === 0}
