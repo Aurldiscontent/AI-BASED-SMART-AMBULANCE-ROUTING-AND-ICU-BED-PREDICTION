@@ -17,6 +17,7 @@ interface MapViewProps {
   onHospitalClick?: (id: string) => void;
   onTrafficClick?: () => void;
   onPathClick?: () => void;
+  customMapImage?: string;
 }
 
 const MapView: React.FC<MapViewProps> = ({
@@ -27,15 +28,17 @@ const MapView: React.FC<MapViewProps> = ({
   transportMode = 'ground',
   onHospitalClick,
   onTrafficClick,
-  onPathClick
+  onPathClick,
+  customMapImage = '/lovable-uploads/65382a9c-1c29-4022-9d95-c24462b61a24.png'
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [routeInfo, setRouteInfo] = useState<{
     distance: string;
     time: string;
     traffic: 'light' | 'moderate' | 'heavy';
-  }>({ distance: '3.2 km', time: '12 min', traffic: 'moderate' });
+  }>({ distance: '10 km', time: '3 min', traffic: 'moderate' });
   const [showAlternateRoutes, setShowAlternateRoutes] = useState(false);
+  const [navigationActive, setNavigationActive] = useState(false);
 
   useEffect(() => {
     // Simulate map loading
@@ -55,23 +58,14 @@ const MapView: React.FC<MapViewProps> = ({
   const calculateRouteInfo = () => {
     if (!selectedDestination) return;
     
-    // Simple mock calculation (would use actual routing API in real app)
-    const latDiff = Math.abs(userLocation.lat - selectedDestination.location.lat);
-    const lngDiff = Math.abs(userLocation.lng - selectedDestination.location.lng);
-    const distance = Math.sqrt(latDiff * latDiff + lngDiff * lngDiff) * 111; // Rough km calculation
-    
-    const trafficFactor = Math.random();
-    let traffic: 'light' | 'moderate' | 'heavy' = 'moderate';
-    if (trafficFactor < 0.3) traffic = 'light';
-    else if (trafficFactor > 0.7) traffic = 'heavy';
-    
-    const speedFactor = transportMode === 'air' ? 0.3 : (traffic === 'light' ? 1 : traffic === 'moderate' ? 1.5 : 2.2);
-    const timeInMinutes = Math.round(distance * speedFactor);
+    // Fixed values as per requirements
+    const distance = 10;
+    const timeInMinutes = transportMode === 'air' ? 2 : 3;
     
     setRouteInfo({
-      distance: `${distance.toFixed(1)} km`,
+      distance: `${distance} km`,
       time: `${timeInMinutes} min`,
-      traffic
+      traffic: 'moderate'
     });
   };
   
@@ -142,7 +136,7 @@ const MapView: React.FC<MapViewProps> = ({
     {
       lat: userLocation.lat + (selectedDestination?.location.lat - userLocation.lat) * 0.3 + 0.005,
       lng: userLocation.lng + (selectedDestination?.location.lng - userLocation.lng) * 0.3 - 0.005,
-      severity: 'heavy' as const
+      severity: 'moderate' as const
     },
     {
       lat: userLocation.lat + (selectedDestination?.location.lat - userLocation.lat) * 0.7 - 0.008,
@@ -150,6 +144,18 @@ const MapView: React.FC<MapViewProps> = ({
       severity: 'moderate' as const
     }
   ];
+  
+  const handleNavigateClick = () => {
+    if (!selectedDestination || !onNavigate) return;
+    
+    setNavigationActive(true);
+    onNavigate(selectedDestination.id);
+    
+    // Simulate navigation process
+    setTimeout(() => {
+      setNavigationActive(false);
+    }, 1500);
+  };
   
   // This is a placeholder for the actual map implementation
   return (
@@ -161,29 +167,23 @@ const MapView: React.FC<MapViewProps> = ({
         </div>
       ) : (
         <>
-          {/* Map simulation with gradient background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-700" />
-          
-          {/* Main roads */}
-          <div className="absolute left-0 right-0 top-1/2 h-2 bg-gray-300 dark:bg-gray-600 transform -translate-y-1/2" />
-          <div className="absolute left-1/3 top-0 bottom-0 w-2 bg-gray-300 dark:bg-gray-600" />
-          
-          {/* Secondary roads - more realistic grid pattern */}
-          <div className="absolute left-0 right-0 top-1/4 h-1 bg-gray-200 dark:bg-gray-500 transform -translate-y-1/2" />
-          <div className="absolute left-0 right-0 top-3/4 h-1 bg-gray-200 dark:bg-gray-500 transform -translate-y-1/2" />
-          <div className="absolute left-2/3 top-0 bottom-0 w-1 bg-gray-200 dark:bg-gray-500" />
-          <div className="absolute left-1/6 top-0 bottom-0 w-1 bg-gray-200 dark:bg-gray-500" />
+          {/* Actual map image */}
+          <img 
+            src={customMapImage} 
+            alt="Map" 
+            className="absolute inset-0 w-full h-full object-cover"
+          />
           
           {/* Alternate routes */}
           {showAlternateRoutes && selectedDestination && alternatePaths.map((alternatePath, idx) => (
             <svg key={`alt-path-${idx}`} className="absolute inset-0 w-full h-full" style={{ pointerEvents: 'none' }}>
               <path 
-                d={`M ${alternatePath.map((p, i) => {
-                  // Convert lat/lng to relative x,y coordinates on the SVG
-                  const x = ((p.lng - 77.5) / 0.3) * 100;
-                  const y = (1 - (p.lat - 12.8) / 0.3) * 100;
+                d={alternatePath.map((p, i) => {
+                  // Convert to screen coordinates
+                  const x = ((p.lng - userLocation.lng) * 300) + 200;
+                  const y = ((p.lat - userLocation.lat) * -300) + 150;
                   return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
-                }).join(' ')}`}
+                }).join(' ')}
                 stroke={idx === 0 ? '#9333ea' : '#2563eb'} 
                 strokeWidth="2"
                 strokeLinecap="round"
@@ -202,36 +202,35 @@ const MapView: React.FC<MapViewProps> = ({
               style={{ pointerEvents: 'none' }}
               onClick={() => onPathClick && onPathClick()}
             >
-              {/* Create a smooth path */}
+              {/* Create a path that follows roads on the map */}
               <path 
-                d={`M ${path.map((p, i) => {
-                  // Convert lat/lng to relative x,y coordinates on the SVG
-                  const x = ((p.lng - 77.5) / 0.3) * 100;
-                  const y = (1 - (p.lat - 12.8) / 0.3) * 100;
-                  return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
-                }).join(' ')}`}
+                d={`M 230 130 L 210 120 L 190 130 L 170 140 L 150 160 L 140 180 L 130 200 L 120 220`}
                 stroke={transportMode === 'air' ? '#3b82f6' : '#10b981'} 
                 strokeWidth="3"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeDasharray={transportMode === 'air' ? "10,5" : "none"}
                 fill="none"
-                className={`${transportMode === 'air' ? "animate-pulse" : ""} cursor-pointer`}
+                className={`${navigationActive ? "animate-pulse" : ""} cursor-pointer`}
                 onClick={() => {
                   setShowAlternateRoutes(!showAlternateRoutes);
                   onPathClick && onPathClick();
                 }}
               />
               
-              {/* Add direction arrows along the path */}
-              {path.slice(1, -1).map((p, i) => {
-                const x = ((p.lng - 77.5) / 0.3) * 100;
-                const y = (1 - (p.lat - 12.8) / 0.3) * 100;
+              {/* Add direction points along the path */}
+              {[1, 2, 3, 4].map((_, i) => {
+                const points = [
+                  { x: 210, y: 120 },
+                  { x: 190, y: 130 },
+                  { x: 150, y: 160 },
+                  { x: 130, y: 200 }
+                ];
                 return (
                   <circle 
                     key={`marker-${i}`} 
-                    cx={x} 
-                    cy={y} 
+                    cx={points[i].x} 
+                    cy={points[i].y} 
                     r="2" 
                     fill={transportMode === 'air' ? '#3b82f6' : '#10b981'} 
                     className={transportMode === 'air' ? "animate-pulse" : ""}
@@ -243,14 +242,17 @@ const MapView: React.FC<MapViewProps> = ({
           
           {/* Traffic congestion markers */}
           {trafficPoints.map((point, idx) => {
-            const x = ((point.lng - 77.5) / 0.3) * 100;
-            const y = (1 - (point.lat - 12.8) / 0.3) * 100;
+            // Position traffic points along the route
+            const positions = [
+              { x: 190, y: 130 },
+              { x: 140, y: 180 }
+            ];
             
             return (
               <div 
                 key={`traffic-${idx}`}
                 className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer"
-                style={{ left: `${x}%`, top: `${y}%` }}
+                style={{ left: positions[idx].x, top: positions[idx].y }}
                 onClick={() => onTrafficClick && onTrafficClick()}
               >
                 <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
@@ -273,7 +275,7 @@ const MapView: React.FC<MapViewProps> = ({
           
           {/* User location marker */}
           <div 
-            className="absolute left-1/3 top-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20"
+            className="absolute left-[230px] top-[130px] transform -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20"
             onClick={() => {
               // Show nearest hospitals
               const sortedDestinations = [...destinations].sort((a, b) => {
@@ -304,9 +306,14 @@ const MapView: React.FC<MapViewProps> = ({
           
           {/* Hospital markers */}
           {destinations.slice(0, 5).map((dest, index) => {
-            // Convert lat/lng to relative position
-            const left = ((dest.location.lng - 77.5) / 0.3) * 100;
-            const top = (1 - (dest.location.lat - 12.8) / 0.3) * 100;
+            // Position hospital markers at specific points on the map
+            const positions = [
+              { x: 120, y: 220 },  // Lower Manhattan
+              { x: 160, y: 170 },  // Canal Street
+              { x: 190, y: 100 },  // Spring Street
+              { x: 90, y: 170 },   // Tribeca
+              { x: 210, y: 90 }    // Little Italy
+            ];
             
             const isSelected = selectedDestination?.id === dest.id;
             
@@ -315,8 +322,8 @@ const MapView: React.FC<MapViewProps> = ({
                 key={dest.id}
                 className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer z-10"
                 style={{ 
-                  left: `${left}%`, 
-                  top: `${top}%` 
+                  left: positions[index].x, 
+                  top: positions[index].y 
                 }}
                 onClick={() => onHospitalClick && onHospitalClick(dest.id)}
               >
@@ -364,10 +371,10 @@ const MapView: React.FC<MapViewProps> = ({
           <div className="absolute bottom-4 right-4">
             <ActionButton
               variant="medical"
-              icon={<Navigation size={18} />}
-              onClick={() => selectedDestination && onNavigate?.(selectedDestination.id)}
+              icon={navigationActive ? <Loader2 className="animate-spin" size={18} /> : <Navigation size={18} />}
+              onClick={handleNavigateClick}
             >
-              Start Navigation
+              {navigationActive ? "Navigating..." : "Start Navigation"}
             </ActionButton>
           </div>
           

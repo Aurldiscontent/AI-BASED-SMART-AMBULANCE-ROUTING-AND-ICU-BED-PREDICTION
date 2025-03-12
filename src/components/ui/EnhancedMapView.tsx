@@ -33,7 +33,7 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
   onHospitalClick,
   transportMode = 'ground',
   theme = 'light',
-  mapImagePath = '/lovable-uploads/7c8af1f3-722f-4ce8-a1f9-aa995983760e.png',
+  mapImagePath = '/lovable-uploads/65382a9c-1c29-4022-9d95-c24462b61a24.png',
   onNavigate,
   showPathFromUser = true,
   userLocation = { lat: 40.7128, lng: -74.0060 }
@@ -45,6 +45,7 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
     distance: string;
     time: string;
   }>({ distance: '10 km', time: '3 min' });
+  const [navigationActive, setNavigationActive] = useState(false);
   
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -84,7 +85,13 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
   
   const handleNavigate = () => {
     if (selectedDestination && onNavigate) {
+      setNavigationActive(true);
       onNavigate(selectedDestination.id);
+      
+      // Simulate navigation start
+      setTimeout(() => {
+        setNavigationActive(false);
+      }, 1500);
     }
   };
   
@@ -109,11 +116,11 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
           
           {destinations.map((hospital, index) => {
             const offsetFactors = [
-              { x: 0.45, y: 0.5 },  // Near center
-              { x: 0.6, y: 0.35 },   // Upper right
-              { x: 0.3, y: 0.6 },    // Lower left
-              { x: 0.7, y: 0.62 },   // Lower right
-              { x: 0.25, y: 0.35 },  // Upper left
+              { x: 0.35, y: 0.4 },  // Spring Street
+              { x: 0.5, y: 0.3 },    // Little Italy
+              { x: 0.42, y: 0.52 },  // Canal Street
+              { x: 0.25, y: 0.48 },  // Tribeca
+              { x: 0.39, y: 0.65 },  // Lower Manhattan
             ];
             
             const position = offsetFactors[index % offsetFactors.length];
@@ -185,8 +192,8 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
               animate={{ scale: 1, opacity: 1 }}
               className="absolute z-20"
               style={{ 
-                left: '20%', 
-                top: '70%',
+                left: '65%', 
+                top: '52%',
                 transform: 'translate(-50%, -50%)'
               }}
             >
@@ -209,32 +216,81 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
                 if (index === -1) return null;
                 
                 const offsetFactors = [
-                  { x: 0.45, y: 0.5 },  // Near center
-                  { x: 0.6, y: 0.35 },   // Upper right
-                  { x: 0.3, y: 0.6 },    // Lower left
-                  { x: 0.7, y: 0.62 },   // Lower right
-                  { x: 0.25, y: 0.35 },  // Upper left
+                  { x: 0.35, y: 0.4 },  // Spring Street
+                  { x: 0.5, y: 0.3 },    // Little Italy
+                  { x: 0.42, y: 0.52 },  // Canal Street
+                  { x: 0.25, y: 0.48 },  // Tribeca
+                  { x: 0.39, y: 0.65 },  // Lower Manhattan
                 ];
                 
                 const position = offsetFactors[index % offsetFactors.length];
                 
-                const userX = 20;
-                const userY = 70;
+                const userX = 65;
+                const userY = 52;
                 const hospitalX = position.x * 100;
                 const hospitalY = position.y * 100;
                 
-                const cpX = (userX + hospitalX) / 2 + 10;
-                const cpY = (userY + hospitalY) / 2 - 10;
+                // For navigation path, we'll add some waypoints to make it follow the roads in the map
+                const pathPoints = [];
+                
+                // Add intermediate points based on which hospital is selected
+                switch(index) {
+                  case 0: // Spring Street
+                    pathPoints.push(
+                      { x: userX - 10, y: userY - 5 },
+                      { x: userX - 18, y: userY - 10 },
+                      { x: hospitalX + 5, y: hospitalY + 2 }
+                    );
+                    break;
+                  case 1: // Little Italy
+                    pathPoints.push(
+                      { x: userX - 8, y: userY - 12 },
+                      { x: hospitalX, y: hospitalY + 10 }
+                    );
+                    break;
+                  case 2: // Canal Street
+                    pathPoints.push(
+                      { x: userX - 10, y: userY },
+                      { x: hospitalX + 5, y: hospitalY - 5 }
+                    );
+                    break;
+                  case 3: // Tribeca
+                    pathPoints.push(
+                      { x: userX - 15, y: userY },
+                      { x: userX - 25, y: userY - 5 },
+                      { x: hospitalX + 10, y: hospitalY }
+                    );
+                    break;
+                  case 4: // Lower Manhattan
+                    pathPoints.push(
+                      { x: userX - 10, y: userY + 5 },
+                      { x: hospitalX + 10, y: hospitalY - 5 }
+                    );
+                    break;
+                  default:
+                    pathPoints.push(
+                      { x: (userX + hospitalX) / 2, y: (userY + hospitalY) / 2 }
+                    );
+                }
+                
+                // Create the path string
+                let pathD = `M ${userX} ${userY}`;
+                
+                pathPoints.forEach(point => {
+                  pathD += ` L ${point.x} ${point.y}`;
+                });
+                
+                pathD += ` L ${hospitalX} ${hospitalY}`;
                 
                 return (
                   <path
-                    d={`M ${userX} ${userY} Q ${cpX} ${cpY} ${hospitalX} ${hospitalY}`}
+                    d={pathD}
                     stroke={transportMode === 'air' ? '#3b82f6' : '#10b981'}
                     strokeWidth="3"
                     strokeDasharray={transportMode === 'air' ? "5,5" : "none"}
                     fill="none"
                     strokeLinecap="round"
-                    className={transportMode === 'air' ? "animate-pulse" : ""}
+                    className={navigationActive ? "animate-pulse" : ""}
                   />
                 );
               })()}
@@ -270,10 +326,10 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
             <div className="absolute bottom-3 right-3 z-30">
               <ActionButton
                 variant="medical"
-                icon={<Navigation size={18} />}
+                icon={navigationActive ? <Loader2 className="animate-spin" size={18} /> : <Navigation size={18} />}
                 onClick={handleNavigate}
               >
-                Navigate
+                {navigationActive ? "Navigating..." : "Navigate"}
               </ActionButton>
             </div>
           )}
