@@ -126,133 +126,115 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
         </div>
       ) : (
         <>
-          {/* Google Maps inspired background with grid */}
-          <div className={`absolute inset-0 ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`} />
+          {/* Real map image background */}
+          <div className="absolute inset-0">
+            <img 
+              src="/lovable-uploads/71b87321-f66b-40ae-9f9f-819acb508dba.png" 
+              alt="Real-time map" 
+              className="w-full h-full object-cover"
+            />
+            <div className={`absolute inset-0 ${isDark ? 'bg-gray-900/30' : 'bg-gray-50/20'}`} />
+          </div>
           
-          {/* Enhanced road network inspired by Google Maps */}
-          <svg className="absolute inset-0 w-full h-full">
-            {/* Highway system */}
-            <path 
-              d="M 10,50 L 90,50 M 50,10 L 50,90" 
-              stroke={isDark ? "#333333" : "#cccccc"} 
-              strokeWidth="6" 
-              strokeLinecap="round"
-            />
-            
-            {/* Major arterial roads */}
-            <path 
-              d="M 10,25 L 90,25 M 10,75 L 90,75 M 25,10 L 25,90 M 75,10 L 75,90" 
-              stroke={isDark ? "#2A2A2A" : "#dddddd"} 
-              strokeWidth="3"
-              strokeLinecap="round"
-            />
-            
-            {/* Secondary roads and connectors */}
-            <path 
-              d="M 10,35 L 90,35 M 10,65 L 90,65 M 35,10 L 35,90 M 65,10 L 65,90" 
-              stroke={isDark ? "#252525" : "#e5e5e5"} 
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-            
-            {/* Local streets with curved connections */}
-            <path 
-              d="M 20,20 Q 30,30 40,40 M 60,60 Q 70,70 80,80 M 20,80 Q 30,70 40,60 M 60,40 Q 70,30 80,20" 
-              stroke={isDark ? "#222222" : "#eeeeee"} 
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-            
-            {/* Traffic visualization */}
-            {showTraffic && (
+          {/* Overlay for traffic indicators and routes */}
+          <svg className="absolute inset-0 w-full h-full" style={{ pointerEvents: 'none' }}>
+            {/* Route path with improved curve and animation */}
+            {selectedDestination && (
               <>
-                <rect x="50%" y="25%" width="25%" height="5%" rx="2" 
-                  fill={isDark ? "#FF4D4D" : "#ef4444"} 
-                  fillOpacity={isDark ? "0.4" : "0.2"} /> {/* Heavy traffic */}
-                <rect x="25%" y="50%" width="25%" height="5%" rx="2" 
-                  fill={isDark ? "#FFA500" : "#f97316"} 
-                  fillOpacity={isDark ? "0.4" : "0.2"} /> {/* Moderate traffic */}
-                <rect x="50%" y="75%" width="25%" height="5%" rx="2" 
-                  fill={isDark ? "#4CAF50" : "#22c55e"} 
-                  fillOpacity={isDark ? "0.4" : "0.2"} /> {/* Light traffic */}
+                {/* Primary route - main blue path showing the fastest route */}
+                <path 
+                  d="M 200,450 C 250,380 300,350 350,320 C 400,290 450,270 500,300 C 550,330 600,350 630,400"
+                  stroke={transportMode === 'air' 
+                    ? isDark ? '#3b82f6' : '#2563eb' 
+                    : isDark ? '#10b981' : '#059669'} 
+                  strokeWidth="6"
+                  strokeLinecap="round"
+                  strokeDasharray={transportMode === 'air' ? "10,5" : "none"}
+                  fill="none"
+                  className="animate-pulse"
+                  style={{ opacity: 0.8 }}
+                />
                 
-                {/* Traffic indicators with pulsing effect */}
-                <circle cx="65%" cy="27.5%" r="2" fill={isDark ? "#FF4D4D" : "#ef4444"} className="animate-pulse">
-                  <animate attributeName="opacity" values="0.4;0.9;0.4" dur="2s" repeatCount="indefinite" />
+                {/* Alternative routes in lighter colors */}
+                <path 
+                  d="M 200,450 C 240,400 280,370 360,350 C 450,330 500,340 630,400"
+                  stroke={isDark ? '#6b7280' : '#9ca3af'} 
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeDasharray="6,3"
+                  fill="none"
+                  style={{ opacity: 0.4 }}
+                />
+                
+                <path 
+                  d="M 200,450 C 250,420 350,400 400,380 C 450,360 500,350 630,400"
+                  stroke={isDark ? '#6b7280' : '#9ca3af'} 
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeDasharray="6,3"
+                  fill="none"
+                  style={{ opacity: 0.4 }}
+                />
+                
+                {/* Traffic spots/congestion indicators */}
+                <circle cx="350" cy="320" r="8" fill={isDark ? 'rgba(220, 38, 38, 0.7)' : 'rgba(239, 68, 68, 0.7)'}>
+                  <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite" />
                 </circle>
-                <circle cx="40%" cy="52.5%" r="2" fill={isDark ? "#FFA500" : "#f97316"} className="animate-pulse">
-                  <animate attributeName="opacity" values="0.4;0.8;0.4" dur="3s" repeatCount="indefinite" />
+                
+                <circle cx="500" cy="300" r="6" fill={isDark ? 'rgba(245, 158, 11, 0.7)' : 'rgba(251, 191, 36, 0.7)'}>
+                  <animate attributeName="opacity" values="0.6;0.9;0.6" dur="3s" repeatCount="indefinite" />
+                </circle>
+                
+                {/* Moving ambulance along the route */}
+                <circle id="ambulance" cx="200" cy="450" r="6" fill={isDark ? '#3b82f6' : '#2563eb'}>
+                  <animate 
+                    attributeName="cx" 
+                    values="200;250;300;350;400;450;500;550;600;630" 
+                    dur="10s" 
+                    repeatCount="indefinite" 
+                  />
+                  <animate 
+                    attributeName="cy" 
+                    values="450;380;350;320;290;270;300;330;350;400" 
+                    dur="10s" 
+                    repeatCount="indefinite" 
+                  />
+                  <animate attributeName="opacity" values="0.8;1;0.8" dur="1s" repeatCount="indefinite" />
                 </circle>
               </>
             )}
           </svg>
           
-          {/* Route path with improved curve and animation */}
-          {selectedDestination && (
-            <svg className="absolute inset-0 w-full h-full" style={{ pointerEvents: 'none' }}>
-              <path 
-                d={`M 30,50 C 40,30 60,30 70,50`}
-                stroke={transportMode === 'air' 
-                  ? isDark ? '#3b82f6' : '#2563eb' 
-                  : isDark ? '#10b981' : '#059669'} 
-                strokeWidth="4"
-                strokeLinecap="round"
-                strokeDasharray={transportMode === 'air' ? "10,5" : "none"}
-                fill="none"
-                className={transportMode === 'air' ? "animate-pulse" : ""}
-              >
-                {transportMode !== 'air' && (
-                  <animate 
-                    attributeName="stroke-dashoffset" 
-                    from="100" 
-                    to="0" 
-                    dur="3s" 
-                    repeatCount="indefinite" 
-                  />
-                )}
-              </path>
-              
-              {/* Direction arrows */}
-              <circle cx="50" cy="36" r="2" fill={transportMode === 'air' 
-                ? isDark ? '#3b82f6' : '#2563eb' 
-                : isDark ? '#10b981' : '#059669'}>
-                <animate attributeName="opacity" values="0.6;1;0.6" dur="1.5s" repeatCount="indefinite" />
-              </circle>
-            </svg>
-          )}
-          
-          {/* Traffic congestion markers */}
-          <div className="absolute top-1/3 left-2/3 transform -translate-x-1/2 -translate-y-1/2">
-            <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
-              isDark ? 'bg-red-900/30' : 'bg-red-100'
-            } animate-pulse`}>
-              <AlertTriangle size={14} className={isDark ? "text-red-400" : "text-red-600"} />
-            </div>
-          </div>
-          
-          {/* User location marker - patient position */}
-          <div className="absolute left-1/3 top-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20">
+          {/* User location marker (ambulance) - origin point */}
+          <div className="absolute left-[30%] top-[75%] transform -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20">
             <div className="relative">
-              <div className="absolute -inset-3 rounded-full bg-blue-500/20 animate-ping opacity-50" />
-              <div className="absolute -inset-2 rounded-full bg-blue-500/30 animate-pulse" />
-              <div className={`h-4 w-4 rounded-full bg-blue-500 border-2 ${
+              <div className="absolute -inset-4 rounded-full bg-blue-500/20 animate-ping opacity-50" />
+              <div className="absolute -inset-3 rounded-full bg-blue-500/30 animate-pulse" />
+              <div className={`h-6 w-6 rounded-full bg-blue-600 border-2 ${
                 isDark ? 'border-gray-800' : 'border-white'
-              } shadow-md`} />
+              } shadow-md flex items-center justify-center`}>
+                <Navigation size={12} className="text-white" />
+              </div>
             </div>
-            <div className={`absolute top-6 left-1/2 transform -translate-x-1/2 ${
+            <div className={`absolute top-7 left-1/2 transform -translate-x-1/2 ${
               isDark ? 'bg-gray-800 text-gray-300' : 'bg-white text-gray-700'
             } px-2 py-1 rounded-md shadow-sm text-xs font-medium`}>
-              Patient
+              Ambulance
             </div>
           </div>
           
-          {/* Hospital markers with enhanced styling */}
+          {/* Destination markers */}
           {destinations.map((dest, index) => {
-            // Convert to relative position for this example
-            const positionMultiplier = destinations.length <= 5 ? 1 : 0.6;
-            const left = 25 + ((index % 5) * 12 * positionMultiplier);
-            const top = 20 + (Math.floor(index / 5) * 25) + ((index % 3) * 5);
+            // Adjusted positions to match real map
+            const positions = [
+              { left: "40%", top: "60%" },
+              { left: "50%", top: "50%" },
+              { left: "65%", top: "40%" },
+              { left: "75%", top: "35%" },
+              { left: "58%", top: "55%" },
+            ];
             
+            const position = positions[index % positions.length];
             const isSelected = selectedDestination?.id === dest.id;
             
             // Determine marker color based on ICU availability
@@ -280,8 +262,8 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
                 key={dest.id}
                 className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer z-10"
                 style={{ 
-                  left: `${left}%`, 
-                  top: `${top}%` 
+                  left: position.left, 
+                  top: position.top 
                 }}
                 onClick={() => onHospitalClick && onHospitalClick(dest.id)}
               >

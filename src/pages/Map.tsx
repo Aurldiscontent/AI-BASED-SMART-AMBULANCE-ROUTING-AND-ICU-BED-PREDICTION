@@ -99,7 +99,11 @@ const Map = () => {
   const destinations = mockHospitals.map(h => ({
     id: h.id,
     name: h.name,
-    location: h.location
+    location: h.location,
+    icuAvailable: h.icuAvailable,
+    icuTotal: h.icuTotal,
+    waitTime: h.waitTime,
+    specialties: ['Emergency', 'ICU', 'Surgery'].slice(0, Math.floor(Math.random() * 3) + 1)
   }));
   
   // Find the selected hospital
@@ -161,7 +165,7 @@ const Map = () => {
     <div 
       className="min-h-screen w-full bg-cover bg-center transition-all duration-500"
       style={{ 
-        backgroundImage: `url('/lovable-uploads/7c8af1f3-722f-4ce8-a1f9-aa995983760e.png')`,
+        backgroundImage: `url('/public/lovable-uploads/71b87321-f66b-40ae-9f9f-819acb508dba.png')`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat'
       }}
@@ -183,12 +187,21 @@ const Map = () => {
           >
             <h1 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">{t("emergency-route")}</h1>
             
-            {/* Map Section */}
+            {/* Map Section with OpenStreetMap style map */}
             <div className="mb-6">
               <EnhancedMapView 
                 destinations={destinations}
                 selectedHospitalId={selectedHospital?.id}
                 onHospitalClick={handleHospitalClick}
+                theme={theme}
+                transportMode="ground"
+                onNavigate={(id) => {
+                  const hospital = mockHospitals.find(h => h.id === id);
+                  if (hospital) {
+                    setSelectedHospital(hospital);
+                    handleNavigate();
+                  }
+                }}
               />
             </div>
             

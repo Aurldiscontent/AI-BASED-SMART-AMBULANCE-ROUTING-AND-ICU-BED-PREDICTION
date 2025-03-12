@@ -85,27 +85,7 @@ const WelcomeScreen: React.FC = () => {
           </p>
         </motion.div>
 
-        {/* 🚀 Get Started Button - Moved up below the title */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 0.5 }}
-          className="mb-6 w-full"
-        >
-          <Button 
-            onClick={handleGetStarted}
-            className="w-full py-7 px-6 bg-gradient-to-r from-cyan-500 via-blue-500 to-blue-600 
-            hover:from-cyan-600 hover:via-blue-600 hover:to-blue-700 text-white rounded-xl 
-            font-bold transition-all duration-300 flex items-center justify-center gap-3 
-            shadow-[0_4px_20px_rgba(0,168,232,0.5)] hover:shadow-[0_4px_25px_rgba(0,168,232,0.7)] 
-            group text-xl tracking-wide border border-cyan-400/30"
-          >
-            Get Started
-            <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
-          </Button>
-        </motion.div>
-
-        {/* 🔥 What We Do Section */}
+        {/* 🔥 What We Do Section - Moved up before the button */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -135,7 +115,25 @@ const WelcomeScreen: React.FC = () => {
           </ul>
         </motion.div>
 
-        {/* Removed Feature Tags as requested */}
+        {/* 🚀 Get Started Button - Moved below the "What We Do" section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.5 }}
+          className="mb-6 w-full"
+        >
+          <Button 
+            onClick={handleGetStarted}
+            className="w-full py-7 px-6 bg-gradient-to-r from-cyan-500 via-blue-500 to-blue-600 
+            hover:from-cyan-600 hover:via-blue-600 hover:to-blue-700 text-white rounded-xl 
+            font-bold transition-all duration-300 flex items-center justify-center gap-3 
+            shadow-[0_4px_20px_rgba(0,168,232,0.5)] hover:shadow-[0_4px_25px_rgba(0,168,232,0.7)] 
+            group text-xl tracking-wide border border-cyan-400/30"
+          >
+            Get Started
+            <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
+          </Button>
+        </motion.div>
       </div>
     </motion.div>
   );
