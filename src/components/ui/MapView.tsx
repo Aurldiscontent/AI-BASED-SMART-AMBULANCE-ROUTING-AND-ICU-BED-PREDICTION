@@ -242,14 +242,18 @@ const MapView: React.FC<MapViewProps> = ({
                 <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
                   point.severity === 'heavy' 
                     ? 'bg-red-100 dark:bg-red-900/30' 
-                    : 'bg-amber-100 dark:bg-amber-900/30'
+                    : point.severity === 'moderate'
+                      ? 'bg-amber-100 dark:bg-amber-900/30'
+                      : 'bg-green-100 dark:bg-green-900/30'
                 } animate-pulse`}>
                   <AlertTriangle 
                     size={14} 
                     className={
                       point.severity === 'heavy' 
                         ? 'text-red-500 dark:text-red-400' 
-                        : 'text-amber-500 dark:text-amber-400'
+                        : point.severity === 'moderate'
+                          ? 'text-amber-500 dark:text-amber-400'
+                          : 'text-green-500 dark:text-green-400'
                     } 
                   />
                 </div>
