@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '@/hooks/use-theme';
 import { useLanguage } from '@/hooks/use-language';
@@ -42,8 +41,8 @@ const Map = () => {
   const [transportMode, setTransportMode] = useState<'ground' | 'air'>('ground');
   const [patientSeverity, setPatientSeverity] = useState<'critical' | 'non-critical'>('non-critical');
   const [hasSetLocation, setHasSetLocation] = useState(false);
+  const [showMultiSelect, setShowMultiSelect] = useState(false);
   
-  // Mock hospitals data
   const mockHospitals: Hospital[] = [
     { 
       id: '1', 
@@ -107,7 +106,6 @@ const Map = () => {
     },
   ];
   
-  // Format destinations for the map component
   const destinations = mockHospitals.map(h => ({
     id: h.id,
     name: h.name,
@@ -118,7 +116,6 @@ const Map = () => {
     specialties: h.specialties
   }));
   
-  // Find the selected hospital
   useEffect(() => {
     if (selectedHospitalId) {
       const hospital = mockHospitals.find(h => h.id === selectedHospitalId);
@@ -126,7 +123,6 @@ const Map = () => {
         setSelectedHospital(hospital);
       }
     } else if (mockHospitals.length > 0) {
-      // Default to the first hospital if none is selected
       setSelectedHospital(mockHospitals[0]);
     }
   }, [selectedHospitalId]);
@@ -144,13 +140,11 @@ const Map = () => {
     
     setIsNavigating(true);
     
-    // Simulate starting navigation
     toast({
       title: t("navigate-to"),
       description: `${t("navigate-to")} ${selectedHospital.name}`,
     });
     
-    // Reset after a delay
     setTimeout(() => {
       setIsNavigating(false);
     }, 2000);
@@ -161,13 +155,11 @@ const Map = () => {
     
     setIsCalling(true);
     
-    // Simulate calling hospital
     toast({
       title: t("calling-hospital"),
       description: `${t("connecting-to")} ${selectedHospital.name}`,
     });
     
-    // Reset after a delay
     setTimeout(() => {
       setIsCalling(false);
     }, 2000);
@@ -183,11 +175,19 @@ const Map = () => {
       return;
     }
     
-    // Simulate setting location with random nearby coordinates
-    const newLat = 40.7128 + (Math.random() * 0.05 - 0.025);
-    const newLng = -74.0060 + (Math.random() * 0.05 - 0.025);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const newLat = position.coords.latitude;
+        const newLng = position.coords.longitude;
+        setUserCoordinates({ lat: newLat, lng: newLng });
+      },
+      () => {
+        const newLat = 40.7128 + (Math.random() * 0.05 - 0.025);
+        const newLng = -74.0060 + (Math.random() * 0.05 - 0.025);
+        setUserCoordinates({ lat: newLat, lng: newLng });
+      }
+    );
     
-    setUserCoordinates({ lat: newLat, lng: newLng });
     setHasSetLocation(true);
     
     toast({
@@ -204,12 +204,15 @@ const Map = () => {
         title: "Critical Patient",
         description: "Air transport is recommended for critical patients.",
       });
+      
+      setShowMultiSelect(true);
+    } else {
+      setShowMultiSelect(false);
     }
   };
   
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 transition-all duration-500">
-      {/* Top Header */}
       <TopHeader />
       
       <div className="container mx-auto px-4 pt-4 pb-20">
@@ -221,7 +224,6 @@ const Map = () => {
         >
           <h1 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">{t("emergency-route")}</h1>
           
-          {/* Map Section */}
           <div className="mb-6">
             <EnhancedMapView 
               destinations={destinations}
@@ -229,9 +231,11 @@ const Map = () => {
               onHospitalClick={handleHospitalClick}
               theme={theme}
               transportMode={transportMode}
-              mapImagePath="/lovable-uploads/68ea6697-a7d4-49f5-bee4-3fd9cb69102e.png"
+              mapImagePath="/lovable-uploads/c26b6999-d1cf-40dd-b57c-d2b5cce67cd0.png"
               showPathFromUser={hasSetLocation}
               userLocation={userCoordinates}
+              centerMapOnSelection={true}
+              enableMultiSelect={showMultiSelect}
               onNavigate={(id) => {
                 const hospital = mockHospitals.find(h => h.id === id);
                 if (hospital) {
@@ -243,7 +247,6 @@ const Map = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Left column: Patient details */}
             <div className={`${
               isDark ? 'bg-gray-800/70 border border-blue-900/30' : 'bg-white/80 border border-blue-100'
             } rounded-xl p-4 space-y-4 shadow-md`}>
@@ -389,7 +392,6 @@ const Map = () => {
               </div>
             </div>
             
-            {/* Center Column: Routes or additional info */}
             <div className={`${
               isDark ? 'bg-gray-800/70 border border-blue-900/30' : 'bg-white/80 border border-blue-100'
             } rounded-xl p-4 shadow-md md:col-span-1`}>
@@ -455,7 +457,6 @@ const Map = () => {
               </div>
             </div>
             
-            {/* Right column: Selected Hospital Info Card */}
             {selectedHospital && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -591,7 +592,6 @@ const Map = () => {
         </motion.div>
       </div>
       
-      {/* Bottom Navigation */}
       <Navbar />
     </div>
   );

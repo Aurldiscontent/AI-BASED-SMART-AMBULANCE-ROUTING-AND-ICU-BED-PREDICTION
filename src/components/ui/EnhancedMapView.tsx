@@ -27,6 +27,7 @@ interface EnhancedMapViewProps {
   showPathFromUser?: boolean;
   userLocation?: { lat: number; lng: number };
   centerMapOnSelection?: boolean;
+  enableMultiSelect?: boolean;
 }
 
 const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
@@ -35,16 +36,18 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
   onHospitalClick,
   transportMode = 'ground',
   theme = 'light',
-  mapImagePath = '/lovable-uploads/65382a9c-1c29-4022-9d95-c24462b61a24.png',
+  mapImagePath = '/lovable-uploads/c26b6999-d1cf-40dd-b57c-d2b5cce67cd0.png',
   onNavigate,
   showPathFromUser = true,
   userLocation = { lat: 40.7128, lng: -74.0060 },
-  centerMapOnSelection = true
+  centerMapOnSelection = true,
+  enableMultiSelect = false
 }) => {
   const { toast } = useToast();
   const [showTraffic, setShowTraffic] = useState(true);
   const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
   const [activeNavigation, setActiveNavigation] = useState(false);
+  const [multiSelectMode, setMultiSelectMode] = useState(enableMultiSelect);
   
   useEffect(() => {
     if (destinations.length > 0) {
@@ -75,8 +78,34 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
       // Simulate navigation completion
       setTimeout(() => {
         setActiveNavigation(false);
-      }, 3000);
+      }, 5000);
     }
+  };
+  
+  const handleMultiDestinationNavigate = (ids: string[]) => {
+    if (ids.length === 0) return;
+    
+    setActiveNavigation(true);
+    
+    const selectedNames = ids.map(id => {
+      const dest = destinations.find(d => d.id === id);
+      return dest?.name || 'hospital';
+    }).join(', ');
+    
+    toast({
+      title: "Multi-Destination Navigation",
+      description: `Optimizing route to ${ids.length} hospitals: ${selectedNames}`,
+    });
+    
+    // If there's a primary handler, call it with the first ID
+    if (onNavigate && ids.length > 0) {
+      onNavigate(ids[0]);
+    }
+    
+    // Simulate navigation completion
+    setTimeout(() => {
+      setActiveNavigation(false);
+    }, 5000);
   };
   
   const handleTrafficClick = () => {
@@ -94,25 +123,54 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
     });
   };
   
+  const toggleMultiSelectMode = () => {
+    setMultiSelectMode(prev => !prev);
+    toast({
+      title: multiSelectMode ? "Single Selection Mode" : "Multi-Selection Mode",
+      description: multiSelectMode 
+        ? "Switched to single hospital selection" 
+        : "You can now select multiple hospitals for route optimization",
+    });
+  };
+  
   return (
-    <MapView
-      destinations={destinations.map(d => ({
-        id: d.id,
-        name: d.name,
-        location: d.location
-      }))}
-      selectedHospitalId={selectedHospitalId}
-      transportMode={transportMode}
-      onHospitalClick={handleHospitalMarkerClick}
-      onNavigate={handleNavigate}
-      onTrafficClick={handleTrafficClick}
-      onPathClick={handlePathClick}
-      customMapImage={mapImagePath || '/lovable-uploads/65382a9c-1c29-4022-9d95-c24462b61a24.png'}
-      userLocation={userLocation}
-      centerMapOnSelection={centerMapOnSelection}
-      activeNavigation={activeNavigation}
-      showTraffic={showTraffic}
-    />
+    <div className="relative">
+      {enableMultiSelect && (
+        <div className="mb-2 flex justify-end">
+          <button
+            onClick={toggleMultiSelectMode}
+            className={`text-xs px-2 py-1 rounded-md ${
+              multiSelectMode 
+                ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300' 
+                : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
+            }`}
+          >
+            {multiSelectMode ? "Multi-Select: ON" : "Multi-Select: OFF"}
+          </button>
+        </div>
+      )}
+      
+      <MapView
+        destinations={destinations.map(d => ({
+          id: d.id,
+          name: d.name,
+          location: d.location
+        }))}
+        selectedHospitalId={selectedHospitalId}
+        transportMode={transportMode}
+        onHospitalClick={handleHospitalMarkerClick}
+        onNavigate={handleNavigate}
+        onTrafficClick={handleTrafficClick}
+        onPathClick={handlePathClick}
+        customMapImage={mapImagePath}
+        userLocation={userLocation}
+        centerMapOnSelection={centerMapOnSelection}
+        activeNavigation={activeNavigation}
+        showTraffic={showTraffic}
+        multiSelectionMode={multiSelectMode}
+        onMultiDestinationSelect={handleMultiDestinationNavigate}
+      />
+    </div>
   );
 };
 

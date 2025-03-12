@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { MapPin, Navigation, Loader2, Map, Zap, AlertTriangle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ActionButton from './ActionButton';
@@ -21,6 +21,8 @@ interface MapViewProps {
   centerMapOnSelection?: boolean;
   activeNavigation?: boolean;
   showTraffic?: boolean;
+  onMultiDestinationSelect?: (ids: string[]) => void;
+  multiSelectionMode?: boolean;
 }
 
 type TrafficSeverity = 'light' | 'moderate' | 'heavy';
@@ -34,10 +36,12 @@ const MapView: React.FC<MapViewProps> = ({
   onHospitalClick,
   onTrafficClick,
   onPathClick,
-  customMapImage = '/lovable-uploads/65382a9c-1c29-4022-9d95-c24462b61a24.png',
+  customMapImage = '/lovable-uploads/c26b6999-d1cf-40dd-b57c-d2b5cce67cd0.png',
   centerMapOnSelection = true,
   activeNavigation = false,
-  showTraffic = true
+  showTraffic = true,
+  onMultiDestinationSelect,
+  multiSelectionMode = false
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [routeInfo, setRouteInfo] = useState<{
@@ -49,11 +53,14 @@ const MapView: React.FC<MapViewProps> = ({
   const [navigationActive, setNavigationActive] = useState(false);
   const [routeProgress, setRouteProgress] = useState(0);
   const [mapCenter, setMapCenter] = useState<{x: number, y: number}>({x: 175, y: 150});
-
+  const [selectedDestinations, setSelectedDestinations] = useState<string[]>([]);
+  const mapRef = useRef<HTMLDivElement>(null);
+  
+  // Load map with a slight delay to ensure proper rendering
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1500);
+    }, 800);
     
     return () => clearTimeout(timer);
   }, []);
@@ -82,6 +89,28 @@ const MapView: React.FC<MapViewProps> = ({
     }
   }, [activeNavigation]);
   
+  // Handle multi-destination selection
+  const toggleDestinationSelection = (id: string) => {
+    if (multiSelectionMode) {
+      setSelectedDestinations(prev => {
+        if (prev.includes(id)) {
+          return prev.filter(destId => destId !== id);
+        } else {
+          return [...prev, id];
+        }
+      });
+    } else if (onHospitalClick) {
+      onHospitalClick(id);
+    }
+  };
+  
+  // Submit selected destinations for navigation
+  const handleMultiDestinationNavigate = () => {
+    if (onMultiDestinationSelect && selectedDestinations.length > 0) {
+      onMultiDestinationSelect(selectedDestinations);
+    }
+  };
+  
   // Recenter map when selection changes
   useEffect(() => {
     if (centerMapOnSelection && selectedHospitalId) {
@@ -102,8 +131,8 @@ const MapView: React.FC<MapViewProps> = ({
           // Interpolate between user location (230, 130) and hospital position
           const pos = positions[index];
           setMapCenter({
-            x: pos.x + (230 - pos.x) / 2,
-            y: pos.y + (130 - pos.y) / 2
+            x: (pos.x + 230) / 2,
+            y: (pos.y + 130) / 2
           });
         }
       }
@@ -215,7 +244,16 @@ const MapView: React.FC<MapViewProps> = ({
 
   // Create a route path with transition animation  
   const getRoutePath = () => {
-    const pathString = `M 230 130 L 210 120 L 190 130 L 170 140 L 150 160 L 140 180 L 130 200 L 120 220`;
+    // Create a more complex path for better visualization
+    const pathString = selectedHospitalId === '1' ? 
+      `M 230 130 L 210 120 L 190 130 L 170 140 L 150 160 L 140 180 L 130 200 L 120 220` :
+      selectedHospitalId === '2' ? 
+      `M 230 130 L 220 120 L 200 110 L 180 120 L 170 140 L 160 170` :
+      selectedHospitalId === '3' ? 
+      `M 230 130 L 220 120 L 215 110 L 210 100 L 200 95 L 190 100` :
+      selectedHospitalId === '4' ? 
+      `M 230 130 L 210 140 L 180 150 L 150 160 L 120 165 L 90 170` :
+      `M 230 130 L 225 120 L 220 110 L 215 100 L 212 95 L 210 90`;
     
     if (navigationActive) {
       // Calculate path length and dash offset for animation
@@ -255,6 +293,29 @@ const MapView: React.FC<MapViewProps> = ({
     );
   };
   
+  // Generate waypoints along the route
+  const getWaypoints = () => {
+    const waypoints = [
+      { x: 210, y: 120 },
+      { x: 190, y: 130 },
+      { x: 170, y: 140 },
+      { x: 150, y: 160 },
+      { x: 140, y: 180 },
+      { x: 130, y: 200 }
+    ];
+    
+    return waypoints.map((point, i) => (
+      <circle 
+        key={`marker-${i}`} 
+        cx={point.x} 
+        cy={point.y} 
+        r={navigationActive && routeProgress > (i/waypoints.length) * 100 ? "3" : "2"} 
+        fill={transportMode === 'air' ? '#3b82f6' : '#10b981'} 
+        className={transportMode === 'air' ? "animate-pulse" : ""}
+      />
+    ));
+  };
+  
   return (
     <div className="w-full rounded-2xl overflow-hidden shadow-md relative h-64 md:h-80 bg-blue-50 dark:bg-gray-800/30">
       {isLoading ? (
@@ -264,11 +325,14 @@ const MapView: React.FC<MapViewProps> = ({
         </div>
       ) : (
         <>
-          <div className="absolute inset-0 w-full h-full flex items-center justify-center overflow-hidden">
+          <div 
+            ref={mapRef}
+            className="absolute inset-0 w-full h-full flex items-center justify-center overflow-hidden"
+          >
             <motion.img 
               src={customMapImage} 
               alt="Map" 
-              className="absolute w-auto min-w-full min-h-full"
+              className="absolute w-auto min-w-full min-h-full object-cover"
               initial={false}
               animate={{
                 x: centerMapOnSelection ? mapCenter.x - 175 : 0, 
@@ -303,25 +367,7 @@ const MapView: React.FC<MapViewProps> = ({
               style={{ pointerEvents: 'none' }}
             >
               {getRoutePath()}
-              
-              {[1, 2, 3, 4].map((_, i) => {
-                const points = [
-                  { x: 210, y: 120 },
-                  { x: 190, y: 130 },
-                  { x: 150, y: 160 },
-                  { x: 130, y: 200 }
-                ];
-                return (
-                  <circle 
-                    key={`marker-${i}`} 
-                    cx={points[i].x} 
-                    cy={points[i].y} 
-                    r={navigationActive && routeProgress > i * 25 ? "3" : "2"} 
-                    fill={transportMode === 'air' ? '#3b82f6' : '#10b981'} 
-                    className={transportMode === 'air' ? "animate-pulse" : ""}
-                  />
-                );
-              })}
+              {getWaypoints()}
               
               {navigationActive && (
                 <motion.circle 
@@ -411,7 +457,8 @@ const MapView: React.FC<MapViewProps> = ({
               { x: 210, y: 90 }    // Little Italy
             ];
             
-            const isSelected = selectedDestination?.id === dest.id;
+            const isSelected = selectedHospitalId === dest.id;
+            const isMultiSelected = selectedDestinations.includes(dest.id);
             
             return (
               <div 
@@ -421,30 +468,44 @@ const MapView: React.FC<MapViewProps> = ({
                   left: positions[index].x, 
                   top: positions[index].y 
                 }}
-                onClick={() => onHospitalClick && onHospitalClick(dest.id)}
+                onClick={() => toggleDestinationSelection(dest.id)}
               >
                 <motion.div
                   initial={{ scale: 0.8, y: 20, opacity: 0 }}
-                  animate={{ scale: isSelected ? 1.2 : 1, y: 0, opacity: 1 }}
+                  animate={{ 
+                    scale: isSelected || isMultiSelected ? 1.2 : 1, 
+                    y: 0, 
+                    opacity: 1 
+                  }}
                   transition={{ delay: index * 0.1, duration: 0.5 }}
                   whileHover={{ scale: 1.15 }}
                 >
-                  <div className={`relative ${isSelected ? 'z-10' : 'z-5'}`}>
-                    {isSelected && (
-                      <div className="absolute -inset-2 rounded-full bg-medical-500/20 animate-pulse" />
+                  <div className={`relative ${(isSelected || isMultiSelected) ? 'z-10' : 'z-5'}`}>
+                    {(isSelected || isMultiSelected) && (
+                      <div className={`absolute -inset-2 rounded-full ${
+                        isMultiSelected ? 'bg-purple-500/20' : 'bg-medical-500/20'
+                      } animate-pulse`} />
                     )}
                     <MapPin 
                       className={`h-6 w-6 ${
                         isSelected 
                           ? 'text-medical-600 drop-shadow-md' 
-                          : index % 3 === 0 ? 'text-red-500' : 'text-green-500'
+                          : isMultiSelected
+                            ? 'text-purple-600 drop-shadow-md'
+                            : index % 3 === 0 ? 'text-red-500' : 'text-green-500'
                       }`} 
-                      strokeWidth={isSelected ? 2.5 : 2} 
-                      fill={isSelected ? '#e0f2fe' : index % 3 === 0 ? '#fee2e2' : '#dcfce7'}
+                      strokeWidth={isSelected || isMultiSelected ? 2.5 : 2} 
+                      fill={
+                        isSelected 
+                          ? '#e0f2fe' 
+                          : isMultiSelected
+                            ? '#f3e8ff'
+                            : index % 3 === 0 ? '#fee2e2' : '#dcfce7'
+                      }
                     />
                   </div>
                   
-                  {isSelected && (
+                  {(isSelected || isMultiSelected) && (
                     <div className="absolute top-6 left-1/2 transform -translate-x-1/2 bg-white dark:bg-gray-800 px-1.5 py-0.5 rounded shadow-sm text-[10px] whitespace-nowrap font-medium">
                       {dest.name}
                     </div>
@@ -462,7 +523,18 @@ const MapView: React.FC<MapViewProps> = ({
             </div>
           )}
           
-          <div className="absolute bottom-4 right-4">
+          <div className="absolute bottom-4 right-4 flex flex-col gap-2">
+            {multiSelectionMode && (
+              <ActionButton
+                variant="info"
+                icon={<span className="text-xs font-bold">{selectedDestinations.length}</span>}
+                onClick={handleMultiDestinationNavigate}
+                disabled={selectedDestinations.length === 0}
+              >
+                Navigate Multi
+              </ActionButton>
+            )}
+            
             <ActionButton
               variant="medical"
               icon={navigationActive ? <Loader2 className="animate-spin" size={18} /> : <Navigation size={18} />}
