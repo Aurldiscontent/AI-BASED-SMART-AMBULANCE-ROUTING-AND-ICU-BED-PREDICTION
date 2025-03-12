@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { MapPin, Navigation, Clock, Map, Zap, AlertTriangle, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -32,13 +33,13 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
   onHospitalClick,
   transportMode = 'ground',
   theme = 'light',
-  mapImagePath = '/placeholder.svg',
+  mapImagePath = '/lovable-uploads/7c8af1f3-722f-4ce8-a1f9-aa995983760e.png',
   onNavigate,
-  showPathFromUser = false,
+  showPathFromUser = true,
   userLocation = { lat: 40.7128, lng: -74.0060 }
 }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [showTraffic, setShowTraffic] = useState(false);
+  const [showTraffic, setShowTraffic] = useState(true);
   const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
   const [routeInfo, setRouteInfo] = useState<{
     distance: string;
@@ -152,10 +153,25 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
                   </div>
                   
                   {isSelected && (
-                    <div className={`absolute top-6 left-1/2 transform -translate-x-1/2 ${
-                      theme === 'dark' ? 'bg-gray-800' : 'bg-white'
-                    } px-2 py-0.5 rounded-full shadow-md text-xs whitespace-nowrap`}>
-                      {hospital.name}
+                    <div className={`absolute top-7 left-1/2 transform -translate-x-1/2 ${
+                      theme === 'dark' ? 'bg-gray-800/90' : 'bg-white/90'
+                    } px-3 py-2 rounded-lg shadow-md text-xs max-w-[150px] z-20`}>
+                      <div className="font-semibold mb-1">{hospital.name}</div>
+                      <div className="text-[10px] mb-1">
+                        ICU: {hospital.icuAvailable}/{hospital.icuTotal}
+                        <br/>
+                        Wait time: {hospital.waitTime} min
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        {hospital.specialties.map(specialty => (
+                          <span 
+                            key={specialty}
+                            className="text-[8px] px-1 py-0.5 rounded-full bg-blue-100 text-blue-700"
+                          >
+                            {specialty}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
