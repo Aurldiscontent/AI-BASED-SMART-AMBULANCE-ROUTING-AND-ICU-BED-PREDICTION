@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { MapPin, Navigation, Loader2, Map, Zap, AlertTriangle } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -40,6 +41,7 @@ const MapView: React.FC<MapViewProps> = ({
   }>({ distance: '10 km', time: '3 min', traffic: 'moderate' });
   const [showAlternateRoutes, setShowAlternateRoutes] = useState(false);
   const [navigationActive, setNavigationActive] = useState(false);
+  const [activeRoute, setActiveRoute] = useState<number[][]>([]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -135,7 +137,7 @@ const MapView: React.FC<MapViewProps> = ({
     {
       lat: userLocation.lat + (selectedDestination?.location.lat - userLocation.lat) * 0.7 - 0.008,
       lng: userLocation.lng + (selectedDestination?.location.lng - userLocation.lng) * 0.7 + 0.008,
-      severity: 'moderate'
+      severity: 'heavy'
     }
   ];
   
@@ -143,6 +145,16 @@ const MapView: React.FC<MapViewProps> = ({
     if (!selectedDestination || !onNavigate) return;
     
     setNavigationActive(true);
+    setActiveRoute([
+      [230, 130],
+      [210, 120],
+      [190, 130],
+      [170, 140],
+      [150, 160],
+      [140, 180],
+      [130, 200],
+      [120, 220]
+    ]);
     onNavigate(selectedDestination.id);
     
     setTimeout(() => {
