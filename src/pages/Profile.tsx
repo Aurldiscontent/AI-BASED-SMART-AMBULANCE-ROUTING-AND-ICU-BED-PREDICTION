@@ -18,6 +18,17 @@ const Profile = () => {
   const isDark = theme === 'dark';
   const [showAnalysis, setShowAnalysis] = React.useState(false);
   
+  // Set Sreejith's profile data when component mounts
+  React.useEffect(() => {
+    // Check if user data already exists
+    if (!localStorage.getItem('userName')) {
+      localStorage.setItem('userName', 'SREEJITH');
+      localStorage.setItem('userEmail', 'sreejith@example.com');
+      localStorage.setItem('userRole', 'First Responder');
+      localStorage.setItem('userLocation', 'Bangalore');
+    }
+  }, []);
+  
   // Check if analysis data exists on component mount
   React.useEffect(() => {
     const checkAnalysisData = () => {
@@ -90,6 +101,14 @@ const Profile = () => {
             <div className="space-y-6">
               {/* Profile Editor Component */}
               <ProfileEditor 
+                initialData={{
+                  name: localStorage.getItem('userName') || 'SREEJITH',
+                  email: localStorage.getItem('userEmail') || 'sreejith@example.com',
+                  phone: '',
+                  role: localStorage.getItem('userRole') || 'First Responder',
+                  medicalHistory: '',
+                  emergencyContacts: [],
+                }}
                 onSave={(data) => {
                   toast({
                     title: "Profile Updated",

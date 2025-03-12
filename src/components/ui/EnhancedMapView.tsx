@@ -26,6 +26,7 @@ interface EnhancedMapViewProps {
   onNavigate?: (id: string) => void;
   showPathFromUser?: boolean;
   userLocation?: { lat: number; lng: number };
+  centerMapOnSelection?: boolean;
 }
 
 const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
@@ -37,11 +38,13 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
   mapImagePath = '/lovable-uploads/65382a9c-1c29-4022-9d95-c24462b61a24.png',
   onNavigate,
   showPathFromUser = true,
-  userLocation = { lat: 40.7128, lng: -74.0060 }
+  userLocation = { lat: 40.7128, lng: -74.0060 },
+  centerMapOnSelection = true
 }) => {
   const { toast } = useToast();
   const [showTraffic, setShowTraffic] = useState(true);
   const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
+  const [activeNavigation, setActiveNavigation] = useState(false);
   
   useEffect(() => {
     if (destinations.length > 0) {
@@ -61,12 +64,18 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
   
   const handleNavigate = (id: string) => {
     if (onNavigate) {
+      setActiveNavigation(true);
       onNavigate(id);
       
       toast({
         title: "Navigation Started",
         description: `Navigating to ${selectedDestination?.name || 'hospital'}. ETA: ${transportMode === 'air' ? '2' : '3'} minutes.`,
       });
+      
+      // Simulate navigation completion
+      setTimeout(() => {
+        setActiveNavigation(false);
+      }, 3000);
     }
   };
   
@@ -100,6 +109,9 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
       onPathClick={handlePathClick}
       customMapImage={mapImagePath || '/lovable-uploads/65382a9c-1c29-4022-9d95-c24462b61a24.png'}
       userLocation={userLocation}
+      centerMapOnSelection={centerMapOnSelection}
+      activeNavigation={activeNavigation}
+      showTraffic={showTraffic}
     />
   );
 };

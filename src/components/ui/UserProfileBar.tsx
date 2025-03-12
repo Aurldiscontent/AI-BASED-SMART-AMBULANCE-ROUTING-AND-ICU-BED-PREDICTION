@@ -1,38 +1,47 @@
 
 import React, { useState, useEffect } from 'react';
-import { User } from 'lucide-react';
+import { User, Pencil } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/hooks/use-language';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 const UserProfileBar = () => {
   const { t, language, setLanguage } = useLanguage();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [userData, setUserData] = useState({
-    name: 'Guest User',
-    email: 'guest@example.com',
-    role: 'User',
-    location: 'Not specified',
+    name: 'SREEJITH',
+    email: 'sreejith@example.com',
+    role: 'First Responder',
+    location: 'Bangalore',
   });
   
   // Load user data from localStorage once when component mounts
   useEffect(() => {
+    // If no data in localStorage, set default SREEJITH data
+    if (!localStorage.getItem('userName')) {
+      localStorage.setItem('userName', 'SREEJITH');
+      localStorage.setItem('userEmail', 'sreejith@example.com');
+      localStorage.setItem('userRole', 'First Responder');
+      localStorage.setItem('userLocation', 'Bangalore');
+    }
+    
+    // Update state with localStorage data
     const name = localStorage.getItem('userName');
     const email = localStorage.getItem('userEmail');
     const role = localStorage.getItem('userRole');
     const location = localStorage.getItem('userLocation');
     
-    if (name && email) {
-      setUserData({
-        name: name,
-        email: email,
-        role: role || 'User',
-        location: location || 'Not specified',
-      });
-    }
+    setUserData({
+      name: name || 'SREEJITH',
+      email: email || 'sreejith@example.com',
+      role: role || 'First Responder',
+      location: location || 'Bangalore',
+    });
   }, []);
   
   const handleSignOut = () => {
@@ -66,6 +75,11 @@ const UserProfileBar = () => {
     });
   };
   
+  const handleEditProfile = () => {
+    setOpen(false);
+    navigate('/profile');
+  };
+  
   return (
     <div className="flex items-center w-full py-2">
       <motion.div 
@@ -91,7 +105,7 @@ const UserProfileBar = () => {
         </DialogTrigger>
         <DialogContent className="sm:max-w-md dark:bg-gray-800 dark:text-gray-200">
           <DialogHeader>
-            <DialogTitle>{t("edit-profile")}</DialogTitle>
+            <DialogTitle>{t("user-profile")}</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="flex flex-col space-y-4">
@@ -107,6 +121,15 @@ const UserProfileBar = () => {
                 <p className="text-sm">{t("role")}: {userData.role}</p>
                 <p className="text-sm">{t("location")}: {userData.location}</p>
               </div>
+              
+              <Button 
+                variant="outline" 
+                className="w-full flex items-center justify-center gap-2"
+                onClick={handleEditProfile}
+              >
+                <Pencil size={16} />
+                {t("edit-profile")}
+              </Button>
               
               <div className="space-y-2">
                 <p className="text-sm font-medium">{t("language")}</p>

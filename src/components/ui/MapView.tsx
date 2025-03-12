@@ -18,6 +18,9 @@ interface MapViewProps {
   onTrafficClick?: () => void;
   onPathClick?: () => void;
   customMapImage?: string;
+  centerMapOnSelection?: boolean;
+  activeNavigation?: boolean;
+  showTraffic?: boolean;
 }
 
 type TrafficSeverity = 'light' | 'moderate' | 'heavy';
@@ -31,7 +34,10 @@ const MapView: React.FC<MapViewProps> = ({
   onHospitalClick,
   onTrafficClick,
   onPathClick,
-  customMapImage = '/lovable-uploads/65382a9c-1c29-4022-9d95-c24462b61a24.png'
+  customMapImage = '/lovable-uploads/65382a9c-1c29-4022-9d95-c24462b61a24.png',
+  centerMapOnSelection = true,
+  activeNavigation = false,
+  showTraffic = true
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [routeInfo, setRouteInfo] = useState<{
@@ -41,7 +47,8 @@ const MapView: React.FC<MapViewProps> = ({
   }>({ distance: '10 km', time: '3 min', traffic: 'moderate' });
   const [showAlternateRoutes, setShowAlternateRoutes] = useState(false);
   const [navigationActive, setNavigationActive] = useState(false);
-  const [activeRoute, setActiveRoute] = useState<number[][]>([]);
+  const [routeProgress, setRouteProgress] = useState(0);
+  const [mapCenter, setMapCenter] = useState<{x: number, y: number}>({x: 175, y: 150});
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -50,6 +57,58 @@ const MapView: React.FC<MapViewProps> = ({
     
     return () => clearTimeout(timer);
   }, []);
+  
+  // Update navigation animation when activeNavigation changes
+  useEffect(() => {
+    if (activeNavigation) {
+      setNavigationActive(true);
+      
+      // Animate route progress
+      setRouteProgress(0);
+      const interval = setInterval(() => {
+        setRouteProgress(prev => {
+          if (prev >= 100) {
+            clearInterval(interval);
+            return 100;
+          }
+          return prev + 2;
+        });
+      }, 60);
+      
+      return () => clearInterval(interval);
+    } else {
+      setNavigationActive(false);
+      setRouteProgress(0);
+    }
+  }, [activeNavigation]);
+  
+  // Recenter map when selection changes
+  useEffect(() => {
+    if (centerMapOnSelection && selectedHospitalId) {
+      const selectedDest = destinations.find(d => d.id === selectedHospitalId);
+      
+      if (selectedDest) {
+        // These are mock positions, in a real app we'd calculate the actual position
+        const positions = [
+          { x: 120, y: 220 },  // Hospital 1
+          { x: 160, y: 170 },  // Hospital 2
+          { x: 190, y: 100 },  // Hospital 3
+          { x: 90, y: 170 },   // Hospital 4
+          { x: 210, y: 90 }    // Hospital 5
+        ];
+        
+        const index = parseInt(selectedDest.id) - 1;
+        if (index >= 0 && index < positions.length) {
+          // Interpolate between user location (230, 130) and hospital position
+          const pos = positions[index];
+          setMapCenter({
+            x: pos.x + (230 - pos.x) / 2,
+            y: pos.y + (130 - pos.y) / 2
+          });
+        }
+      }
+    }
+  }, [selectedHospitalId, destinations, centerMapOnSelection]);
   
   const selectedDestination = selectedHospitalId 
     ? destinations.find(d => d.id === selectedHospitalId) 
@@ -128,16 +187,22 @@ const MapView: React.FC<MapViewProps> = ({
     lat: number;
     lng: number;
     severity: TrafficSeverity;
+    x: number;
+    y: number;
   }> = [
     {
       lat: userLocation.lat + (selectedDestination?.location.lat - userLocation.lat) * 0.3 + 0.005,
       lng: userLocation.lng + (selectedDestination?.location.lng - userLocation.lng) * 0.3 - 0.005,
-      severity: 'moderate'
+      severity: 'moderate',
+      x: 190,
+      y: 130
     },
     {
       lat: userLocation.lat + (selectedDestination?.location.lat - userLocation.lat) * 0.7 - 0.008,
       lng: userLocation.lng + (selectedDestination?.location.lng - userLocation.lng) * 0.7 + 0.008,
-      severity: 'heavy'
+      severity: 'heavy',
+      x: 140,
+      y: 180
     }
   ];
   
@@ -145,21 +210,49 @@ const MapView: React.FC<MapViewProps> = ({
     if (!selectedDestination || !onNavigate) return;
     
     setNavigationActive(true);
-    setActiveRoute([
-      [230, 130],
-      [210, 120],
-      [190, 130],
-      [170, 140],
-      [150, 160],
-      [140, 180],
-      [130, 200],
-      [120, 220]
-    ]);
     onNavigate(selectedDestination.id);
+  };
+
+  // Create a route path with transition animation  
+  const getRoutePath = () => {
+    const pathString = `M 230 130 L 210 120 L 190 130 L 170 140 L 150 160 L 140 180 L 130 200 L 120 220`;
     
-    setTimeout(() => {
-      setNavigationActive(false);
-    }, 1500);
+    if (navigationActive) {
+      // Calculate path length and dash offset for animation
+      const pathLength = 320; // Approximate path length
+      const dashOffset = pathLength - (pathLength * (routeProgress / 100));
+      
+      return (
+        <path 
+          d={pathString}
+          stroke={transportMode === 'air' ? '#3b82f6' : '#10b981'} 
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeDasharray={pathLength}
+          strokeDashoffset={dashOffset}
+          fill="none"
+          className="transition-all duration-300"
+        />
+      );
+    }
+    
+    return (
+      <path 
+        d={pathString}
+        stroke={transportMode === 'air' ? '#3b82f6' : '#10b981'} 
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeDasharray={transportMode === 'air' ? "10,5" : "none"}
+        fill="none"
+        className={`${navigationActive ? "animate-pulse" : ""} cursor-pointer`}
+        onClick={() => {
+          setShowAlternateRoutes(!showAlternateRoutes);
+          onPathClick && onPathClick();
+        }}
+      />
+    );
   };
   
   return (
@@ -171,11 +264,19 @@ const MapView: React.FC<MapViewProps> = ({
         </div>
       ) : (
         <>
-          <img 
-            src={customMapImage} 
-            alt="Map" 
-            className="absolute inset-0 w-full h-full object-cover"
-          />
+          <div className="absolute inset-0 w-full h-full flex items-center justify-center overflow-hidden">
+            <motion.img 
+              src={customMapImage} 
+              alt="Map" 
+              className="absolute w-auto min-w-full min-h-full"
+              initial={false}
+              animate={{
+                x: centerMapOnSelection ? mapCenter.x - 175 : 0, 
+                y: centerMapOnSelection ? mapCenter.y - 150 : 0
+              }}
+              transition={{ duration: 0.5 }}
+            />
+          </div>
           
           {showAlternateRoutes && selectedDestination && alternatePaths.map((alternatePath, idx) => (
             <svg key={`alt-path-${idx}`} className="absolute inset-0 w-full h-full" style={{ pointerEvents: 'none' }}>
@@ -200,22 +301,8 @@ const MapView: React.FC<MapViewProps> = ({
             <svg 
               className="absolute inset-0 w-full h-full" 
               style={{ pointerEvents: 'none' }}
-              onClick={() => onPathClick && onPathClick()}
             >
-              <path 
-                d={`M 230 130 L 210 120 L 190 130 L 170 140 L 150 160 L 140 180 L 130 200 L 120 220`}
-                stroke={transportMode === 'air' ? '#3b82f6' : '#10b981'} 
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeDasharray={transportMode === 'air' ? "10,5" : "none"}
-                fill="none"
-                className={`${navigationActive ? "animate-pulse" : ""} cursor-pointer`}
-                onClick={() => {
-                  setShowAlternateRoutes(!showAlternateRoutes);
-                  onPathClick && onPathClick();
-                }}
-              />
+              {getRoutePath()}
               
               {[1, 2, 3, 4].map((_, i) => {
                 const points = [
@@ -229,52 +316,65 @@ const MapView: React.FC<MapViewProps> = ({
                     key={`marker-${i}`} 
                     cx={points[i].x} 
                     cy={points[i].y} 
-                    r="2" 
+                    r={navigationActive && routeProgress > i * 25 ? "3" : "2"} 
                     fill={transportMode === 'air' ? '#3b82f6' : '#10b981'} 
                     className={transportMode === 'air' ? "animate-pulse" : ""}
                   />
                 );
               })}
+              
+              {navigationActive && (
+                <motion.circle 
+                  cx={230 - (routeProgress * 1.1)}
+                  cy={130 + (routeProgress * 0.9)}
+                  r="5"
+                  fill={transportMode === 'air' ? '#3b82f6' : '#10b981'}
+                  stroke="white"
+                  strokeWidth="2"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
+              )}
             </svg>
           )}
           
-          {trafficPoints.map((point, idx) => {
-            const positions = [
-              { x: 190, y: 130 },
-              { x: 140, y: 180 }
-            ];
-            
-            return (
-              <div 
-                key={`traffic-${idx}`}
-                className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer"
-                style={{ left: positions[idx].x, top: positions[idx].y }}
-                onClick={() => onTrafficClick && onTrafficClick()}
-              >
-                <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
-                  point.severity === 'heavy' 
-                    ? 'bg-red-100 dark:bg-red-900/30' 
-                    : point.severity === 'moderate'
-                      ? 'bg-amber-100 dark:bg-amber-900/30'
-                      : 'bg-green-100 dark:bg-green-900/30'
-                } animate-pulse`}>
-                  <AlertTriangle 
-                    size={14} 
-                    className={
-                      point.severity === 'heavy' 
-                        ? 'text-red-500 dark:text-red-400' 
-                        : point.severity === 'moderate'
-                          ? 'text-amber-500 dark:text-amber-400'
-                          : 'text-green-500 dark:text-green-400'
-                    } 
-                  />
-                </div>
+          {showTraffic && trafficPoints.map((point, idx) => (
+            <div 
+              key={`traffic-${idx}`}
+              className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer"
+              style={{ left: point.x, top: point.y }}
+              onClick={() => onTrafficClick && onTrafficClick()}
+            >
+              <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                point.severity === 'heavy' 
+                  ? 'bg-red-100 dark:bg-red-900/30' 
+                  : point.severity === 'moderate'
+                    ? 'bg-amber-100 dark:bg-amber-900/30'
+                    : 'bg-green-100 dark:bg-green-900/30'
+              } animate-pulse`}>
+                <AlertTriangle 
+                  size={14} 
+                  className={
+                    point.severity === 'heavy' 
+                      ? 'text-red-500 dark:text-red-400' 
+                      : point.severity === 'moderate'
+                        ? 'text-amber-500 dark:text-amber-400'
+                        : 'text-green-500 dark:text-green-400'
+                  } 
+                />
               </div>
-            );
-          })}
+            </div>
+          ))}
           
-          <div 
+          <motion.div 
             className="absolute left-[230px] top-[130px] transform -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20"
+            initial={false}
+            animate={{ 
+              scale: navigationActive ? 1.2 : 1,
+              x: navigationActive ? routeProgress * -1.1 : 0,
+              y: navigationActive ? routeProgress * 0.9 : 0
+            }}
             onClick={() => {
               const sortedDestinations = [...destinations].sort((a, b) => {
                 const distA = Math.sqrt(
@@ -300,7 +400,7 @@ const MapView: React.FC<MapViewProps> = ({
             <div className="absolute top-6 left-1/2 transform -translate-x-1/2 bg-white dark:bg-gray-800 px-2 py-1 rounded-md shadow-sm">
               <span className="text-xs font-medium">Patient</span>
             </div>
-          </div>
+          </motion.div>
           
           {destinations.slice(0, 5).map((dest, index) => {
             const positions = [
