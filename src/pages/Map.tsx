@@ -40,7 +40,7 @@ const Map = () => {
   const mockHospitals: Hospital[] = [
     { 
       id: '1', 
-      name: 'City General Hospital', 
+      name: 'Spring Street Medical Center', 
       location: { lat: 40.7128, lng: -74.0060 }, 
       icuAvailable: 5, 
       icuTotal: 20, 
@@ -51,7 +51,7 @@ const Map = () => {
     },
     { 
       id: '2', 
-      name: 'Memorial Medical Center', 
+      name: 'Little Italy Hospital', 
       location: { lat: 40.7228, lng: -74.0090 }, 
       icuAvailable: 8, 
       icuTotal: 15, 
@@ -62,7 +62,7 @@ const Map = () => {
     },
     { 
       id: '3', 
-      name: 'Downtown Hospital', 
+      name: 'Canal Street Medical', 
       location: { lat: 40.7158, lng: -74.0030 }, 
       icuAvailable: 2, 
       icuTotal: 10, 
@@ -73,7 +73,7 @@ const Map = () => {
     },
     { 
       id: '4', 
-      name: 'Manhattan Medical', 
+      name: 'Tribeca Health Center', 
       location: { lat: 40.7208, lng: -74.0120 }, 
       icuAvailable: 10, 
       icuTotal: 25, 
@@ -84,7 +84,7 @@ const Map = () => {
     },
     { 
       id: '5', 
-      name: 'Lower East Medical Center', 
+      name: 'Lower Manhattan Hospital', 
       location: { lat: 40.7148, lng: -74.0070 }, 
       icuAvailable: 3, 
       icuTotal: 12, 
@@ -162,154 +162,142 @@ const Map = () => {
   };
   
   return (
-    <div 
-      className="min-h-screen w-full bg-cover bg-center transition-all duration-500"
-      style={{ 
-        backgroundImage: `url('/lovable-uploads/14c7b14a-212b-4984-9c54-32bd32be1010.png')`,
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat'
-      }}
-    >
-      <div className={`min-h-screen w-full backdrop-blur-sm transition-all duration-500 pb-20 ${
-        isDark 
-          ? 'bg-gradient-to-br from-gray-900/90 via-purple-900/70 to-gray-900/90' 
-          : 'bg-gradient-to-br from-blue-50/80 via-purple-100/60 to-blue-50/80'
-      }`}>
-        {/* Top Header */}
-        <TopHeader />
-        
-        <div className="container mx-auto px-4 pt-4 pb-20">
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="w-full"
-          >
-            <h1 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">{t("emergency-route")}</h1>
-            
-            {/* Map Section with OpenStreetMap style map */}
-            <div className="mb-6">
-              <EnhancedMapView 
-                destinations={destinations}
-                selectedHospitalId={selectedHospital?.id}
-                onHospitalClick={handleHospitalClick}
-                theme={theme}
-                transportMode="ground"
-                onNavigate={(id) => {
-                  const hospital = mockHospitals.find(h => h.id === id);
-                  if (hospital) {
-                    setSelectedHospital(hospital);
-                    handleNavigate();
-                  }
-                }}
-              />
-            </div>
-            
-            {/* Hospital Info */}
-            {selectedHospital && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-md"
-              >
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200">{selectedHospital.name}</h2>
-                    <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mt-1">
-                      <MapPin size={14} className="mr-1" />
-                      <span>{selectedHospital.distance}</span>
-                      <span className="mx-2">•</span>
-                      <Clock size={14} className="mr-1" />
-                      <span>{selectedHospital.travelTime}</span>
-                    </div>
-                  </div>
-                  <div className="bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-md">
-                    <div className="flex items-center space-x-1">
-                      <span className="text-blue-700 dark:text-blue-300 font-medium">ICU:</span>
-                      <span className={`font-bold ${
-                        selectedHospital.icuAvailable < 3 
-                          ? 'text-red-600 dark:text-red-400' 
-                          : selectedHospital.icuAvailable < 6
-                            ? 'text-amber-600 dark:text-amber-400'
-                            : 'text-green-600 dark:text-green-400'
-                      }`}>
-                        {selectedHospital.icuAvailable}/{selectedHospital.icuTotal}
-                      </span>
-                    </div>
+    <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 transition-all duration-500">
+      {/* Top Header */}
+      <TopHeader />
+      
+      <div className="container mx-auto px-4 pt-4 pb-20">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="w-full"
+        >
+          <h1 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">{t("emergency-route")}</h1>
+          
+          {/* Map Section with OpenStreetMap style map */}
+          <div className="mb-6">
+            <EnhancedMapView 
+              destinations={destinations}
+              selectedHospitalId={selectedHospital?.id}
+              onHospitalClick={handleHospitalClick}
+              theme={theme}
+              transportMode="ground"
+              mapImagePath="/lovable-uploads/7ec18946-42f4-4809-ad8c-b0c5c04089cd.png"
+              onNavigate={(id) => {
+                const hospital = mockHospitals.find(h => h.id === id);
+                if (hospital) {
+                  setSelectedHospital(hospital);
+                  handleNavigate();
+                }
+              }}
+            />
+          </div>
+          
+          {/* Hospital Info */}
+          {selectedHospital && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-md"
+            >
+              <div className="flex justify-between items-start mb-3">
+                <div>
+                  <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200">{selectedHospital.name}</h2>
+                  <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    <MapPin size={14} className="mr-1" />
+                    <span>{selectedHospital.distance}</span>
+                    <span className="mx-2">•</span>
+                    <Clock size={14} className="mr-1" />
+                    <span>{selectedHospital.travelTime}</span>
                   </div>
                 </div>
-                
-                <div className="grid grid-cols-2 gap-3 mb-4">
-                  <div className="flex items-center bg-gray-50 dark:bg-gray-700/30 p-2 rounded-lg">
-                    <Clock className="h-5 w-5 text-amber-500 mr-2" />
-                    <div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Wait Time</p>
-                      <p className="font-medium text-gray-800 dark:text-gray-200">{selectedHospital.waitTime} minutes</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center bg-gray-50 dark:bg-gray-700/30 p-2 rounded-lg">
-                    <AlertCircle className="h-5 w-5 text-medical-500 mr-2" />
-                    <div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Status</p>
-                      <p className={`font-medium ${
-                        selectedHospital.icuAvailable < 3 
-                          ? 'text-red-600 dark:text-red-400' 
+                <div className="bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-md">
+                  <div className="flex items-center space-x-1">
+                    <span className="text-blue-700 dark:text-blue-300 font-medium">ICU:</span>
+                    <span className={`font-bold ${
+                      selectedHospital.icuAvailable < 3 
+                        ? 'text-red-600 dark:text-red-400' 
+                        : selectedHospital.icuAvailable < 6
+                          ? 'text-amber-600 dark:text-amber-400'
                           : 'text-green-600 dark:text-green-400'
-                      }`}>
-                        {selectedHospital.icuAvailable < 3 ? 'Critical' : 'Available'}
-                      </p>
-                    </div>
+                    }`}>
+                      {selectedHospital.icuAvailable}/{selectedHospital.icuTotal}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                <div className="flex items-center bg-gray-50 dark:bg-gray-700/30 p-2 rounded-lg">
+                  <Clock className="h-5 w-5 text-amber-500 mr-2" />
+                  <div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Wait Time</p>
+                    <p className="font-medium text-gray-800 dark:text-gray-200">{selectedHospital.waitTime} minutes</p>
                   </div>
                 </div>
                 
-                <div className="grid grid-cols-2 gap-3">
-                  <Button
-                    className="bg-medical-500 hover:bg-medical-600 text-white w-full flex items-center justify-center gap-2"
-                    onClick={handleNavigate}
-                    disabled={isNavigating}
-                  >
-                    {isNavigating ? (
-                      <>
-                        <div className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full"></div>
-                        <span>Navigating...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Navigation size={16} />
-                        <span>{t("navigate-to")}</span>
-                      </>
-                    )}
-                  </Button>
-                  
-                  <Button
-                    variant="outline"
-                    className="w-full flex items-center justify-center gap-2"
-                    onClick={handleCall}
-                    disabled={isCalling}
-                  >
-                    {isCalling ? (
-                      <>
-                        <div className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full"></div>
-                        <span>Calling...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Phone size={16} />
-                        <span>Call</span>
-                      </>
-                    )}
-                  </Button>
+                <div className="flex items-center bg-gray-50 dark:bg-gray-700/30 p-2 rounded-lg">
+                  <AlertCircle className="h-5 w-5 text-medical-500 mr-2" />
+                  <div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Status</p>
+                    <p className={`font-medium ${
+                      selectedHospital.icuAvailable < 3 
+                        ? 'text-red-600 dark:text-red-400' 
+                        : 'text-green-600 dark:text-green-400'
+                    }`}>
+                      {selectedHospital.icuAvailable < 3 ? 'Critical' : 'Available'}
+                    </p>
+                  </div>
                 </div>
-              </motion.div>
-            )}
-          </motion.div>
-        </div>
-        
-        {/* Bottom Navigation */}
-        <Navbar />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3">
+                <Button
+                  className="bg-medical-500 hover:bg-medical-600 text-white w-full flex items-center justify-center gap-2"
+                  onClick={handleNavigate}
+                  disabled={isNavigating}
+                >
+                  {isNavigating ? (
+                    <>
+                      <div className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full"></div>
+                      <span>Navigating...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Navigation size={16} />
+                      <span>{t("navigate-to")}</span>
+                    </>
+                  )}
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  className="w-full flex items-center justify-center gap-2"
+                  onClick={handleCall}
+                  disabled={isCalling}
+                >
+                  {isCalling ? (
+                    <>
+                      <div className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full"></div>
+                      <span>Calling...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Phone size={16} />
+                      <span>Call</span>
+                    </>
+                  )}
+                </Button>
+              </div>
+            </motion.div>
+          )}
+        </motion.div>
       </div>
+      
+      {/* Bottom Navigation */}
+      <Navbar />
     </div>
   );
 };
