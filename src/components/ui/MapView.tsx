@@ -130,7 +130,10 @@ const MapView: React.FC<MapViewProps> = ({
           { x: 270, y: 170 },  // Hospital 4
           { x: 220, y: 80 },   // Hospital 5
           { x: 120, y: 120 },  // Hospital 6
-          { x: 110, y: 190 },  // and so on...
+          { x: 110, y: 190 },  // Hospital 7
+          { x: 190, y: 210 },  // Hospital 8
+          { x: 250, y: 110 },  // Hospital 9
+          { x: 190, y: 180 },  // Hospital 10
         ];
         
         const index = parseInt(selectedDest.id) - 1;
@@ -212,7 +215,7 @@ const MapView: React.FC<MapViewProps> = ({
             strokeDashoffset: `${dashOffset}px`,
             stroke: transportMode === 'air' ? '#3b82f6' : '#ef4444',
             strokeWidth: transportMode === 'air' ? 6 : 4,
-            strokeDasharray: transportMode === 'air' ? '15, 10' : '10, 5',
+            strokeDasharray: transportMode === 'air' ? '15, 10' : '10, 5'
           }}
         />
       );
@@ -466,12 +469,16 @@ const MapView: React.FC<MapViewProps> = ({
             icon={<Zap size={18} />}
             onClick={handleNavigateClick}
             disabled={!selectedHospitalId || navigationActive}
-          />
+          >
+            Navigate
+          </ActionButton>
           <ActionButton
             variant="outline"
             icon={<Map size={18} />}
             onClick={onTrafficClick}
-          />
+          >
+            Traffic
+          </ActionButton>
           <ActionButton
             variant="outline"
             icon={
@@ -493,7 +500,9 @@ const MapView: React.FC<MapViewProps> = ({
               )
             }
             onClick={onPathClick}
-          />
+          >
+            Mode
+          </ActionButton>
         </div>
         
         <div className="absolute bottom-4 right-4 flex flex-col gap-2">
@@ -563,3 +572,4 @@ const MapView: React.FC<MapViewProps> = ({
 };
 
 export default MapView;
+
