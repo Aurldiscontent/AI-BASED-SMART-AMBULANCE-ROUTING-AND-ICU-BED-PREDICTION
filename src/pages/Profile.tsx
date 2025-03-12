@@ -78,52 +78,32 @@ const Profile = () => {
       }`}>
         <TopHeader />
         
-        <div className="container mx-auto px-4 pt-4 pb-20">
+        <div className="container mx-auto px-4 pt-4 pb-20 flex justify-center">
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="max-w-4xl mx-auto"
+            className="max-w-2xl w-full"
           >
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="space-y-6">
-                <h1 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">{t("profile")}</h1>
-                
-                {/* Profile Editor Component */}
-                <ProfileEditor 
-                  onSave={(data) => {
-                    toast({
-                      title: "Profile Updated",
-                      description: "Your profile has been updated successfully.",
-                    });
-                  }}
-                />
-                
-                {/* Data Upload Component */}
-                <div className="hidden lg:block">
-                  <DataUploadDialog 
-                    onAnalysisReady={handleAnalysisReady}
-                    onResetAnalysis={handleResetAnalysis}
-                    analysisExists={showAnalysis}
-                  />
-                </div>
-              </div>
+            <h1 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-200">{t("profile")}</h1>
+            
+            <div className="space-y-6">
+              {/* Profile Editor Component */}
+              <ProfileEditor 
+                onSave={(data) => {
+                  toast({
+                    title: "Profile Updated",
+                    description: "Your profile has been updated successfully.",
+                  });
+                }}
+              />
               
-              <div className="space-y-6">
-                {/* Data Upload Dialog (mobile view) */}
-                <div className="block lg:hidden">
-                  <DataUploadDialog 
-                    onAnalysisReady={handleAnalysisReady}
-                    onResetAnalysis={handleResetAnalysis}
-                    analysisExists={showAnalysis}
-                  />
-                </div>
-                
-                {/* Emergency Contacts - This would be part of ProfileEditor now */}
-                <div className="lg:mt-[82px]">
-                  {/* Additional profile-related content can go here */}
-                </div>
-              </div>
+              {/* Data Upload Component */}
+              <DataUploadDialog 
+                onAnalysisReady={handleAnalysisReady}
+                onResetAnalysis={handleResetAnalysis}
+                analysisExists={showAnalysis}
+              />
             </div>
           </motion.div>
         </div>

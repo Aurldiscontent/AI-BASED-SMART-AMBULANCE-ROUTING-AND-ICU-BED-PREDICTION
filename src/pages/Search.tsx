@@ -9,6 +9,7 @@ import { Search as SearchIcon, MapPin, ArrowRight, Clock, Ambulance } from 'luci
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
 interface Hospital {
   id: string;
@@ -24,10 +25,13 @@ const Search = () => {
   const { theme } = useTheme();
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const isDark = theme === 'dark';
   const [searchTerm, setSearchTerm] = useState('');
   const [searching, setSearching] = useState(false);
+  const [searchPerformed, setSearchPerformed] = useState(false);
   const [searchResults, setSearchResults] = useState<Hospital[]>([]);
+  const [location, setLocation] = useState('');
   
   // Mock hospitals data
   const mockHospitals: Hospital[] = [
@@ -41,23 +45,57 @@ const Search = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!searchTerm.trim()) return;
+    if (!searchTerm.trim() && !location.trim()) {
+      toast({
+        title: "Input Required",
+        description: "Please enter either a hospital name or location to search.",
+        variant: "destructive"
+      });
+      return;
+    }
     
     setSearching(true);
     
     // Simulate search delay
     setTimeout(() => {
-      // Filter hospitals based on search term
-      const results = mockHospitals.filter(hospital => 
-        hospital.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      // Filter hospitals based on search term or location
+      let results;
       
-      setSearchResults(results.length > 0 ? results : mockHospitals);
+      if (searchTerm.trim()) {
+        results = mockHospitals.filter(hospital => 
+          hospital.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      } else {
+        // If searching by location, we'll return all hospitals sorted by distance
+        results = [...mockHospitals].sort((a, b) => 
+          parseFloat(a.distance) - parseFloat(b.distance)
+        );
+      }
+      
+      setSearchResults(results.length > 0 ? results : []);
+      setSearchPerformed(true);
       setSearching(false);
+
+      if (results.length === 0) {
+        toast({
+          title: "No Results Found",
+          description: "We couldn't find any hospitals matching your search criteria.",
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Hospitals Found",
+          description: `We found ${results.length} hospitals near your location.`,
+        });
+      }
     }, 800);
   };
   
   const handleNavigateToHospital = (hospitalId: string) => {
+    toast({
+      title: "Navigation Started",
+      description: "Generating route to selected hospital...",
+    });
     navigate(`/map?hospital=${hospitalId}`);
   };
   
@@ -83,16 +121,16 @@ const Search = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="w-full"
+            className="max-w-3xl mx-auto"
           >
-            <h1 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">{t("search-hospitals")}</h1>
+            <h1 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-200">{t("search-hospitals")}</h1>
             
             {/* Search Form */}
-            <form onSubmit={handleSearch} className="mb-6">
+            <form onSubmit={handleSearch} className="mb-6 space-y-4">
               <div className="relative">
                 <Input
                   type="text"
-                  placeholder={t("search-hospitals")}
+                  placeholder="Search by hospital name"
                   className="pl-10 pr-4 py-3 rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -100,22 +138,36 @@ const Search = () => {
                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                   <SearchIcon className="h-5 w-5 text-gray-400" />
                 </div>
-                <Button 
-                  type="submit" 
-                  className="absolute inset-y-0 right-0 px-4 m-[2px] rounded-lg bg-medical-500 hover:bg-medical-600"
-                  disabled={searching}
-                >
-                  {searching ? 
-                    <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : 
-                    t("search-hospitals").split('...')[0]}
-                </Button>
               </div>
+              
+              <div className="relative">
+                <Input
+                  type="text"
+                  placeholder="Enter your location"
+                  className="pl-10 pr-4 py-3 rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                />
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <MapPin className="h-5 w-5 text-gray-400" />
+                </div>
+              </div>
+              
+              <Button 
+                type="submit" 
+                className="w-full py-5 rounded-lg bg-medical-500 hover:bg-medical-600"
+                disabled={searching}
+              >
+                {searching ? 
+                  <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : 
+                  t("search-hospitals").split('...')[0]}
+              </Button>
             </form>
             
             {/* Search Results */}
             <div className="space-y-4">
               {searchResults.length > 0 && (
-                <h2 className="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-200">{t("hospitals-near-you")}</h2>
+                <h2 className="text-xl font-semibold mb-2 text-center text-gray-800 dark:text-gray-200">{t("hospitals-near-you")}</h2>
               )}
               
               {searchResults.map((hospital) => (
@@ -172,9 +224,11 @@ const Search = () => {
                 </motion.div>
               ))}
               
-              {searchTerm && searchResults.length === 0 && !searching && (
+              {searchPerformed && searchResults.length === 0 && !searching && (
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-6 text-center shadow-md">
-                  <p className="text-gray-500 dark:text-gray-400">No hospitals found matching "{searchTerm}"</p>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    No hospitals found matching your search criteria.
+                  </p>
                 </div>
               )}
             </div>

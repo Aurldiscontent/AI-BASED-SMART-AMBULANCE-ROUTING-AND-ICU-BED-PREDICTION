@@ -85,6 +85,26 @@ const WelcomeScreen: React.FC = () => {
           </p>
         </motion.div>
 
+        {/* 🚀 Get Started Button - Moved up below the title */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.5 }}
+          className="mb-6 w-full"
+        >
+          <Button 
+            onClick={handleGetStarted}
+            className="w-full py-7 px-6 bg-gradient-to-r from-cyan-500 via-blue-500 to-blue-600 
+            hover:from-cyan-600 hover:via-blue-600 hover:to-blue-700 text-white rounded-xl 
+            font-bold transition-all duration-300 flex items-center justify-center gap-3 
+            shadow-[0_4px_20px_rgba(0,168,232,0.5)] hover:shadow-[0_4px_25px_rgba(0,168,232,0.7)] 
+            group text-xl tracking-wide border border-cyan-400/30"
+          >
+            Get Started
+            <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
+          </Button>
+        </motion.div>
+
         {/* 🔥 What We Do Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -115,55 +135,7 @@ const WelcomeScreen: React.FC = () => {
           </ul>
         </motion.div>
 
-        {/* 🚀 Feature Tags */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9, duration: 0.5 }}
-          className="w-full mb-6"
-        >
-          <div className="flex flex-wrap justify-center gap-2">
-            {[
-              { label: "Emergency Response", emoji: "🚑" },
-              { label: "Smart AI Routing", emoji: "🗺️" },
-              { label: "Hospital Network", emoji: "🏥" },
-              { label: "Real-time Updates", emoji: "⏳" },
-              { label: "Saving Lives Together", emoji: "👨‍⚕️" },
-              { label: "Fast & Reliable", emoji: "⚡" },
-            ].map((tag, index) => (
-              <motion.span 
-                key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.9 + (index * 0.05), duration: 0.3 }}
-                className="inline-flex items-center px-3 py-1.5 m-1 rounded-full bg-white/10 
-                backdrop-blur-sm border border-cyan-500/30 text-cyan-100 shadow-lg"
-              >
-                <span className="mr-1 text-lg">{tag.emoji}</span> {tag.label}
-              </motion.span>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* 🚀 Get Started Button */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.5 }}
-          className="mt-2 w-full"
-        >
-          <Button 
-            onClick={handleGetStarted}
-            className="w-full py-7 px-6 bg-gradient-to-r from-cyan-500 via-blue-500 to-blue-600 
-            hover:from-cyan-600 hover:via-blue-600 hover:to-blue-700 text-white rounded-xl 
-            font-bold transition-all duration-300 flex items-center justify-center gap-3 
-            shadow-[0_4px_20px_rgba(0,168,232,0.5)] hover:shadow-[0_4px_25px_rgba(0,168,232,0.7)] 
-            group text-xl tracking-wide border border-cyan-400/30"
-          >
-            Get Started
-            <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
-          </Button>
-        </motion.div>
+        {/* Removed Feature Tags as requested */}
       </div>
     </motion.div>
   );

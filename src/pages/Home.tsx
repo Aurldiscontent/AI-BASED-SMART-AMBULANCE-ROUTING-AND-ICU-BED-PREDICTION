@@ -11,22 +11,27 @@ import HospitalDashboard from '@/components/ui/HospitalDashboard';
 import Navbar from '@/components/ui/Navbar';
 import EmergencyDashboard from '@/components/ui/EmergencyDashboard';
 import MedicalAnalytics from '@/components/ui/MedicalAnalytics';
+import PatientSeveritySelector from '@/components/ui/PatientSeveritySelector';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Switch } from '@/components/ui/switch';
 import { Wifi, WifiOff, Zap, AlertTriangle, Info, Clock, MapPin, Sun, Moon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import LanguageSwitcher from '@/components/ui/LanguageSwitcher';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 const Home = () => {
   const { theme, setTheme } = useTheme();
   const { t } = useLanguage();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const isDark = theme === 'dark';
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [systemStatus, setSystemStatus] = useState<'normal' | 'warning' | 'critical'>('normal');
   const [transportMode, setTransportMode] = useState<'ground' | 'air'>('ground');
-  const [patientSeverity, setPatientSeverity] = useState(5);
+  const [patientSeverity, setPatientSeverity] = useState<'critical' | 'non-critical'>('non-critical');
   const [selectedAnalyticView, setSelectedAnalyticView] = useState('icu');
+  const [sourceLocation, setSourceLocation] = useState('');
   
   const [hospitals] = useState([
     { id: '1', name: 'City General Hospital', icuBeds: 12, totalBeds: 20, aiSurvivalRate: 92, distance: '2.3 km', waitTime: '5 min', specialties: ['Trauma', 'Cardiac'] },
@@ -170,21 +175,38 @@ const Home = () => {
     setShowAnalysis(false);
   };
 
-  const handleSeverityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPatientSeverity(parseInt(e.target.value));
+  const handlePatientSeverityChange = (severity: 'critical' | 'non-critical') => {
+    setPatientSeverity(severity);
+    
+    if (severity === 'critical' && transportMode !== 'air') {
+      toast({
+        title: "Critical Patient",
+        description: "Air transport is recommended for critical patients.",
+      });
+    }
   };
 
-  const getSeverityLabel = (value: number) => {
-    if (value <= 3) return 'Minor';
-    if (value <= 7) return 'Moderate';
-    return 'Critical';
-  };
-  
   const toggleTheme = () => {
     setTheme(isDark ? 'light' : 'dark');
     toast({
       title: `Switched to ${isDark ? 'Light' : 'Dark'} Mode`,
       description: `Display has been updated to ${isDark ? 'light' : 'dark'} mode.`,
+    });
+  };
+
+  const handleSearchLocation = () => {
+    if (!sourceLocation.trim()) {
+      toast({
+        title: "Location Required",
+        description: "Please enter a source location to search.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    toast({
+      title: "Location Set",
+      description: `Source location set to: ${sourceLocation}`,
     });
   };
   
@@ -202,6 +224,7 @@ const Home = () => {
           ? 'bg-gradient-to-br from-gray-900/95 via-gray-800/90 to-gray-900/95' 
           : 'bg-gradient-to-br from-white/95 via-blue-50/90 to-white/95'
         } backdrop-blur-sm transition-all duration-500 pb-20`}>
+        
         <div className="container mx-auto px-4">
           <div className={`py-4 flex flex-col sm:flex-row justify-between items-center border-b ${
             isDark ? 'border-blue-900/30' : 'border-blue-200/80'
@@ -218,6 +241,7 @@ const Home = () => {
                 {t('emergency-route')}
               </p>
             </div>
+            
             <div className="flex items-center gap-4">
               <LanguageSwitcher />
               
@@ -247,7 +271,7 @@ const Home = () => {
                 )}
                 <span>
                   {systemStatus === 'normal' 
-                    ? t('network-connection-issues') 
+                    ? t('network-active') 
                     : systemStatus === 'warning'
                       ? t('partial-network-connection')
                       : t('network-connection-issues')
@@ -255,7 +279,30 @@ const Home = () => {
                 </span>
               </div>
             </div>
+            
             <TopHeader />
+          </div>
+          
+          <div className={`flex flex-wrap justify-center gap-2 py-2 ${
+            isDark ? 'bg-gray-800/50' : 'bg-white/50'
+          } backdrop-blur-sm rounded-lg mt-2`}>
+            {[
+              { label: "Dashboard", onClick: () => navigate("/home") },
+              { label: "Search Hospitals", onClick: () => navigate("/search") },
+              { label: "Patient Entry", onClick: () => navigate("/profile") },
+              { label: "Map View", onClick: () => navigate("/map") },
+              { label: "Analysis", onClick: () => setShowAnalysis(true) },
+            ].map((item, index) => (
+              <Button 
+                key={index} 
+                variant="ghost" 
+                size="sm"
+                onClick={item.onClick}
+                className={isDark ? "text-blue-300 hover:text-blue-100" : "text-blue-700 hover:text-blue-900"}
+              >
+                {item.label}
+              </Button>
+            ))}
           </div>
         </div>
         
@@ -342,6 +389,7 @@ const Home = () => {
                   </div>
                   
                   <h2 className={`text-lg font-bold ${isDark ? 'text-blue-400' : 'text-blue-700'} mt-6 mb-3`}>Emergency Alerts</h2>
+                  
                   <div className="space-y-2 max-h-60 overflow-y-auto scrollbar-none pr-2">
                     {alerts.map(alert => (
                       <div 
@@ -466,15 +514,27 @@ const Home = () => {
                   <div className="space-y-4">
                     <div>
                       <label className={`block text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-1`}>Patient Location</label>
-                      <input 
-                        type="text" 
-                        className={`w-full ${
-                          isDark 
-                            ? 'bg-gray-900/60 border border-gray-700 text-gray-200' 
-                            : 'bg-white/60 border border-gray-300 text-gray-700'
-                        } rounded-lg px-3 py-2`}
-                        defaultValue={patientData.location}
-                      />
+                      <div className="flex gap-2">
+                        <input 
+                          type="text" 
+                          className={`w-full ${
+                            isDark 
+                              ? 'bg-gray-900/60 border border-gray-700 text-gray-200' 
+                              : 'bg-white/60 border border-gray-300 text-gray-700'
+                          } rounded-lg px-3 py-2`}
+                          value={sourceLocation}
+                          onChange={(e) => setSourceLocation(e.target.value)}
+                          placeholder="Enter exact location"
+                        />
+                        <Button 
+                          onClick={handleSearchLocation}
+                          className={`${
+                            isDark ? 'bg-blue-700 hover:bg-blue-600' : 'bg-blue-600 hover:bg-blue-500'
+                          }`}
+                        >
+                          Set
+                        </Button>
+                      </div>
                     </div>
                     
                     <div>
@@ -495,6 +555,7 @@ const Home = () => {
                           </option>
                         ))}
                       </select>
+                      
                       {patientData.aiRecommendedHospital && (
                         <div className="mt-1 flex items-center">
                           <Zap size={14} className={isDark ? "text-blue-400" : "text-blue-600"} />
@@ -508,38 +569,18 @@ const Home = () => {
                     </div>
                     
                     <div>
-                      <div className="flex justify-between mb-1">
-                        <label className={`block text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Patient Severity</label>
-                        <span className="text-sm font-medium" style={{
-                          color: patientSeverity <= 3 
-                            ? isDark ? '#34d399' : '#10b981' 
-                            : patientSeverity <= 7 
-                              ? isDark ? '#fbbf24' : '#d97706' 
-                              : isDark ? '#ef4444' : '#dc2626'
-                        }}>
-                          {getSeverityLabel(patientSeverity)}
-                        </span>
-                      </div>
-                      <input 
-                        type="range" 
-                        min="1" 
-                        max="10" 
-                        value={patientSeverity}
-                        onChange={handleSeverityChange}
-                        className="w-full"
-                        style={{
-                          '--range-color': patientSeverity <= 3 
-                            ? isDark ? '#34d399' : '#10b981' 
-                            : patientSeverity <= 7 
-                              ? isDark ? '#fbbf24' : '#d97706' 
-                              : isDark ? '#ef4444' : '#dc2626'
-                        } as React.CSSProperties}
+                      <PatientSeveritySelector 
+                        severity={patientSeverity}
+                        onChange={handlePatientSeverityChange}
+                        theme={isDark ? 'dark' : 'light'}
                       />
-                      <div className={`flex justify-between text-xs ${isDark ? 'text-gray-500' : 'text-gray-600'} px-1`}>
-                        <span>1</span>
-                        <span>5</span>
-                        <span>10</span>
-                      </div>
+                      
+                      {patientSeverity === 'critical' && transportMode !== 'air' && (
+                        <div className={`mt-2 text-xs ${isDark ? 'text-amber-400' : 'text-amber-600'} flex items-center`}>
+                          <AlertTriangle size={12} className="mr-1" />
+                          Air transport recommended for critical patients
+                        </div>
+                      )}
                     </div>
                     
                     <div>
@@ -586,12 +627,6 @@ const Home = () => {
                             Air
                           </button>
                         </div>
-                        {patientSeverity > 8 && transportMode !== 'air' && (
-                          <div className={`mt-2 text-xs ${isDark ? 'text-amber-400' : 'text-amber-600'} flex items-center`}>
-                            <AlertTriangle size={12} className="mr-1" />
-                            Air transport recommended for critical patients
-                          </div>
-                        )}
                       </div>
                     
                       <button 
@@ -601,9 +636,18 @@ const Home = () => {
                             : 'bg-blue-600 hover:bg-blue-500 text-white'
                         } py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 mt-4`}
                         onClick={() => {
+                          if (!sourceLocation) {
+                            toast({
+                              title: "Location Required",
+                              description: "Please enter a source location.",
+                              variant: "destructive"
+                            });
+                            return;
+                          }
+                          
                           toast({
                             title: "Emergency Response Dispatched",
-                            description: `Ambulance dispatched to ${patientData.location}. ETA: 8 minutes.`,
+                            description: `Ambulance dispatched to ${sourceLocation}. ETA: 8 minutes.`,
                           });
                         }}
                       >
@@ -639,3 +683,4 @@ const Home = () => {
 };
 
 export default Home;
+
