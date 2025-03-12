@@ -48,6 +48,16 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
   const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
   const [activeNavigation, setActiveNavigation] = useState(false);
   const [multiSelectMode, setMultiSelectMode] = useState(enableMultiSelect);
+  const [initialLoad, setInitialLoad] = useState(true);
+  
+  // Force center on initial load
+  useEffect(() => {
+    if (initialLoad) {
+      setTimeout(() => {
+        setInitialLoad(false);
+      }, 500);
+    }
+  }, [initialLoad]);
   
   useEffect(() => {
     if (destinations.length > 0) {
@@ -164,11 +174,13 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
         onPathClick={handlePathClick}
         customMapImage={mapImagePath}
         userLocation={userLocation}
-        centerMapOnSelection={centerMapOnSelection}
+        centerMapOnSelection={true}
+        forceInitialCenter={initialLoad}
         activeNavigation={activeNavigation}
         showTraffic={showTraffic}
         multiSelectionMode={multiSelectMode}
         onMultiDestinationSelect={handleMultiDestinationNavigate}
+        alwaysShowAllRoutes={true}
       />
     </div>
   );

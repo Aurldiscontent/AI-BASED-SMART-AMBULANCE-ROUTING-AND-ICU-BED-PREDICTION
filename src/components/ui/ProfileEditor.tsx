@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { motion } from 'framer-motion';
-import { User, Phone, Mail, Heart, Plus, X, Save, UserPlus } from 'lucide-react';
+import { User, Phone, Mail, Heart, Plus, X, Save, UserPlus, Building, MapPin } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -18,6 +18,8 @@ const profileFormSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address." }),
   phone: z.string().min(10, { message: "Phone number must be at least 10 digits." }),
   role: z.string().optional(),
+  location: z.string().optional(),
+  department: z.string().optional(),
   medicalHistory: z.string().optional(),
   emergencyContacts: z.array(
     z.object({
@@ -33,6 +35,7 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>;
 interface ProfileEditorProps {
   initialData?: ProfileFormValues;
   onSave?: (data: ProfileFormValues) => void;
+  onCancel?: () => void;
 }
 
 const ProfileEditor: React.FC<ProfileEditorProps> = ({ 
@@ -41,10 +44,13 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({
     email: localStorage.getItem('userEmail') || '',
     phone: '',
     role: localStorage.getItem('userRole') || '',
+    location: localStorage.getItem('userLocation') || '',
+    department: localStorage.getItem('userDepartment') || '',
     medicalHistory: '',
     emergencyContacts: [],
   },
-  onSave 
+  onSave,
+  onCancel
 }) => {
   const { theme } = useTheme();
   const { toast } = useToast();
@@ -90,6 +96,12 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({
       if (values.role) {
         localStorage.setItem('userRole', values.role);
       }
+      if (values.location) {
+        localStorage.setItem('userLocation', values.location);
+      }
+      if (values.department) {
+        localStorage.setItem('userDepartment', values.department);
+      }
       
       setIsLoading(false);
       
@@ -99,214 +111,257 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({
       });
     }, 1000);
   };
+  
+  const handleCancel = () => {
+    if (onCancel) {
+      onCancel();
+    }
+  };
 
   return (
-    <div className={`rounded-xl overflow-hidden shadow-md ${
+    <div className={`rounded-xl overflow-hidden ${
       isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
     }`}>
-      <div className="bg-gradient-to-r from-medical-500 to-medical-600 p-4">
-        <h2 className="text-lg font-bold text-white flex items-center">
-          <User className="mr-2" size={18} />
-          Edit Profile
-        </h2>
-      </div>
-      
-      <div className="p-4">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center">
-                      <User size={14} className="mr-1" />
-                      Full Name
-                    </FormLabel>
-                    <FormControl>
-                      <Input placeholder="Your full name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="role"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center">
-                      <User size={14} className="mr-1" />
-                      Role
-                    </FormLabel>
-                    <FormControl>
-                      <Input placeholder="Your role (e.g., First Responder)" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center">
-                      <Mail size={14} className="mr-1" />
-                      Email
-                    </FormLabel>
-                    <FormControl>
-                      <Input placeholder="Your email address" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center">
-                      <Phone size={14} className="mr-1" />
-                      Phone Number
-                    </FormLabel>
-                    <FormControl>
-                      <Input placeholder="Your phone number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-5 p-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
-              name="medicalHistory"
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="flex items-center">
-                    <Heart size={14} className="mr-1" />
-                    Medical History
+                    <User size={14} className="mr-1" />
+                    Full Name
                   </FormLabel>
                   <FormControl>
-                    <Textarea 
-                      placeholder="Add any relevant medical history or conditions"
-                      className="h-20 resize-none"
-                      {...field} 
-                    />
+                    <Input placeholder="Your full name" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This information will be shared with emergency responders when needed
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
             
-            {/* Emergency Contacts Section */}
-            <div className="mt-6">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className={`font-medium flex items-center ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  <UserPlus size={16} className="mr-1" />
-                  Emergency Contacts
-                </h3>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="outline"
-                  onClick={addEmergencyContact}
-                  className={isDark ? 'border-gray-700 text-gray-300' : ''}
-                >
-                  <Plus size={14} className="mr-1" />
-                  Add Contact
-                </Button>
-              </div>
-              
-              {form.watch('emergencyContacts')?.map((_, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className={`p-3 rounded-lg mb-3 relative ${
-                    isDark ? 'bg-gray-700/40' : 'bg-gray-50'
-                  }`}
-                >
-                  <button
-                    type="button"
-                    className={`absolute top-2 right-2 rounded-full p-1 ${
-                      isDark ? 'hover:bg-gray-600' : 'hover:bg-gray-200'
-                    }`}
-                    onClick={() => removeEmergencyContact(index)}
-                  >
-                    <X size={14} />
-                  </button>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <FormField
-                      control={form.control}
-                      name={`emergencyContacts.${index}.name`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-xs">Name</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Contact name" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={form.control}
-                      name={`emergencyContacts.${index}.phone`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-xs">Phone</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Contact phone" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={form.control}
-                      name={`emergencyContacts.${index}.relationship`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-xs">Relationship</FormLabel>
-                          <FormControl>
-                            <Input placeholder="E.g., spouse, parent" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </motion.div>
-              ))}
-              
-              {form.watch('emergencyContacts')?.length === 0 && (
-                <div className={`py-4 px-3 text-center rounded ${
-                  isDark ? 'bg-gray-700/40 text-gray-400' : 'bg-gray-50 text-gray-500'
-                }`}>
-                  <p className="text-sm">No emergency contacts added yet</p>
-                </div>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center">
+                    <Mail size={14} className="mr-1" />
+                    Email
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="Your email address" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
+            />
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center">
+                    <Phone size={14} className="mr-1" />
+                    Phone Number
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="Your phone number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="role"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center">
+                    <User size={14} className="mr-1" />
+                    Role
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="Your role (e.g., First Responder)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="department"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center">
+                    <Building size={14} className="mr-1" />
+                    Department
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="Your department" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="location"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center">
+                    <MapPin size={14} className="mr-1" />
+                    Location
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="Your location" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          
+          <FormField
+            control={form.control}
+            name="medicalHistory"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="flex items-center">
+                  <Heart size={14} className="mr-1" />
+                  Medical History
+                </FormLabel>
+                <FormControl>
+                  <Textarea 
+                    placeholder="Add any relevant medical history or conditions"
+                    className="h-20 resize-none"
+                    {...field} 
+                  />
+                </FormControl>
+                <FormDescription>
+                  This information will be shared with emergency responders when needed
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          {/* Emergency Contacts Section */}
+          <div className="mt-6" id="emergency-contacts-section">
+            <div className="flex justify-between items-center mb-2">
+              <h3 className={`font-medium flex items-center ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                <UserPlus size={16} className="mr-1" />
+                Emergency Contacts
+              </h3>
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                onClick={addEmergencyContact}
+                className={isDark ? 'border-gray-700 text-gray-300' : ''}
+              >
+                <Plus size={14} className="mr-1" />
+                Add Contact
+              </Button>
             </div>
             
+            {form.watch('emergencyContacts')?.map((_, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className={`p-3 rounded-lg mb-3 relative ${
+                  isDark ? 'bg-gray-700/40' : 'bg-gray-50'
+                }`}
+              >
+                <button
+                  type="button"
+                  className={`absolute top-2 right-2 rounded-full p-1 ${
+                    isDark ? 'hover:bg-gray-600' : 'hover:bg-gray-200'
+                  }`}
+                  onClick={() => removeEmergencyContact(index)}
+                >
+                  <X size={14} />
+                </button>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <FormField
+                    control={form.control}
+                    name={`emergencyContacts.${index}.name`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-xs">Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Contact name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name={`emergencyContacts.${index}.phone`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-xs">Phone</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Contact phone" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name={`emergencyContacts.${index}.relationship`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-xs">Relationship</FormLabel>
+                        <FormControl>
+                          <Input placeholder="E.g., spouse, parent" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </motion.div>
+            ))}
+            
+            {form.watch('emergencyContacts')?.length === 0 && (
+              <div className={`py-4 px-3 text-center rounded ${
+                isDark ? 'bg-gray-700/40 text-gray-400' : 'bg-gray-50 text-gray-500'
+              }`}>
+                <p className="text-sm">No emergency contacts added yet</p>
+              </div>
+            )}
+          </div>
+          
+          <div className="flex justify-end gap-2 pt-2">
             <Button 
-              type="submit" 
-              className="w-full bg-medical-600 hover:bg-medical-700 mt-4"
+              type="button"
+              variant="outline"
+              onClick={handleCancel}
+            >
+              Cancel
+            </Button>
+            
+            <Button 
+              type="submit"
+              className="bg-medical-600 hover:bg-medical-700"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -317,13 +372,13 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({
               ) : (
                 <>
                   <Save size={16} className="mr-2" />
-                  Save Profile
+                  Save Changes
                 </>
               )}
             </Button>
-          </form>
-        </Form>
-      </div>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 };

@@ -1,64 +1,70 @@
+
 import React, { useEffect, useState, useRef } from 'react';
 import { MapPin, Navigation, Loader2, Map, Zap, AlertTriangle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ActionButton from './ActionButton';
+import { useToast } from '@/hooks/use-toast';
+
+interface Location {
+  lat: number;
+  lng: number;
+}
+
+interface MapDestination {
+  id: string;
+  name: string;
+  location: Location;
+}
 
 interface MapViewProps {
-  userLocation?: { lat: number; lng: number };
-  destinations?: Array<{
-    id: string;
-    name: string;
-    location: { lat: number; lng: number };
-  }>;
-  onNavigate?: (id: string) => void;
+  destinations: MapDestination[];
   selectedHospitalId?: string | null;
   transportMode?: 'ground' | 'air';
   onHospitalClick?: (id: string) => void;
+  onNavigate?: (id: string) => void;
   onTrafficClick?: () => void;
   onPathClick?: () => void;
   customMapImage?: string;
+  userLocation?: Location;
   centerMapOnSelection?: boolean;
+  forceInitialCenter?: boolean;
   activeNavigation?: boolean;
   showTraffic?: boolean;
-  onMultiDestinationSelect?: (ids: string[]) => void;
   multiSelectionMode?: boolean;
+  onMultiDestinationSelect?: (ids: string[]) => void;
+  alwaysShowAllRoutes?: boolean;
 }
 
-type TrafficSeverity = 'light' | 'moderate' | 'heavy';
-
 const MapView: React.FC<MapViewProps> = ({
-  userLocation = { lat: 12.9716, lng: 77.5946 }, // Default to Bangalore
-  destinations = [],
-  onNavigate,
+  destinations,
   selectedHospitalId = null,
   transportMode = 'ground',
   onHospitalClick,
+  onNavigate,
   onTrafficClick,
   onPathClick,
   customMapImage = '/lovable-uploads/c26b6999-d1cf-40dd-b57c-d2b5cce67cd0.png',
+  userLocation = { lat: 40.7128, lng: -74.0060 },
   centerMapOnSelection = true,
+  forceInitialCenter = false,
   activeNavigation = false,
   showTraffic = true,
+  multiSelectionMode = false,
   onMultiDestinationSelect,
-  multiSelectionMode = false
+  alwaysShowAllRoutes = false
 }) => {
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
-  const [routeInfo, setRouteInfo] = useState<{
-    distance: string;
-    time: string;
-    traffic: TrafficSeverity;
-  }>({ distance: '10 km', time: '3 min', traffic: 'moderate' });
-  const [showAlternateRoutes, setShowAlternateRoutes] = useState(false);
   const [navigationActive, setNavigationActive] = useState(false);
   const [routeProgress, setRouteProgress] = useState(0);
-  const [mapCenter, setMapCenter] = useState<{x: number, y: number}>({x: 175, y: 150});
+  const [mapCenter, setMapCenter] = useState({ x: 200, y: 150 });
   const [selectedDestinations, setSelectedDestinations] = useState<string[]>([]);
   const mapRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 800);
+    }, 1000);
     
     return () => clearTimeout(timer);
   }, []);
@@ -76,7 +82,7 @@ const MapView: React.FC<MapViewProps> = ({
           }
           return prev + 2;
         });
-      }, 60);
+      }, 100);
       
       return () => clearInterval(interval);
     } else {
@@ -105,7 +111,14 @@ const MapView: React.FC<MapViewProps> = ({
     }
   };
   
+  // Center map when selection changes or on initial load
   useEffect(() => {
+    if (forceInitialCenter) {
+      // Set to center initially
+      setMapCenter({ x: 200, y: 150 });
+      return;
+    }
+    
     if (centerMapOnSelection && selectedHospitalId) {
       const selectedDest = destinations.find(d => d.id === selectedHospitalId);
       
@@ -113,9 +126,11 @@ const MapView: React.FC<MapViewProps> = ({
         const positions = [
           { x: 120, y: 220 },  // Hospital 1
           { x: 160, y: 170 },  // Hospital 2
-          { x: 190, y: 100 },  // Hospital 3
-          { x: 90, y: 170 },   // Hospital 4
-          { x: 210, y: 90 }    // Hospital 5
+          { x: 240, y: 220 },  // Hospital 3
+          { x: 270, y: 170 },  // Hospital 4
+          { x: 220, y: 80 },   // Hospital 5
+          { x: 120, y: 120 },  // Hospital 6
+          { x: 110, y: 190 },  // and so on...
         ];
         
         const index = parseInt(selectedDest.id) - 1;
@@ -128,120 +143,60 @@ const MapView: React.FC<MapViewProps> = ({
         }
       }
     }
-  }, [selectedHospitalId, destinations, centerMapOnSelection]);
+  }, [selectedHospitalId, centerMapOnSelection, destinations, forceInitialCenter]);
   
-  const selectedDestination = selectedHospitalId 
-    ? destinations.find(d => d.id === selectedHospitalId) 
-    : destinations[0];
-  
-  const calculateRouteInfo = () => {
-    if (!selectedDestination) return;
+  // Map the hospital destinations to visual coordinates
+  const getHospitalPosition = (id: string) => {
+    const positions = [
+      { x: 120, y: 220 },  // Hospital 1
+      { x: 160, y: 170 },  // Hospital 2
+      { x: 240, y: 220 },  // Hospital 3
+      { x: 270, y: 170 },  // Hospital 4
+      { x: 220, y: 80 },   // Hospital 5
+      { x: 120, y: 120 },  // Hospital 6
+      { x: 110, y: 190 },  // Hospital 7
+      { x: 190, y: 210 },  // Hospital 8
+      { x: 250, y: 110 },  // Hospital 9
+      { x: 190, y: 180 },  // Hospital 10
+    ];
     
-    const distance = 10;
-    const timeInMinutes = transportMode === 'air' ? 2 : 3;
-    
-    setRouteInfo({
-      distance: `${distance} km`,
-      time: `${timeInMinutes} min`,
-      traffic: 'moderate'
-    });
-  };
-  
-  useEffect(() => {
-    if (!isLoading && selectedDestination) {
-      calculateRouteInfo();
-    }
-  }, [isLoading, selectedDestination, transportMode]);
-  
-  const generatePath = () => {
-    if (!selectedDestination) return [];
-    
-    const start = userLocation;
-    const end = selectedDestination.location;
-    
-    const waypoints = [];
-    const pointCount = 5 + Math.floor(Math.random() * 3);
-    
-    for (let i = 1; i < pointCount - 1; i++) {
-      const ratio = i / pointCount;
-      
-      const jitter = 0.005 * (Math.random() - 0.5);
-      
-      waypoints.push({
-        lat: start.lat + (end.lat - start.lat) * ratio + jitter,
-        lng: start.lng + (end.lng - start.lng) * ratio + jitter
-      });
+    const index = parseInt(id) - 1;
+    if (index >= 0 && index < positions.length) {
+      return positions[index];
     }
     
-    return [start, ...waypoints, end];
+    return { x: 180, y: 180 };
   };
   
-  const path = generatePath();
-  
-  const generateAlternatePaths = () => {
-    if (!selectedDestination) return [];
-    
-    return [1, 2].map(() => {
-      const alternatePath = [];
-      const pointCount = 5 + Math.floor(Math.random() * 3);
-      
-      for (let i = 0; i < pointCount; i++) {
-        const ratio = i / (pointCount - 1);
-        
-        const jitter = 0.015 * (Math.random() - 0.5);
-        const jitter2 = 0.015 * (Math.random() - 0.5);
-        
-        alternatePath.push({
-          lat: userLocation.lat + (selectedDestination.location.lat - userLocation.lat) * ratio + jitter,
-          lng: userLocation.lng + (selectedDestination.location.lng - userLocation.lng) * ratio + jitter2
-        });
-      }
-      
-      return alternatePath;
-    });
+  const getUserPosition = () => {
+    return { x: 230, y: 130 };
   };
-  
-  const alternatePaths = generateAlternatePaths();
-  
-  const trafficPoints: Array<{
-    lat: number;
-    lng: number;
-    severity: TrafficSeverity;
-    x: number;
-    y: number;
-  }> = [
-    {
-      lat: userLocation.lat + (selectedDestination?.location.lat - userLocation.lat) * 0.3 + 0.005,
-      lng: userLocation.lng + (selectedDestination?.location.lng - userLocation.lng) * 0.3 - 0.005,
-      severity: 'moderate',
-      x: 190,
-      y: 130
-    },
-    {
-      lat: userLocation.lat + (selectedDestination?.location.lat - userLocation.lat) * 0.7 - 0.008,
-      lng: userLocation.lng + (selectedDestination?.location.lng - userLocation.lng) * 0.7 + 0.008,
-      severity: 'heavy',
-      x: 140,
-      y: 180
-    }
-  ];
   
   const handleNavigateClick = () => {
-    if (!selectedDestination || !onNavigate) return;
+    if (!selectedHospitalId || !onNavigate) return;
+    const selectedDestination = destinations.find(d => d.id === selectedHospitalId);
+    if (!selectedDestination) return;
+    
+    toast({
+      title: "Navigation Started",
+      description: `Navigating to ${selectedDestination.name}`,
+    });
     
     setNavigationActive(true);
+    setRouteProgress(0);
     onNavigate(selectedDestination.id);
   };
 
   const getRoutePath = () => {
+    // Create a more complex path for better visualization
     const pathString = selectedHospitalId === '1' ? 
       `M 230 130 L 210 120 L 190 130 L 170 140 L 150 160 L 140 180 L 130 200 L 120 220` :
       selectedHospitalId === '2' ? 
-      `M 230 130 L 220 120 L 200 110 L 180 120 L 170 140 L 160 170` :
+      `M 230 130 L 220 140 L 200 150 L 180 160 L 160 170` :
       selectedHospitalId === '3' ? 
-      `M 230 130 L 220 120 L 215 110 L 210 100 L 200 95 L 190 100` :
+      `M 230 130 L 235 150 L 240 170 L 240 200 L 240 220` :
       selectedHospitalId === '4' ? 
-      `M 230 130 L 210 140 L 180 150 L 150 160 L 120 165 L 90 170` :
+      `M 230 130 L 240 140 L 250 150 L 260 160 L 270 170` :
       `M 230 130 L 225 120 L 220 110 L 215 100 L 212 95 L 210 90`;
     
     if (navigationActive) {
@@ -249,36 +204,66 @@ const MapView: React.FC<MapViewProps> = ({
       const dashOffset = pathLength - (pathLength * (routeProgress / 100));
       
       return (
-        <path 
+        <path
           d={pathString}
-          stroke={transportMode === 'air' ? '#3b82f6' : '#10b981'} 
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeDasharray={pathLength}
-          strokeDashoffset={dashOffset}
-          fill="none"
-          className="transition-all duration-300"
+          className="route-path"
+          style={{ 
+            strokeDasharray: `${pathLength}px`, 
+            strokeDashoffset: `${dashOffset}px`,
+            stroke: transportMode === 'air' ? '#3b82f6' : '#ef4444',
+            strokeWidth: transportMode === 'air' ? 6 : 4,
+            strokeDasharray: transportMode === 'air' ? '15, 10' : '10, 5',
+          }}
         />
       );
     }
     
     return (
-      <path 
+      <path
         d={pathString}
-        stroke={transportMode === 'air' ? '#3b82f6' : '#10b981'} 
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeDasharray={transportMode === 'air' ? "10,5" : "none"}
-        fill="none"
-        className={`${navigationActive ? "animate-pulse" : ""} cursor-pointer`}
-        onClick={() => {
-          setShowAlternateRoutes(!showAlternateRoutes);
-          onPathClick && onPathClick();
+        style={{ 
+          stroke: selectedHospitalId ? (transportMode === 'air' ? '#3b82f6' : '#ef4444') : 'transparent', 
+          strokeWidth: 3, 
+          strokeDasharray: transportMode === 'air' ? '10, 5' : '5, 3',
+          opacity: 0.7,
+          transition: 'opacity 0.5s ease-in-out'
         }}
       />
     );
+  };
+  
+  // Draw a route path for each hospital when alwaysShowAllRoutes is true
+  const getAllRoutePaths = () => {
+    if (!alwaysShowAllRoutes) return null;
+    
+    return destinations.map(dest => {
+      const pos = getHospitalPosition(dest.id);
+      const userPos = getUserPosition();
+      const isSelected = selectedHospitalId === dest.id || selectedDestinations.includes(dest.id);
+      
+      // Create a simple straight line or a slightly curved line
+      const dx = pos.x - userPos.x;
+      const dy = pos.y - userPos.y;
+      const midX = (userPos.x + pos.x) / 2;
+      const midY = (userPos.y + pos.y) / 2 - 10; // Slight curve upward
+      
+      const pathString = `M ${userPos.x} ${userPos.y} Q ${midX} ${midY} ${pos.x} ${pos.y}`;
+      
+      return (
+        <path
+          key={dest.id}
+          d={pathString}
+          style={{ 
+            stroke: isSelected ? (transportMode === 'air' ? '#3b82f6' : '#ef4444') : '#94a3b8',
+            strokeWidth: isSelected ? 3 : 1.5,
+            strokeDasharray: transportMode === 'air' ? '10, 5' : '5, 3',
+            opacity: isSelected ? 0.9 : 0.4,
+            transition: 'all 0.3s ease-in-out'
+          }}
+          fill="none"
+        />
+      );
+    });
   };
   
   const getWaypoints = () => {
@@ -286,276 +271,293 @@ const MapView: React.FC<MapViewProps> = ({
       { x: 210, y: 120 },
       { x: 190, y: 130 },
       { x: 170, y: 140 },
-      { x: 150, y: 160 },
-      { x: 140, y: 180 },
-      { x: 130, y: 200 }
+      { x: 150, y: 160 }
     ];
     
-    return waypoints.map((point, i) => (
-      <circle 
-        key={`marker-${i}`} 
-        cx={point.x} 
-        cy={point.y} 
-        r={navigationActive && routeProgress > (i/waypoints.length) * 100 ? "3" : "2"} 
-        fill={transportMode === 'air' ? '#3b82f6' : '#10b981'} 
-        className={transportMode === 'air' ? "animate-pulse" : ""}
-      />
-    ));
+    if (!navigationActive) return null;
+    
+    return waypoints.map((point, index) => {
+      // Only show waypoints up to the current progress
+      if ((index + 1) * 20 > routeProgress) return null;
+      
+      return (
+        <circle
+          key={index}
+          cx={point.x}
+          cy={point.y}
+          r={4}
+          fill={transportMode === 'air' ? '#3b82f6' : '#ef4444'}
+          opacity={0.8}
+        >
+          <animate
+            attributeName="r"
+            values="3;5;3"
+            dur="1.5s"
+            repeatCount="indefinite"
+          />
+          <animate
+            attributeName="opacity"
+            values="0.6;1;0.6"
+            dur="1.5s"
+            repeatCount="indefinite"
+          />
+        </circle>
+      );
+    });
+  };
+  
+  const getPathEndMarker = () => {
+    if (!selectedHospitalId || !navigationActive || routeProgress < 100) return null;
+    
+    const position = getHospitalPosition(selectedHospitalId);
+    
+    return (
+      <circle
+        cx={position.x}
+        cy={position.y}
+        r={8}
+        fill={transportMode === 'air' ? '#3b82f6' : '#ef4444'}
+        stroke="white"
+        strokeWidth={2}
+      >
+        <animate
+          attributeName="r"
+          values="6;10;6"
+          dur="1.5s"
+          repeatCount="indefinite"
+        />
+        <animate
+          attributeName="opacity"
+          values="0.6;1;0.6"
+          dur="1.5s"
+          repeatCount="indefinite"
+        />
+      </circle>
+    );
+  };
+  
+  const getHospitalMarkers = () => {
+    return destinations.map(destination => {
+      const position = getHospitalPosition(destination.id);
+      const isSelected = selectedHospitalId === destination.id;
+      const isMultiSelected = selectedDestinations.includes(destination.id);
+      
+      return (
+        <g 
+          key={destination.id}
+          onClick={() => toggleDestinationSelection(destination.id)}
+          style={{ cursor: 'pointer' }}
+          className="hospital-marker"
+        >
+          <circle
+            cx={position.x}
+            cy={position.y}
+            r={10}
+            className={`${
+              isSelected || isMultiSelected
+                ? 'fill-blue-500 dark:fill-blue-400'
+                : 'fill-white dark:fill-gray-700'
+            } transition-all duration-300`}
+            stroke={isSelected || isMultiSelected ? 'white' : '#3b82f6'}
+            strokeWidth={2}
+          />
+          <text
+            x={position.x}
+            y={position.y + 4}
+            textAnchor="middle"
+            fill={isSelected || isMultiSelected ? 'white' : '#3b82f6'}
+            style={{ fontSize: '10px', fontWeight: 'bold' }}
+          >
+            {destination.id}
+          </text>
+          
+          {(isSelected || isMultiSelected) && (
+            <circle
+              cx={position.x}
+              cy={position.y}
+              r={14}
+              fill="transparent"
+              stroke="#3b82f6"
+              strokeWidth={2}
+              opacity={0.5}
+            >
+              <animate
+                attributeName="r"
+                values="12;16;12"
+                dur="2s"
+                repeatCount="indefinite"
+              />
+              <animate
+                attributeName="opacity"
+                values="0.4;0.6;0.4"
+                dur="2s"
+                repeatCount="indefinite"
+              />
+            </circle>
+          )}
+        </g>
+      );
+    });
   };
   
   return (
-    <div className="w-full rounded-2xl overflow-hidden shadow-md relative h-64 md:h-80 bg-blue-50 dark:bg-gray-800/30">
-      {isLoading ? (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800/70">
-          <Loader2 className="w-8 h-8 text-medical-500 animate-spin mb-2" />
-          <p className="text-sm text-gray-600 dark:text-gray-400">Loading map...</p>
+    <div className="relative rounded-xl overflow-hidden shadow-lg transition-all duration-500">
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800 z-10">
+          <Loader2 className="w-10 h-10 animate-spin text-blue-500" />
         </div>
-      ) : (
-        <>
-          <div 
-            ref={mapRef}
-            className="absolute inset-0 w-full h-full flex items-center justify-center overflow-hidden"
-          >
-            <motion.img 
-              src={customMapImage} 
-              alt="Map" 
-              className="absolute w-auto min-w-full min-h-full object-cover"
-              initial={false}
-              animate={{
-                x: centerMapOnSelection ? mapCenter.x - 175 : 0, 
-                y: centerMapOnSelection ? mapCenter.y - 150 : 0
-              }}
-              transition={{ duration: 0.5 }}
-            />
-          </div>
-          
-          {showAlternateRoutes && selectedDestination && alternatePaths.map((alternatePath, idx) => (
-            <svg key={`alt-path-${idx}`} className="absolute inset-0 w-full h-full" style={{ pointerEvents: 'none' }}>
-              <path 
-                d={alternatePath.map((p, i) => {
-                  const x = ((p.lng - userLocation.lng) * 300) + 200;
-                  const y = ((p.lat - userLocation.lat) * -300) + 150;
-                  return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
-                }).join(' ')}
-                stroke={idx === 0 ? '#9333ea' : '#2563eb'} 
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeDasharray="5,5"
-                fill="none"
-                opacity="0.6"
-              />
-            </svg>
-          ))}
-          
-          {selectedDestination && (
-            <svg 
-              className="absolute inset-0 w-full h-full" 
-              style={{ pointerEvents: 'none' }}
-            >
-              {getRoutePath()}
-              {getWaypoints()}
-              
-              {navigationActive && (
-                <motion.circle 
-                  cx={230 - (routeProgress * 1.1)}
-                  cy={130 + (routeProgress * 0.9)}
-                  r="5"
-                  fill={transportMode === 'air' ? '#3b82f6' : '#10b981'}
-                  stroke="white"
-                  strokeWidth="2"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                />
-              )}
-            </svg>
-          )}
-          
-          {showTraffic && trafficPoints.map((point, idx) => (
-            <div 
-              key={`traffic-${idx}`}
-              className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer"
-              style={{ left: point.x, top: point.y }}
-              onClick={() => onTrafficClick && onTrafficClick()}
-            >
-              <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
-                point.severity === 'heavy' 
-                  ? 'bg-red-100 dark:bg-red-900/30' 
-                  : point.severity === 'moderate'
-                    ? 'bg-amber-100 dark:bg-amber-900/30'
-                    : 'bg-green-100 dark:bg-green-900/30'
-              } animate-pulse`}>
-                <AlertTriangle 
-                  size={14} 
-                  className={
-                    point.severity === 'heavy' 
-                      ? 'text-red-500 dark:text-red-400' 
-                      : point.severity === 'moderate'
-                        ? 'text-amber-500 dark:text-amber-400'
-                        : 'text-green-500 dark:text-green-400'
-                  } 
-                />
-              </div>
-            </div>
-          ))}
-          
-          <motion.div 
-            className="absolute left-[230px] top-[130px] transform -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20"
-            initial={false}
-            animate={{ 
-              scale: navigationActive ? 1.2 : 1,
-              x: navigationActive ? routeProgress * -1.1 : 0,
-              y: navigationActive ? routeProgress * 0.9 : 0
-            }}
-            onClick={() => {
-              const sortedDestinations = [...destinations].sort((a, b) => {
-                const distA = Math.sqrt(
-                  Math.pow(a.location.lat - userLocation.lat, 2) + 
-                  Math.pow(a.location.lng - userLocation.lng, 2)
-                );
-                const distB = Math.sqrt(
-                  Math.pow(b.location.lat - userLocation.lat, 2) + 
-                  Math.pow(b.location.lng - userLocation.lng, 2)
-                );
-                return distA - distB;
-              });
-              
-              if (sortedDestinations.length > 0) {
-                onHospitalClick && onHospitalClick(sortedDestinations[0].id);
-              }
-            }}
-          >
-            <div className="relative">
-              <div className="absolute -inset-2 rounded-full bg-blue-500/20 animate-pulse" />
-              <div className="h-4 w-4 rounded-full bg-blue-500 border-2 border-white dark:border-gray-200 shadow-md" />
-            </div>
-            <div className="absolute top-6 left-1/2 transform -translate-x-1/2 bg-white dark:bg-gray-800 px-2 py-1 rounded-md shadow-sm">
-              <span className="text-xs font-medium">Patient</span>
-            </div>
-          </motion.div>
-          
-          {destinations.slice(0, 5).map((dest, index) => {
-            const positions = [
-              { x: 120, y: 220 },  // Lower Manhattan
-              { x: 160, y: 170 },  // Canal Street
-              { x: 190, y: 100 },  // Spring Street
-              { x: 90, y: 170 },   // Tribeca
-              { x: 210, y: 90 }    // Little Italy
-            ];
-            
-            const isSelected = selectedHospitalId === dest.id;
-            const isMultiSelected = selectedDestinations.includes(dest.id);
-            
-            return (
-              <div 
-                key={dest.id}
-                className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer z-10"
-                style={{ 
-                  left: positions[index].x, 
-                  top: positions[index].y 
-                }}
-                onClick={() => toggleDestinationSelection(dest.id)}
-              >
-                <motion.div
-                  initial={{ scale: 0.8, y: 20, opacity: 0 }}
-                  animate={{ 
-                    scale: isSelected || isMultiSelected ? 1.2 : 1, 
-                    y: 0, 
-                    opacity: 1 
-                  }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                  whileHover={{ scale: 1.15 }}
-                >
-                  <div className={`relative ${(isSelected || isMultiSelected) ? 'z-10' : 'z-5'}`}>
-                    {(isSelected || isMultiSelected) && (
-                      <div className={`absolute -inset-2 rounded-full ${
-                        isMultiSelected ? 'bg-purple-500/20' : 'bg-medical-500/20'
-                      } animate-pulse`} />
-                    )}
-                    <MapPin 
-                      className={`h-6 w-6 ${
-                        isSelected 
-                          ? 'text-medical-600 drop-shadow-md' 
-                          : isMultiSelected
-                            ? 'text-purple-600 drop-shadow-md'
-                            : index % 3 === 0 ? 'text-red-500' : 'text-green-500'
-                      }`} 
-                      strokeWidth={isSelected || isMultiSelected ? 2.5 : 2} 
-                      fill={
-                        isSelected 
-                          ? '#e0f2fe' 
-                          : isMultiSelected
-                            ? '#f3e8ff'
-                            : index % 3 === 0 ? '#fee2e2' : '#dcfce7'
-                      }
-                    />
-                  </div>
-                  
-                  {(isSelected || isMultiSelected) && (
-                    <div className="absolute top-6 left-1/2 transform -translate-x-1/2 bg-white dark:bg-gray-800 px-1.5 py-0.5 rounded shadow-sm text-[10px] whitespace-nowrap font-medium">
-                      {dest.name}
-                    </div>
-                  )}
-                </motion.div>
-              </div>
-            );
-          })}
-          
-          {transportMode === 'air' && (
-            <div className="absolute left-1/2 top-1/3 transform -translate-x-1/2 -translate-y-1/2">
-              <div className="bg-blue-500 text-white text-xs px-2 py-1 rounded-md shadow-md">
-                🚁 Air Route
-              </div>
-            </div>
-          )}
-          
-          <div className="absolute bottom-4 right-4 flex flex-col gap-2">
-            {multiSelectionMode && (
-              <ActionButton
-                variant="outline"
-                icon={<span className="text-xs font-bold">{selectedDestinations.length}</span>}
-                onClick={handleMultiDestinationNavigate}
-                disabled={selectedDestinations.length === 0}
-              >
-                Navigate Multi
-              </ActionButton>
-            )}
-            
-            <ActionButton
-              variant="medical"
-              icon={navigationActive ? <Loader2 className="animate-spin" size={18} /> : <Navigation size={18} />}
-              onClick={handleNavigateClick}
-            >
-              {navigationActive ? "Navigating..." : "Start Navigation"}
-            </ActionButton>
-          </div>
-          
-          <div 
-            className="absolute top-4 left-4 glass-card px-3 py-2 rounded-lg text-sm cursor-pointer"
-            onClick={() => onPathClick && onPathClick()}
-          >
-            <div className="flex items-center">
-              <Zap size={14} className="text-medical-500 mr-1" />
-              <p className="font-medium">{routeInfo.distance} • {routeInfo.time}</p>
-            </div>
-            <div className="flex items-center text-xs text-gray-600 dark:text-gray-400 mt-1">
-              <Map size={12} className="mr-1" />
-              <span>
-                {routeInfo.traffic === 'light' 
-                  ? 'Light traffic' 
-                  : routeInfo.traffic === 'moderate' 
-                    ? 'Moderate traffic' 
-                    : 'Heavy traffic'
-                }
-              </span>
-              {routeInfo.traffic === 'heavy' && (
-                <AlertTriangle size={10} className="ml-1 text-amber-500" />
-              )}
-            </div>
-          </div>
-        </>
       )}
+      
+      <div 
+        ref={mapRef}
+        className="relative w-full h-[400px] bg-cover bg-center rounded-xl overflow-hidden"
+        style={{ 
+          backgroundImage: `url('${customMapImage}')`,
+          transition: 'background-position 0.5s ease-out',
+          backgroundPosition: `${mapCenter.x * 0.5}px ${mapCenter.y * 0.5}px`
+        }}
+      >
+        {/* Traffic overlay */}
+        {showTraffic && (
+          <div 
+            className={`absolute inset-0 pointer-events-none ${
+              transportMode === 'ground' ? 'traffic-moderate' : ''
+            }`}
+          />
+        )}
+        
+        {/* SVG overlay for markers and paths */}
+        <svg 
+          className="absolute inset-0 w-full h-full pointer-events-none" 
+          viewBox="0 0 400 300"
+          style={{ zIndex: 2 }}
+        >
+          {/* Always show all routes if enabled */}
+          {getAllRoutePaths()}
+          
+          {/* Selected route path */}
+          {selectedHospitalId && !alwaysShowAllRoutes && getRoutePath()}
+          
+          {/* Waypoints during navigation */}
+          {getWaypoints()}
+          
+          {/* End marker animation */}
+          {getPathEndMarker()}
+          
+          {/* User location marker */}
+          <circle
+            cx={getUserPosition().x}
+            cy={getUserPosition().y}
+            r={8}
+            fill="#ef4444"
+            stroke="white"
+            strokeWidth={2}
+            style={{ pointerEvents: 'auto', cursor: 'pointer' }}
+          />
+          
+          {/* Hospital markers */}
+          {getHospitalMarkers()}
+        </svg>
+        
+        {/* Map controls */}
+        <div className="absolute bottom-4 left-4 flex flex-col gap-2">
+          <ActionButton
+            variant="emergency"
+            icon={<Zap size={18} />}
+            onClick={handleNavigateClick}
+            disabled={!selectedHospitalId || navigationActive}
+          />
+          <ActionButton
+            variant="outline"
+            icon={<Map size={18} />}
+            onClick={onTrafficClick}
+          />
+          <ActionButton
+            variant="outline"
+            icon={
+              transportMode === 'air' 
+              ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M8.5 19h-4a1 1 0 0 1-.8-1.6l9.8-13"></path>
+                  <path d="M17 5.5v13a1 1 0 0 0 1.6.8l2.7-2.7"></path>
+                  <path d="M13 1.1l-5.9 5.3a1 1 0 0 0-.3.7v2.9l-3.8 3.4a1 1 0 0 0 .7 1.7h7.5"></path>
+                </svg>
+              ) 
+              : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path>
+                  <circle cx="7" cy="17" r="2"></circle>
+                  <path d="M9 17h6"></path>
+                  <circle cx="17" cy="17" r="2"></circle>
+                </svg>
+              )
+            }
+            onClick={onPathClick}
+          />
+        </div>
+        
+        <div className="absolute bottom-4 right-4 flex flex-col gap-2">
+          {multiSelectionMode && (
+            <ActionButton
+              variant="outline"
+              icon={<span className="text-xs font-bold">{selectedDestinations.length}</span>}
+              onClick={handleMultiDestinationNavigate}
+              disabled={selectedDestinations.length === 0}
+            >
+              Navigate
+            </ActionButton>
+          )}
+        </div>
+        
+        {/* Navigation status overlay */}
+        {navigationActive && (
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Navigation className="text-white" size={16} />
+                <span className="text-white font-medium text-sm">
+                  {routeProgress < 100 
+                    ? `Navigating... ${routeProgress}%` 
+                    : "Arrived at destination"}
+                </span>
+              </div>
+              <div className="bg-white/20 backdrop-blur-sm px-2 py-1 rounded text-white text-xs">
+                ETA: {transportMode === 'air' ? '2' : '3'} min
+              </div>
+            </div>
+            
+            <div className="mt-1 h-1 bg-white/30 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-white rounded-full"
+                style={{ width: `${routeProgress}%`, transition: 'width 0.3s ease-out' }}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+      
+      {/* Map legend */}
+      <div className="mt-2 flex flex-wrap gap-2 text-xs text-gray-600 dark:text-gray-300 justify-end">
+        <div className="flex items-center">
+          <div className="w-3 h-3 rounded-full bg-red-500 mr-1"></div>
+          <span>Your Location</span>
+        </div>
+        <div className="flex items-center">
+          <div className="w-3 h-3 rounded-full bg-blue-500 mr-1"></div>
+          <span>Selected Hospital</span>
+        </div>
+        {transportMode === 'air' ? (
+          <div className="flex items-center">
+            <div className="w-3 h-3 border-2 border-dashed border-blue-500 rounded-full mr-1"></div>
+            <span>Air Route</span>
+          </div>
+        ) : (
+          <div className="flex items-center">
+            <div className="w-3 h-3 border-2 border-dashed border-red-500 rounded-full mr-1"></div>
+            <span>Ground Route</span>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
