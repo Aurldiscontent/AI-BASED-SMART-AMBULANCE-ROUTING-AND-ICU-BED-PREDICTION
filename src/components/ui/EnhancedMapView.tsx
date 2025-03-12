@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { MapPin, Navigation, Clock, Map, Zap, AlertTriangle, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -44,9 +43,8 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
   const [routeInfo, setRouteInfo] = useState<{
     distance: string;
     time: string;
-  }>({ distance: '1.5 km', time: '8 min' });
+  }>({ distance: '10 km', time: '3 min' });
   
-  // Load map after a slight delay for animation
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -55,7 +53,6 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
     return () => clearTimeout(timer);
   }, []);
   
-  // Select the correct destination
   useEffect(() => {
     if (destinations.length > 0) {
       const selected = selectedHospitalId 
@@ -65,11 +62,12 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
       if (selected) {
         setSelectedDestination(selected);
         
-        // Calculate realistic route info based on distance and transport mode
-        const distance = (Math.random() * 5 + 0.5).toFixed(1);
-        const timeInMinutes = transportMode === 'air' 
-          ? Math.round(Number(distance) * 2) 
-          : Math.round(Number(distance) * 5);
+        let distance = 10;
+        let timeInMinutes = 3;
+        
+        if (transportMode === 'air') {
+          timeInMinutes = 2;
+        }
         
         setRouteInfo({
           distance: `${distance} km`,
@@ -102,17 +100,13 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
         </div>
       ) : (
         <>
-          {/* Map Image as Background */}
           <img 
             src={mapImagePath} 
             alt="Map" 
             className="absolute inset-0 w-full h-full object-cover"
           />
           
-          {/* Hospital Markers */}
           {destinations.map((hospital, index) => {
-            // Convert coordinates to relative positions
-            // These values will position hospitals on different parts of the NYC map
             const offsetFactors = [
               { x: 0.45, y: 0.5 },  // Near center
               { x: 0.6, y: 0.35 },   // Upper right
@@ -169,7 +163,6 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
             );
           })}
           
-          {/* User Location Marker */}
           {showPathFromUser && (
             <motion.div
               initial={{ scale: 0, opacity: 0 }}
@@ -193,10 +186,8 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
             </motion.div>
           )}
           
-          {/* Path from user to selected hospital */}
           {showPathFromUser && selectedDestination && (
             <svg className="absolute inset-0 w-full h-full" style={{ pointerEvents: 'none', zIndex: 5 }}>
-              {/* Find the selected hospital's position */}
               {(() => {
                 const index = destinations.findIndex(d => d.id === selectedDestination.id);
                 if (index === -1) return null;
@@ -211,13 +202,11 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
                 
                 const position = offsetFactors[index % offsetFactors.length];
                 
-                // Create a slightly curved path
                 const userX = 20;
                 const userY = 70;
                 const hospitalX = position.x * 100;
                 const hospitalY = position.y * 100;
                 
-                // Control point for curve (creates a slight curve in the path)
                 const cpX = (userX + hospitalX) / 2 + 10;
                 const cpY = (userY + hospitalY) / 2 - 10;
                 
@@ -236,14 +225,12 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
             </svg>
           )}
           
-          {/* Transport Mode Indicator */}
           {transportMode === 'air' && (
             <div className="absolute left-1/2 top-5 transform -translate-x-1/2 bg-blue-500 text-white text-xs px-2 py-1 rounded-md shadow-md">
               🚁 Air Route
             </div>
           )}
           
-          {/* Route Info */}
           {selectedDestination && (
             <div className={`absolute top-3 left-3 ${
               theme === 'dark' ? 'bg-gray-800/80' : 'bg-white/80'
@@ -257,13 +244,12 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
               {showTraffic && (
                 <div className="flex items-center text-xs text-gray-600 dark:text-gray-400 mt-1">
                   <Map size={12} className="mr-1" />
-                  <span>Light traffic</span>
+                  <span>Moderate traffic</span>
                 </div>
               )}
             </div>
           )}
           
-          {/* Navigation Button */}
           {selectedDestination && (
             <div className="absolute bottom-3 right-3 z-30">
               <ActionButton
@@ -276,7 +262,6 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
             </div>
           )}
           
-          {/* Traffic Alert */}
           {showTraffic && (
             <div className="absolute left-1/3 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
               <div className="w-5 h-5 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center animate-pulse">
