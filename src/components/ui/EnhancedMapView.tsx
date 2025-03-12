@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { MapPin, Navigation, Loader2, Map, Zap, AlertTriangle, Clock, Building, BadgeAlert } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -129,84 +128,56 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
           {/* Real map image background */}
           <div className="absolute inset-0">
             <img 
-              src="/lovable-uploads/71b87321-f66b-40ae-9f9f-819acb508dba.png" 
+              src="/lovable-uploads/14c7b14a-212b-4984-9c54-32bd32be1010.png" 
               alt="Real-time map" 
               className="w-full h-full object-cover"
             />
-            <div className={`absolute inset-0 ${isDark ? 'bg-gray-900/30' : 'bg-gray-50/20'}`} />
+            <div className={`absolute inset-0 ${isDark ? 'bg-gray-900/30' : 'bg-transparent'}`} />
           </div>
           
           {/* Overlay for traffic indicators and routes */}
-          <svg className="absolute inset-0 w-full h-full" style={{ pointerEvents: 'none' }}>
-            {/* Route path with improved curve and animation */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none">
+            {/* Primary route - animated blue path showing the fastest route */}
             {selectedDestination && (
               <>
-                {/* Primary route - main blue path showing the fastest route */}
+                {/* Main route line - blue pulse animation */}
                 <path 
-                  d="M 200,450 C 250,380 300,350 350,320 C 400,290 450,270 500,300 C 550,330 600,350 630,400"
+                  d="M 380,520 L 375,490 L 370,460 L 365,430 L 358,400 L 350,370 L 345,340 L 340,310 L 335,280 L 330,250 L 325,220"
                   stroke={transportMode === 'air' 
                     ? isDark ? '#3b82f6' : '#2563eb' 
-                    : isDark ? '#10b981' : '#059669'} 
-                  strokeWidth="6"
+                    : isDark ? '#10b981' : '#1d4ed8'} 
+                  strokeWidth="4"
                   strokeLinecap="round"
+                  fill="none"
                   strokeDasharray={transportMode === 'air' ? "10,5" : "none"}
-                  fill="none"
                   className="animate-pulse"
-                  style={{ opacity: 0.8 }}
-                />
+                >
+                  <animate attributeName="stroke-opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite" />
+                </path>
                 
-                {/* Alternative routes in lighter colors */}
-                <path 
-                  d="M 200,450 C 240,400 280,370 360,350 C 450,330 500,340 630,400"
-                  stroke={isDark ? '#6b7280' : '#9ca3af'} 
-                  strokeWidth="4"
-                  strokeLinecap="round"
-                  strokeDasharray="6,3"
-                  fill="none"
-                  style={{ opacity: 0.4 }}
-                />
+                {/* Moving dot along route */}
+                <circle r="5" fill="#3b82f6">
+                  <animateMotion
+                    path="M 380,520 L 375,490 L 370,460 L 365,430 L 358,400 L 350,370 L 345,340 L 340,310 L 335,280 L 330,250 L 325,220"
+                    dur="6s"
+                    repeatCount="indefinite"
+                  />
+                </circle>
                 
-                <path 
-                  d="M 200,450 C 250,420 350,400 400,380 C 450,360 500,350 630,400"
-                  stroke={isDark ? '#6b7280' : '#9ca3af'} 
-                  strokeWidth="4"
-                  strokeLinecap="round"
-                  strokeDasharray="6,3"
-                  fill="none"
-                  style={{ opacity: 0.4 }}
-                />
-                
-                {/* Traffic spots/congestion indicators */}
-                <circle cx="350" cy="320" r="8" fill={isDark ? 'rgba(220, 38, 38, 0.7)' : 'rgba(239, 68, 68, 0.7)'}>
+                {/* Traffic congestion spots */}
+                <circle cx="365" cy="430" r="6" fill="rgba(220, 38, 38, 0.7)">
                   <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite" />
                 </circle>
                 
-                <circle cx="500" cy="300" r="6" fill={isDark ? 'rgba(245, 158, 11, 0.7)' : 'rgba(251, 191, 36, 0.7)'}>
+                <circle cx="345" cy="340" r="5" fill="rgba(245, 158, 11, 0.7)">
                   <animate attributeName="opacity" values="0.6;0.9;0.6" dur="3s" repeatCount="indefinite" />
-                </circle>
-                
-                {/* Moving ambulance along the route */}
-                <circle id="ambulance" cx="200" cy="450" r="6" fill={isDark ? '#3b82f6' : '#2563eb'}>
-                  <animate 
-                    attributeName="cx" 
-                    values="200;250;300;350;400;450;500;550;600;630" 
-                    dur="10s" 
-                    repeatCount="indefinite" 
-                  />
-                  <animate 
-                    attributeName="cy" 
-                    values="450;380;350;320;290;270;300;330;350;400" 
-                    dur="10s" 
-                    repeatCount="indefinite" 
-                  />
-                  <animate attributeName="opacity" values="0.8;1;0.8" dur="1s" repeatCount="indefinite" />
                 </circle>
               </>
             )}
           </svg>
           
           {/* User location marker (ambulance) - origin point */}
-          <div className="absolute left-[30%] top-[75%] transform -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20">
+          <div className="absolute left-[48%] top-[65%] transform -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20">
             <div className="relative">
               <div className="absolute -inset-4 rounded-full bg-blue-500/20 animate-ping opacity-50" />
               <div className="absolute -inset-3 rounded-full bg-blue-500/30 animate-pulse" />
@@ -225,13 +196,13 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
           
           {/* Destination markers */}
           {destinations.map((dest, index) => {
-            // Adjusted positions to match real map
+            // Adjusted positions to match the NYC map
             const positions = [
-              { left: "40%", top: "60%" },
-              { left: "50%", top: "50%" },
-              { left: "65%", top: "40%" },
-              { left: "75%", top: "35%" },
-              { left: "58%", top: "55%" },
+              { left: "42%", top: "28%" },  // Spring St area
+              { left: "48%", top: "38%" },  // Little Italy
+              { left: "44%", top: "46%" },  // Canal St
+              { left: "40%", top: "52%" },  // Chambers area
+              { left: "38%", top: "58%" },  // City Hall area
             ];
             
             const position = positions[index % positions.length];
@@ -396,6 +367,11 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
               <Navigation size={14} />
               <span>Navigate</span>
             </button>
+          </div>
+
+          {/* Map attribution */}
+          <div className="absolute bottom-1 right-1 text-[8px] text-gray-500 dark:text-gray-400 bg-white/70 dark:bg-black/30 px-1 rounded">
+            © OpenStreetMap contributors
           </div>
         </>
       )}

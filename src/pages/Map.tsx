@@ -41,57 +41,57 @@ const Map = () => {
     { 
       id: '1', 
       name: 'City General Hospital', 
-      location: { lat: 12.9716, lng: 77.5946 }, 
+      location: { lat: 40.7128, lng: -74.0060 }, 
       icuAvailable: 5, 
       icuTotal: 20, 
       waitTime: 10,
-      distance: '2.5 km',
+      distance: '1.5 km',
       travelTime: '8 min',
-      phone: '+91 80 2345 6789'
+      phone: '+1 212-555-1234'
     },
     { 
       id: '2', 
       name: 'Memorial Medical Center', 
-      location: { lat: 12.9516, lng: 77.6246 }, 
+      location: { lat: 40.7228, lng: -74.0090 }, 
       icuAvailable: 8, 
       icuTotal: 15, 
       waitTime: 5,
-      distance: '4.2 km',
+      distance: '2.2 km',
       travelTime: '12 min',
-      phone: '+91 80 2345 1234'
+      phone: '+1 212-555-2345'
     },
     { 
       id: '3', 
-      name: 'Community Hospital', 
-      location: { lat: 12.9916, lng: 77.5746 }, 
+      name: 'Downtown Hospital', 
+      location: { lat: 40.7158, lng: -74.0030 }, 
       icuAvailable: 2, 
       icuTotal: 10, 
       waitTime: 15,
-      distance: '3.8 km',
-      travelTime: '14 min',
-      phone: '+91 80 2345 5678'
+      distance: '0.8 km',
+      travelTime: '6 min',
+      phone: '+1 212-555-3456'
     },
     { 
       id: '4', 
-      name: 'St. Mary\'s Medical', 
-      location: { lat: 12.9416, lng: 77.6046 }, 
+      name: 'Manhattan Medical', 
+      location: { lat: 40.7208, lng: -74.0120 }, 
       icuAvailable: 10, 
       icuTotal: 25, 
       waitTime: 8,
-      distance: '5.1 km',
-      travelTime: '18 min',
-      phone: '+91 80 2345 9876'
+      distance: '1.7 km',
+      travelTime: '10 min',
+      phone: '+1 212-555-4567'
     },
     { 
       id: '5', 
-      name: 'Riverside Health Center', 
-      location: { lat: 13.0016, lng: 77.5846 }, 
+      name: 'Lower East Medical Center', 
+      location: { lat: 40.7148, lng: -74.0070 }, 
       icuAvailable: 3, 
       icuTotal: 12, 
       waitTime: 12,
-      distance: '6.3 km',
-      travelTime: '20 min',
-      phone: '+91 80 2345 4321'
+      distance: '1.2 km',
+      travelTime: '7 min',
+      phone: '+1 212-555-5678'
     },
   ];
   
@@ -103,7 +103,7 @@ const Map = () => {
     icuAvailable: h.icuAvailable,
     icuTotal: h.icuTotal,
     waitTime: h.waitTime,
-    specialties: ['Emergency', 'ICU', 'Surgery'].slice(0, Math.floor(Math.random() * 3) + 1)
+    specialties: ['Emergency', 'ICU', 'Surgery', 'Trauma', 'Pediatrics'].slice(0, Math.floor(Math.random() * 3) + 1)
   }));
   
   // Find the selected hospital
@@ -165,7 +165,7 @@ const Map = () => {
     <div 
       className="min-h-screen w-full bg-cover bg-center transition-all duration-500"
       style={{ 
-        backgroundImage: `url('/public/lovable-uploads/71b87321-f66b-40ae-9f9f-819acb508dba.png')`,
+        backgroundImage: `url('/lovable-uploads/14c7b14a-212b-4984-9c54-32bd32be1010.png')`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat'
       }}
@@ -173,7 +173,7 @@ const Map = () => {
       <div className={`min-h-screen w-full backdrop-blur-sm transition-all duration-500 pb-20 ${
         isDark 
           ? 'bg-gradient-to-br from-gray-900/90 via-purple-900/70 to-gray-900/90' 
-          : 'bg-gradient-to-br from-blue-50/90 via-purple-100/70 to-blue-50/90'
+          : 'bg-gradient-to-br from-blue-50/80 via-purple-100/60 to-blue-50/80'
       }`}>
         {/* Top Header */}
         <TopHeader />
