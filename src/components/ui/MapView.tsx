@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import { MapPin, Navigation, Loader2, Map, Zap, AlertTriangle } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -111,10 +110,8 @@ const MapView: React.FC<MapViewProps> = ({
     }
   };
   
-  // Center map when selection changes or on initial load
   useEffect(() => {
     if (forceInitialCenter) {
-      // Set to center initially
       setMapCenter({ x: 200, y: 150 });
       return;
     }
@@ -148,7 +145,6 @@ const MapView: React.FC<MapViewProps> = ({
     }
   }, [selectedHospitalId, centerMapOnSelection, destinations, forceInitialCenter]);
   
-  // Map the hospital destinations to visual coordinates
   const getHospitalPosition = (id: string) => {
     const positions = [
       { x: 120, y: 220 },  // Hospital 1
@@ -191,7 +187,6 @@ const MapView: React.FC<MapViewProps> = ({
   };
 
   const getRoutePath = () => {
-    // Create a more complex path for better visualization
     const pathString = selectedHospitalId === '1' ? 
       `M 230 130 L 210 120 L 190 130 L 170 140 L 150 160 L 140 180 L 130 200 L 120 220` :
       selectedHospitalId === '2' ? 
@@ -214,8 +209,7 @@ const MapView: React.FC<MapViewProps> = ({
             strokeDasharray: `${pathLength}px`, 
             strokeDashoffset: `${dashOffset}px`,
             stroke: transportMode === 'air' ? '#3b82f6' : '#ef4444',
-            strokeWidth: transportMode === 'air' ? 6 : 4,
-            strokeDasharray: transportMode === 'air' ? '15, 10' : '10, 5'
+            strokeWidth: transportMode === 'air' ? 6 : 4
           }}
         />
       );
@@ -235,7 +229,6 @@ const MapView: React.FC<MapViewProps> = ({
     );
   };
   
-  // Draw a route path for each hospital when alwaysShowAllRoutes is true
   const getAllRoutePaths = () => {
     if (!alwaysShowAllRoutes) return null;
     
@@ -244,11 +237,10 @@ const MapView: React.FC<MapViewProps> = ({
       const userPos = getUserPosition();
       const isSelected = selectedHospitalId === dest.id || selectedDestinations.includes(dest.id);
       
-      // Create a simple straight line or a slightly curved line
       const dx = pos.x - userPos.x;
       const dy = pos.y - userPos.y;
       const midX = (userPos.x + pos.x) / 2;
-      const midY = (userPos.y + pos.y) / 2 - 10; // Slight curve upward
+      const midY = (userPos.y + pos.y) / 2 - 10;
       
       const pathString = `M ${userPos.x} ${userPos.y} Q ${midX} ${midY} ${pos.x} ${pos.y}`;
       
@@ -280,7 +272,6 @@ const MapView: React.FC<MapViewProps> = ({
     if (!navigationActive) return null;
     
     return waypoints.map((point, index) => {
-      // Only show waypoints up to the current progress
       if ((index + 1) * 20 > routeProgress) return null;
       
       return (
@@ -417,37 +408,34 @@ const MapView: React.FC<MapViewProps> = ({
         style={{ 
           backgroundImage: `url('${customMapImage}')`,
           transition: 'background-position 0.5s ease-out',
-          backgroundPosition: `${mapCenter.x * 0.5}px ${mapCenter.y * 0.5}px`
+          backgroundPosition: `${mapCenter.x * 0.5}px ${mapCenter.y * 0.5}px`,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
         }}
       >
-        {/* Traffic overlay */}
         {showTraffic && (
           <div 
             className={`absolute inset-0 pointer-events-none ${
               transportMode === 'ground' ? 'traffic-moderate' : ''
             }`}
+            style={{ zIndex: 1 }}
           />
         )}
         
-        {/* SVG overlay for markers and paths */}
         <svg 
           className="absolute inset-0 w-full h-full pointer-events-none" 
           viewBox="0 0 400 300"
           style={{ zIndex: 2 }}
+          preserveAspectRatio="xMidYMid meet"
         >
-          {/* Always show all routes if enabled */}
           {getAllRoutePaths()}
           
-          {/* Selected route path */}
           {selectedHospitalId && !alwaysShowAllRoutes && getRoutePath()}
           
-          {/* Waypoints during navigation */}
           {getWaypoints()}
           
-          {/* End marker animation */}
           {getPathEndMarker()}
           
-          {/* User location marker */}
           <circle
             cx={getUserPosition().x}
             cy={getUserPosition().y}
@@ -458,12 +446,10 @@ const MapView: React.FC<MapViewProps> = ({
             style={{ pointerEvents: 'auto', cursor: 'pointer' }}
           />
           
-          {/* Hospital markers */}
           {getHospitalMarkers()}
         </svg>
         
-        {/* Map controls */}
-        <div className="absolute bottom-4 left-4 flex flex-col gap-2">
+        <div className="absolute bottom-4 left-4 flex flex-col gap-2 z-10">
           <ActionButton
             variant="emergency"
             icon={<Zap size={18} />}
@@ -505,7 +491,7 @@ const MapView: React.FC<MapViewProps> = ({
           </ActionButton>
         </div>
         
-        <div className="absolute bottom-4 right-4 flex flex-col gap-2">
+        <div className="absolute bottom-4 right-4 flex flex-col gap-2 z-10">
           {multiSelectionMode && (
             <ActionButton
               variant="outline"
@@ -518,9 +504,8 @@ const MapView: React.FC<MapViewProps> = ({
           )}
         </div>
         
-        {/* Navigation status overlay */}
         {navigationActive && (
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4 z-10">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <Navigation className="text-white" size={16} />
@@ -545,7 +530,6 @@ const MapView: React.FC<MapViewProps> = ({
         )}
       </div>
       
-      {/* Map legend */}
       <div className="mt-2 flex flex-wrap gap-2 text-xs text-gray-600 dark:text-gray-300 justify-end">
         <div className="flex items-center">
           <div className="w-3 h-3 rounded-full bg-red-500 mr-1"></div>
