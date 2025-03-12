@@ -32,7 +32,7 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
   transportMode = 'ground',
   onHospitalClick,
   theme = 'dark',
-  mapImagePath = "/lovable-uploads/7ec18946-42f4-4809-ad8c-b0c5c04089cd.png", // Default to new map image
+  mapImagePath = "/lovable-uploads/68ea6697-a7d4-49f5-bee4-3fd9cb69102e.png", // Updated to new map image
 }) => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
@@ -142,9 +142,9 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
             {/* Primary route - animated blue path showing the fastest route */}
             {selectedDestination && (
               <>
-                {/* Main route line - blue pulse animation */}
+                {/* Main route line - blue pulse animation - Updated route coordinates to match new map */}
                 <path 
-                  d="M 400,560 L 385,500 L 370,440 L 355,380 L 345,340 L 340,300 L 330,260 L 325,230"
+                  d="M 540,610 L 525,565 L 513,520 L 500,475 L 485,430 L 475,385 L 460,340 L 445,300"
                   stroke={transportMode === 'air' 
                     ? isDark ? '#3b82f6' : '#2563eb' 
                     : isDark ? '#10b981' : '#1d4ed8'} 
@@ -160,7 +160,7 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
                 {/* Moving dot along route */}
                 <circle r="5" fill="#3b82f6">
                   <animateMotion
-                    path="M 400,560 L 385,500 L 370,440 L 355,380 L 345,340 L 340,300 L 330,260 L 325,230"
+                    path="M 540,610 L 525,565 L 513,520 L 500,475 L 485,430 L 475,385 L 460,340 L 445,300"
                     dur="6s"
                     repeatCount="indefinite"
                   />
@@ -169,8 +169,8 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
             )}
           </svg>
           
-          {/* User location marker (ambulance) - origin point */}
-          <div className="absolute left-[47%] top-[68%] transform -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20">
+          {/* User location marker (ambulance) - Updated position to match new map */}
+          <div className="absolute left-[54%] top-[75%] transform -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20">
             <div className="relative">
               <div className="absolute -inset-4 rounded-full bg-blue-500/20 animate-ping opacity-50" />
               <div className="absolute -inset-3 rounded-full bg-blue-500/30 animate-pulse" />
@@ -182,15 +182,15 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
             </div>
           </div>
           
-          {/* Destination markers */}
+          {/* Destination markers - Updated positions for the new map */}
           {destinations.map((dest, index) => {
-            // Adjusted positions to match the NYC map
+            // Adjusted positions to match the new NYC map
             const positions = [
-              { left: "60%", top: "30%" },  // Spring Street Medical Center
-              { left: "63%", top: "40%" },  // Little Italy Hospital
-              { left: "55%", top: "50%" },  // Canal Street Medical
-              { left: "48%", top: "58%" },  // Tribeca Health Center
-              { left: "41%", top: "63%" },  // Lower Manhattan Hospital
+              { left: "76%", top: "30%" },  // Spring Street Medical Center
+              { left: "70%", top: "42%" },  // Little Italy Hospital
+              { left: "63%", top: "52%" },  // Canal Street Medical
+              { left: "58%", top: "62%" },  // Tribeca Health Center
+              { left: "48%", top: "72%" },  // Lower Manhattan Hospital
             ];
             
             const position = positions[index % positions.length];
@@ -267,7 +267,7 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
           })}
           
           {/* Enhanced route info card */}
-          <div className="absolute top-4 left-4 px-3 py-2 rounded-lg text-sm backdrop-blur-md bg-white/80 border border-gray-200">
+          <div className="absolute top-4 left-4 px-3 py-2 rounded-lg text-sm bg-white border border-gray-200">
             <div className="flex items-center">
               <Zap size={14} className="text-blue-600 mr-1" />
               <p className="font-medium text-gray-700">{routeInfo.distance} • {routeInfo.time}</p>
@@ -290,7 +290,7 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
           
           {/* Selected hospital info */}
           {selectedHospitalDetails && (
-            <div className="absolute bottom-4 left-4 right-20 px-3 py-2 rounded-lg text-sm backdrop-blur-md bg-white/90 border border-gray-200">
+            <div className="absolute bottom-4 left-4 right-20 px-3 py-2 rounded-lg text-sm bg-white border border-gray-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <Building size={14} className="text-blue-600 mr-1" />

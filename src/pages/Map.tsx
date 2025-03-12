@@ -175,7 +175,7 @@ const Map = () => {
         >
           <h1 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">{t("emergency-route")}</h1>
           
-          {/* Map Section with OpenStreetMap style map */}
+          {/* Map Section with updated map image */}
           <div className="mb-6">
             <EnhancedMapView 
               destinations={destinations}
@@ -183,7 +183,7 @@ const Map = () => {
               onHospitalClick={handleHospitalClick}
               theme={theme}
               transportMode="ground"
-              mapImagePath="/lovable-uploads/7ec18946-42f4-4809-ad8c-b0c5c04089cd.png"
+              mapImagePath="/lovable-uploads/68ea6697-a7d4-49f5-bee4-3fd9cb69102e.png"
               onNavigate={(id) => {
                 const hospital = mockHospitals.find(h => h.id === id);
                 if (hospital) {
