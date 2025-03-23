@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import QRCode from 'qrcode.react';
+import { Switch } from '@/components/ui/switch';
 
 export interface Hospital {
   id: string;
@@ -49,6 +50,8 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
   const [expandedHospitalId, setExpandedHospitalId] = useState<string | null>(null);
   const [qrDialogOpen, setQrDialogOpen] = useState(false);
   const [selectedHospital, setSelectedHospital] = useState<Hospital | null>(null);
+  const [showBedAvailability, setShowBedAvailability] = useState(true);
+  const [isEmergencyCallActive, setIsEmergencyCallActive] = useState(false);
 
   // Toggle expanded view for a hospital
   const toggleExpand = (id: string) => {
@@ -59,10 +62,10 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
   const getAvailabilityStatus = (available: number, total: number) => {
     const ratio = available / total;
     
-    if (ratio === 0) return { text: "ICU Full", color: isDark ? "text-red-400" : "text-red-600" };
-    if (ratio < 0.2) return { text: "Critical Availability", color: isDark ? "text-red-400" : "text-red-600" };
-    if (ratio < 0.5) return { text: "Limited Availability", color: isDark ? "text-amber-400" : "text-amber-600" };
-    return { text: "Beds Available", color: isDark ? "text-green-400" : "text-green-600" };
+    if (ratio === 0) return { text: "ICU Full", color: isDark ? "text-red-400" : "text-red-600", indicator: "🔴" };
+    if (ratio < 0.2) return { text: "Critical Availability", color: isDark ? "text-red-400" : "text-red-600", indicator: "🔴" };
+    if (ratio < 0.5) return { text: "Limited Availability", color: isDark ? "text-amber-400" : "text-amber-600", indicator: "🟡" };
+    return { text: "Beds Available", color: isDark ? "text-green-400" : "text-green-600", indicator: "🟢" };
   };
   
   const handleQrCode = (e: React.MouseEvent, hospital: Hospital) => {
@@ -84,6 +87,17 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
       operatingHours: hospital.operatingHours || 'Not specified',
       emergencyFacilities: hospital.emergencyFacilities.join(', ')
     });
+  };
+
+  const handleEmergencyCall = (e: React.MouseEvent, hospital: Hospital) => {
+    e.stopPropagation();
+    setIsEmergencyCallActive(true);
+    
+    // Simulate emergency call
+    setTimeout(() => {
+      setIsEmergencyCallActive(false);
+      alert(`Emergency call connected to ${hospital.name}. An ambulance has been dispatched to your location. Estimated arrival time: ${Math.floor(parseInt(hospital.travelTime) * 0.7)} minutes.`);
+    }, 2000);
   };
 
   if (isLoading) {
@@ -118,10 +132,21 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
       isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
     }`}>
       <div className="bg-gradient-to-r from-medical-500 to-medical-600 p-4">
-        <h2 className="text-lg font-bold text-white flex items-center">
-          <Building className="mr-2" size={18} />
-          Nearby Hospitals ({hospitals.length})
-        </h2>
+        <div className="flex justify-between items-center">
+          <h2 className="text-lg font-bold text-white flex items-center">
+            <Building className="mr-2" size={18} />
+            Nearby Hospitals ({hospitals.length})
+          </h2>
+          
+          <div className="flex items-center space-x-2">
+            <span className="text-xs text-white">Availability</span>
+            <Switch 
+              checked={showBedAvailability} 
+              onCheckedChange={setShowBedAvailability}
+              className="data-[state=checked]:bg-green-500"
+            />
+          </div>
+        </div>
       </div>
       
       <div className="divide-y divide-gray-200 dark:divide-gray-700 max-h-[600px] overflow-y-auto">
@@ -152,6 +177,11 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
                           <Star size={14} className="text-yellow-500" />
                           <span className="text-xs ml-1 text-gray-600 dark:text-gray-400">{hospital.rating}</span>
                         </div>
+                      )}
+                      {showBedAvailability && (
+                        <span className="ml-2 text-lg" title={availability.text}>
+                          {availability.indicator}
+                        </span>
                       )}
                     </div>
                     <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mt-1">
@@ -187,9 +217,14 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
                     isDark ? 'bg-gray-700/60' : 'bg-gray-100'
                   } p-2 rounded-lg`}>
                     <p className="text-xs text-gray-500 dark:text-gray-400">ICU Beds</p>
-                    <p className={`font-semibold ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>
-                      {hospital.icuAvailable} / {hospital.icuTotal}
-                    </p>
+                    <div className="flex items-center justify-between">
+                      <p className={`font-semibold ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>
+                        {hospital.icuAvailable} / {hospital.icuTotal}
+                      </p>
+                      <span className="text-sm" title={availability.text}>
+                        {availability.indicator}
+                      </span>
+                    </div>
                   </div>
                   
                   <div className={`${
@@ -228,17 +263,38 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
                     {isExpanded ? 'Show Less' : 'Show More'}
                   </Button>
                   
-                  <Button 
-                    size="sm" 
-                    className="text-xs bg-medical-500 hover:bg-medical-600 text-white"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onSelectHospital(hospital);
-                    }}
-                  >
-                    <Ambulance size={12} className="mr-1" />
-                    Navigate
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button 
+                      size="sm" 
+                      className="text-xs bg-red-600 hover:bg-red-700 text-white"
+                      onClick={(e) => handleEmergencyCall(e, hospital)}
+                      disabled={isEmergencyCallActive}
+                    >
+                      {isEmergencyCallActive ? (
+                        <>
+                          <span className="animate-pulse mr-1">🚨</span>
+                          Calling...
+                        </>
+                      ) : (
+                        <>
+                          <span className="mr-1">🚑</span>
+                          SOS
+                        </>
+                      )}
+                    </Button>
+
+                    <Button 
+                      size="sm" 
+                      className="text-xs bg-medical-500 hover:bg-medical-600 text-white"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onSelectHospital(hospital);
+                      }}
+                    >
+                      <Ambulance size={12} className="mr-1" />
+                      Navigate
+                    </Button>
+                  </div>
                 </div>
                 
                 {isExpanded && (
@@ -351,6 +407,18 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
                   <Phone className="mr-2 h-4 w-4 text-gray-500 mt-0.5" />
                   <span className="text-gray-700 dark:text-gray-300">{selectedHospital.phone}</span>
                 </div>
+              </div>
+              
+              <div className="mt-4 w-full">
+                <Button 
+                  className="w-full"
+                  onClick={() => {
+                    // In a real app, this would save the QR code to gallery
+                    alert('QR code saved to gallery!');
+                  }}
+                >
+                  Save QR to Gallery
+                </Button>
               </div>
             </div>
           )}

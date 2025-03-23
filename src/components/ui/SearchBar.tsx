@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Search, MapPin, Mic } from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
 interface SearchBarProps {
   placeholder?: string;
@@ -16,6 +16,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   className = "",
   showVoiceCommand = true
 }) => {
+  const { toast } = useToast();
   const [isVoiceActive, setIsVoiceActive] = useState(false);
   const [query, setQuery] = useState('');
   
