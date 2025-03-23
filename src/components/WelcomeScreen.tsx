@@ -8,13 +8,35 @@ import {
   Navigation, Brain, Heart, HeartPulse, Ambulance 
 } from 'lucide-react';
 import { Button } from './ui/button';
+import { useLanguage } from '@/hooks/use-language';
+import LanguageSelector from './ui/LanguageSelector';
 
 const WelcomeScreen: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const handleGetStarted = () => {
     navigate('/auth');
   };
+
+  const featuresData = [
+    {
+      icon: '🗺️',
+      text: t('ai-route-finding'),
+    },
+    {
+      icon: '🏥',
+      text: t('bed-availability'),
+    },
+    {
+      icon: '⏳',
+      text: t('save-minutes'),
+    },
+    {
+      icon: '❤️',
+      text: t('every-second-counts'),
+    }
+  ];
 
   return (
     <motion.div 
@@ -61,6 +83,11 @@ const WelcomeScreen: React.FC = () => {
           <AnimatedLogo size="lg" showText={false} />
         </motion.div>
 
+        {/* Language Selector */}
+        <div className="absolute top-4 right-4">
+          <LanguageSelector />
+        </div>
+
         {/* 🌍 Title & Subtitle */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -71,17 +98,17 @@ const WelcomeScreen: React.FC = () => {
           <h1 className="text-2xl md:text-4xl font-extrabold tracking-wide mb-3">
             <span className="flex items-center gap-2 justify-center">
               <span className="inline-block text-3xl">🚑</span> 
-              <span className="text-white">RAPID</span> 
+              <span className="text-white">{t('rapid')}</span> 
               <span className="inline-block text-3xl">🏥</span> 
-              <span className="text-white">AID</span> 
+              <span className="text-white">{t('aid')}</span> 
               <span className="inline-block text-3xl">💓</span> 
-              <span className="text-white">INNOVATORS</span> 
+              <span className="text-white">{t('innovators')}</span> 
               <span className="inline-block text-3xl">🚀</span>
             </span>
           </h1>
 
           <p className="text-lg md:text-xl font-medium text-cyan-300 drop-shadow-lg mb-6 mt-2 px-2">
-            Smart AI Ambulance Routing for Life-Saving Response! ⚡🚑
+            {t('smart-routing')} ⚡🚑
           </p>
         </motion.div>
 
@@ -93,25 +120,15 @@ const WelcomeScreen: React.FC = () => {
           className="w-full mb-6 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 p-5 shadow-lg"
         >
           <h2 className="text-xl font-bold text-cyan-300 mb-3 flex items-center justify-center gap-2">
-            <span className="inline-block text-2xl">⏳</span> What We Do
+            <span className="inline-block text-2xl">⏳</span> {t('what-we-do')}
           </h2>
           <ul className="text-left space-y-3 text-blue-100">
-            <li className="flex items-start">
-              <span className="inline-block text-xl mr-2">🗺️</span> 
-              <span>AI-powered system finds the fastest routes for ambulances through traffic</span>
-            </li>
-            <li className="flex items-start">
-              <span className="inline-block text-xl mr-2">🏥</span> 
-              <span>Real-time hospital bed availability tracking</span>
-            </li>
-            <li className="flex items-start">
-              <span className="inline-block text-xl mr-2">⏳</span> 
-              <span>Helps save precious minutes during emergencies</span>
-            </li>
-            <li className="flex items-start">
-              <span className="inline-block text-xl mr-2">❤️</span> 
-              <span>Every second counts when saving lives!</span>
-            </li>
+            {featuresData.map((feature, index) => (
+              <li key={index} className="flex items-start">
+                <span className="inline-block text-xl mr-2">{feature.icon}</span> 
+                <span>{feature.text}</span>
+              </li>
+            ))}
           </ul>
         </motion.div>
 
@@ -130,7 +147,7 @@ const WelcomeScreen: React.FC = () => {
             shadow-[0_4px_20px_rgba(0,168,232,0.5)] hover:shadow-[0_4px_25px_rgba(0,168,232,0.7)] 
             group text-xl tracking-wide border border-cyan-400/30"
           >
-            Get Started
+            {t('get-started')}
             <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
           </Button>
         </motion.div>

@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Define available languages
@@ -33,6 +32,36 @@ const translations: Record<Language, Record<string, string>> = {
     "incidents-by-category": "Incidents by Category",
     "icu-occupancy-forecast": "ICU Occupancy Forecast",
     "receive-live-traffic": "Receive Live Traffic",
+    "rapid": "RAPID",
+    "aid": "AID",
+    "innovators": "INNOVATORS",
+    "smart-routing": "Smart AI Ambulance Routing for Life-Saving Response!",
+    "what-we-do": "What We Do",
+    "ai-route-finding": "AI-powered system finds the fastest routes for ambulances through traffic",
+    "bed-availability": "Real-time hospital bed availability tracking",
+    "save-minutes": "Helps save precious minutes during emergencies",
+    "every-second-counts": "Every second counts when saving lives!",
+    "get-started": "Get Started",
+    "dashboard": "Dashboard",
+    "search-hospitals": "Search Hospitals",
+    "patient-entry": "Patient Entry",
+    "map-view": "Map View",
+    "analysis": "Analysis",
+    "nearby-icu": "Nearby ICU Availability",
+    "emergency-alerts": "Emergency Alerts",
+    "live-route": "Live Route Mapping",
+    "real-time-analytics": "Real-Time Analytics",
+    "icu-status": "ICU Status",
+    "response-time": "Response Time",
+    "cases": "Cases",
+    "patient-emergency": "Patient & Emergency Details",
+    "patient-location": "Patient Location",
+    "selected-hospital": "Selected Hospital",
+    "transport-mode": "Transport Mode",
+    "ground": "Ground",
+    "air": "Air",
+    "dispatch": "Dispatch Emergency Response",
+    "network-active": "Network Active",
   },
   
   hi: {
@@ -56,6 +85,36 @@ const translations: Record<Language, Record<string, string>> = {
     "incidents-by-category": "श्रेणी के अनुसार घटनाएँ",
     "icu-occupancy-forecast": "आईसीयू अधिग्रहण पूर्वानुमान",
     "receive-live-traffic": "लाइव ट्रैफिक प्राप्त करें",
+    "rapid": "रैपिड",
+    "aid": "एड",
+    "innovators": "इनोवेटर्स",
+    "smart-routing": "जीवन-रक्षक प्रतिक्रिया के लिए स्मार्ट एआई एम्बुलेंस मार्गदर्शन!",
+    "what-we-do": "हम क्या करते हैं",
+    "ai-route-finding": "एआई-संचालित सिस्टम एम्बुलेंस के लिए ट्रैफिक के बीच सबसे तेज़ मार्ग खोजता है",
+    "bed-availability": "रीयल-टाइम अस्पताल बेड उपलब्धता ट्रैकिंग",
+    "save-minutes": "आपातकाल के दौरान कीमती मिनट बचाने में मदद करता है",
+    "every-second-counts": "जब जीवन बचाने की बात आती है तो हर सेकंड मायने रखता है!",
+    "get-started": "शुरू करें",
+    "dashboard": "डैशबोर्ड",
+    "search-hospitals": "अस्पताल खोजें",
+    "patient-entry": "रोगी प्रविष्टि",
+    "map-view": "मानचित्र दृश्य",
+    "analysis": "विश्लेषण",
+    "nearby-icu": "पास की ICU उपलब्धता",
+    "emergency-alerts": "आपातकालीन अलर्ट",
+    "live-route": "लाइव रूट मैपिंग",
+    "real-time-analytics": "रीयल-टाइम एनालिटिक्स",
+    "icu-status": "ICU स्थिति",
+    "response-time": "प्रतिक्रिया समय",
+    "cases": "मामले",
+    "patient-emergency": "रोगी और आपातकालीन विवरण",
+    "patient-location": "रोगी का स्थान",
+    "selected-hospital": "चयनित अस्पताल",
+    "transport-mode": "परिवहन मोड",
+    "ground": "जमीन",
+    "air": "हवाई",
+    "dispatch": "आपातकालीन प्रतिक्रिया भेजें",
+    "network-active": "नेटवर्क सक्रिय",
   },
 
   kn: {
@@ -79,6 +138,36 @@ const translations: Record<Language, Record<string, string>> = {
     "incidents-by-category": "ವರ್ಗದ ಪ್ರಕಾರ ಘಟನೆಗಳು",
     "icu-occupancy-forecast": "ಐಸಿಯು ಆಕ್ರಮಣ ಮುನ್ಸೂಚನೆ",
     "receive-live-traffic": "ಲೈವ್ ಟ್ರಾಫಿಕ್ ಸ್ವೀಕರಿಸಿ",
+    "rapid": "ರ್ಯಾಪಿಡ್",
+    "aid": "ಏಡ್",
+    "innovators": "ಇನ್ನೋವೇಟರ್ಸ್",
+    "smart-routing": "ಜೀವ ರಕ್ಷಕ ಪ್ರತಿಕ್ರಿಯೆಗಾಗಿ ಸ್ಮಾರ್ಟ್ ಎಐ ಆಂಬುಲೆನ್ಸ್ ಮಾರ್ಗದರ್ಶನ!",
+    "what-we-do": "ನಾವು ಏನು ಮಾಡುತ್ತೇವೆ",
+    "ai-route-finding": "ಎಐ-ಪವರ್ಡ್ ಸಿಸ್ಟಮ್ ಆಂಬುಲೆನ್ಸ್‌ಗಳಿಗೆ ಟ್ರಾಫಿಕ್ ಮೂಲಕ ಅತ್ಯಂತ ವೇಗದ ಮಾರ್ಗಗಳನ್ನು ಕಂಡುಹಿಡಿಯುತ್ತದೆ",
+    "bed-availability": "ರಿಯಲ್-ಟೈಮ್ ಆಸ್ಪತ್ರೆ ಹಾಸಿಗೆ ಲಭ್ಯತೆ ಟ್ರ್ಯಾಕಿಂಗ್",
+    "save-minutes": "ತುರ್ತು ಪರಿಸ್ಥಿತಿಗಳಲ್ಲಿ ಅಮೂಲ್ಯವಾದ ನಿಮಿಷಗಳನ್ನು ಉಳಿಸಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ",
+    "every-second-counts": "ಜೀವ ಉಳಿಸುವಾಗ ಪ್ರತಿ ಸೆಕೆಂಡ್ ಮುಖ್ಯ!",
+    "get-started": "ಪ್ರಾರಂಭಿಸಿ",
+    "dashboard": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+    "search-hospitals": "ಆಸ್ಪತ್ರೆಗಳನ್ನು ಹುಡುಕಿ",
+    "patient-entry": "ರೋಗಿ ನಮೂದು",
+    "map-view": "ನಕ್ಷೆ ನೋಟ",
+    "analysis": "ವಿಶ್ಲೇಷಣೆ",
+    "nearby-icu": "ಹತ್ತಿರದ ICU ಲಭ್ಯತೆ",
+    "emergency-alerts": "ತುರ್ತು ಎಚ್ಚರಿಕೆಗಳು",
+    "live-route": "ಲೈವ್ ರೂಟ್ ಮ್ಯಾಪಿಂಗ್",
+    "real-time-analytics": "ರಿಯಲ್-ಟೈಮ್ ವಿಶ್ಲೇಷಣೆ",
+    "icu-status": "ICU ಸ್ಥಿತಿ",
+    "response-time": "ಪ್ರತಿಕ್ರಿಯೆ ಸಮಯ",
+    "cases": "ಪ್ರಕರಣಗಳು",
+    "patient-emergency": "ರೋಗಿ ಮತ್ತು ತುರ್ತು ವಿವರಗಳು",
+    "patient-location": "ರೋಗಿಯ ಸ್ಥಳ",
+    "selected-hospital": "ಆಯ್ಕೆ ಮಾಡಿದ ಆಸ್ಪತ್ರೆ",
+    "transport-mode": "ಸಾರಿಗೆ ಮೋಡ್",
+    "ground": "ನೆಲ",
+    "air": "ವಾಯು",
+    "dispatch": "ತುರ್ತು ಪ್ರತಿಕ್ರಿಯೆಯನ್ನು ಕಳುಹಿಸಿ",
+    "network-active": "ನೆಟ್‌ವರ್ಕ್ ಸಕ್ರಿಯವಾಗಿದೆ",
   },
 
   ta: {
@@ -102,6 +191,36 @@ const translations: Record<Language, Record<string, string>> = {
     "incidents-by-category": "வகை வாரியாக சம்பவங்கள்",
     "icu-occupancy-forecast": "ICU ஆக்கிரமிப்பு முன்னறிவிப்பு",
     "receive-live-traffic": "நேரடி ட்ராஃபிக்கைப் பெறுக",
+    "rapid": "ராபிட்",
+    "aid": "எய்ட்",
+    "innovators": "இன்னோவேட்டர்ஸ்",
+    "smart-routing": "உயிர் காக்கும் பதிலளிப்புக்கான ஸ்மார்ட் AI ஆம்புலன்ஸ் வழிசெலுத்தல்!",
+    "what-we-do": "நாங்கள் என்ன செய்கிறோம்",
+    "ai-route-finding": "AI-செயல்படுத்தப்பட்ட அமைப்பு ஆம்புலன்ஸ்களுக்கு போக்குவரத்து வழியாக வேகமான பாதைகளைக் கண்டறிகிறது",
+    "bed-availability": "நிகழ்நேர மருத்துவமனை படுக்கை இருப்பு கண்காணிப்பு",
+    "save-minutes": "அவசரகாலங்களில் விலைமதிப்பற்ற நிமிடங்களை சேமிக்க உதவுகிறது",
+    "every-second-counts": "உயிர்களைக் காப்பாற்றும் போது ஒவ்வொரு வினாடியும் முக்கியம்!",
+    "get-started": "தொடங்கவும்",
+    "dashboard": "டாஷ்போர்டு",
+    "search-hospitals": "மருத்துவமனைகளைத் தேடுங்கள்",
+    "patient-entry": "நோயாளி உள்ளீடு",
+    "map-view": "வரைபடக் காட்சி",
+    "analysis": "பகுப்பாய்வு",
+    "nearby-icu": "அருகிலுள்ள ICU இருப்பு",
+    "emergency-alerts": "அவசர எச்சரிக்கைகள்",
+    "live-route": "நேரடி பாதை வரைபடம்",
+    "real-time-analytics": "நிகழ்நேர பகுப்பாய்வு",
+    "icu-status": "ICU நிலை",
+    "response-time": "பதிலளிப்பு நேரம்",
+    "cases": "வழக்குகள்",
+    "patient-emergency": "நோயாளி மற்றும் அவசர விவரங்கள்",
+    "patient-location": "நோயாளி இருப்பிடம்",
+    "selected-hospital": "தேர்ந்தெடுக்கப்பட்ட மருத்துவமனை",
+    "transport-mode": "போக்குவரத்து முறை",
+    "ground": "தரை",
+    "air": "காற்று",
+    "dispatch": "அவசர பதிலளிப்பை அனுப்பவும்",
+    "network-active": "நெட்வொர்க் செயலில் உள்ளது",
   },
 
   te: {
@@ -125,6 +244,36 @@ const translations: Record<Language, Record<string, string>> = {
     "incidents-by-category": "వర్గం వారీగా సంఘటనలు",
     "icu-occupancy-forecast": "ICU ఆక్రమణ ఫోర్‌కాస్ట్",
     "receive-live-traffic": "ప్రత్యక్ష ట్రాఫిక్‌ను స్వీకరించండి",
+    "rapid": "రాపిడ్",
+    "aid": "ఎయిడ్",
+    "innovators": "ఇన్నోవేటర్స్",
+    "smart-routing": "ప్రాణరక్షక ప్రతిస్పందన కోసం స్మార్ట్ AI అంబులెన్స్ రూటింగ్!",
+    "what-we-do": "మేము ఏమి చేస్తాము",
+    "ai-route-finding": "AI-పవర్డ్ సిస్టమ్ అంబులెన్స్‌లకు ట్రాఫిక్ ద్వారా వేగవంతమైన మార్గాలను కనుగొంటుంది",
+    "bed-availability": "రియల్-టైమ్ హాస్పిటల్ బెడ్ అందుబాటు ట్రాకింగ్",
+    "save-minutes": "అత్యవసర పరిస్థితుల్లో విలువైన నిమిషాలను ఆదా చేయడానికి సహాయపడుతుంది",
+    "every-second-counts": "ప్రాణాలను కాపాడేటప్పుడు ప్రతి క్షణం ముఖ్యమే!",
+    "get-started": "ప్రారంభించండి",
+    "dashboard": "డాష్‌బోర్డ్",
+    "search-hospitals": "ఆసుపత్రులను శోధించండి",
+    "patient-entry": "రోగి ఎంట్రీ",
+    "map-view": "మ్యాప్ వీక్షణ",
+    "analysis": "విశ్లేషణ",
+    "nearby-icu": "సమీపంలోని ICU లభ్యత",
+    "emergency-alerts": "అత్యవసర హెచ్చరికలు",
+    "live-route": "లైవ్ రూట్ మ్యాపింగ్",
+    "real-time-analytics": "రియల్-టైమ్ అనలిటిక్స్",
+    "icu-status": "ICU స్థితి",
+    "response-time": "స్పందన సమయం",
+    "cases": "కేసులు",
+    "patient-emergency": "రోగి & అత్యవసర వివరాలు",
+    "patient-location": "రోగి స్థానం",
+    "selected-hospital": "ఎంచుకున్న ఆసుపత్రి",
+    "transport-mode": "రవాణా మోడ్",
+    "ground": "భూమి",
+    "air": "గాలి",
+    "dispatch": "అత్యవసర ప్రతిస్పందనను పంపండి",
+    "network-active": "నెట్‌వర్క్ యాక్టివ్‌గా ఉంది",
   },
 
   ml: {
@@ -141,180 +290,4 @@ const translations: Record<Language, Record<string, string>> = {
     "available-beds": "ലഭ്യമായ കിടക്കകൾ",
     "total-beds": "ആകെ കിടക്കകൾ",
     "network-connection-issues": "നെറ്റ്‌വർക്ക് കണക്ഷൻ പ്രശ്നങ്ങൾ",
-    "partial-network-connection": "ഭാഗിക നെറ്റ്‌വർക്ക് കണക്ഷൻ",
-    "medical-response-analytics": "മെഡിക്കൽ പ്രതികരണ അനലിറ്റിക്സ്",
-    "patient-survival-rate": "ആശുപത്രി അനുസരിച്ച് രോഗി അതിജീവന നിരക്ക്",
-    "emergency-response-time": "അടിയന്തിര പ്രതികരണ സമയം",
-    "incidents-by-category": "വിഭാഗം അനുസരിച്ച് സംഭവങ്ങൾ",
-    "icu-occupancy-forecast": "ICU ഓക്യുപൻസി ഫോർകാസ്റ്റ്",
-    "receive-live-traffic": "തത്സമയ ട്രാഫിക് സ്വീകരിക്കുക",
-  },
-  
-  // Add mappings for the string values being used in the components
-  english: {
-    // Same as 'en'
-    "ai-smart-ambulance-routing": "AI Smart Ambulance Routing",
-    "emergency-route": "Emergency Route Optimization System",
-    "geographic-incident-distribution": "Geographic Incident Distribution",
-    "icu-bed-occupancy": "ICU Bed Occupancy",
-    "hospital-wait-times": "Hospital Wait Times",
-    "north-bangalore": "North Bangalore",
-    "central-bangalore": "Central Bangalore",
-    "south-bangalore": "South Bangalore",
-    "east-bangalore": "East Bangalore",
-    "west-bangalore": "West Bangalore",
-    "available-beds": "Available Beds",
-    "total-beds": "Total Beds",
-    "network-connection-issues": "Network Connection Issues",
-    "partial-network-connection": "Partial Network Connection",
-    "medical-response-analytics": "Medical Response Analytics",
-    "patient-survival-rate": "Patient Survival Rate by Hospital",
-    "emergency-response-time": "Emergency Response Time",
-    "incidents-by-category": "Incidents by Category",
-    "icu-occupancy-forecast": "ICU Occupancy Forecast",
-    "receive-live-traffic": "Receive Live Traffic",
-  },
-  
-  hindi: {
-    // Same as 'hi'
-    "ai-smart-ambulance-routing": "एआई स्मार्ट एम्बुलेंस मार्गदर्शन",
-    "emergency-route": "आपातकालीन मार्ग अनुकूलन प्रणाली",
-    "geographic-incident-distribution": "भौगोलिक घटना वितरण",
-    "icu-bed-occupancy": "आईसीयू बेड अधिग्रहण",
-    "hospital-wait-times": "अस्पताल प्रतीक्षा समय",
-    "north-bangalore": "उत्तर बैंगलोर",
-    "central-bangalore": "मध्य बैंगलोर",
-    "south-bangalore": "दक्षिण बैंगलोर",
-    "east-bangalore": "पूर्व बैंगलोर",
-    "west-bangalore": "पश्चिम बैंगलोर",
-    "available-beds": "उपलब्ध बिस्तर",
-    "total-beds": "कुल बिस्तर",
-    "network-connection-issues": "नेटवर्क कनेक्शन समस्याएं",
-    "partial-network-connection": "आंशिक नेटवर्क कनेक्शन",
-    "medical-response-analytics": "चिकित्सा प्रतिक्रिया विश्लेषण",
-    "patient-survival-rate": "अस्पताल द्वारा रोगी जीवित रहने की दर",
-    "emergency-response-time": "आपातकालीन प्रतिक्रिया समय",
-    "incidents-by-category": "श्रेणी के अनुसार घटनाएँ",
-    "icu-occupancy-forecast": "आईसीयू अधिग्रहण पूर्वानुमान",
-    "receive-live-traffic": "लाइव ट्रैफिक प्राप्त करें",
-  },
-  
-  kannada: {
-    // Same as 'kn'
-    "ai-smart-ambulance-routing": "ಎಐ ಸ್ಮಾರ್ಟ್ ಆಂಬುಲೆನ್ಸ್ ಮಾರ್ಗದರ್ಶನ",
-    "emergency-route": "ತುರ್ತು ಮಾರ್ಗ ಆಪ್ಟಿಮೈಸೇಶನ್ ಸಿಸ್ಟಮ್",
-    "geographic-incident-distribution": "ಭೌಗೋಳಿಕ ಘಟನೆಗಳ ವಿತರಣೆ",
-    "icu-bed-occupancy": "ಐಸಿಯು ಹಾಸಿಗೆ ಆಕ್ರಮಣ",
-    "hospital-wait-times": "ಆಸ್ಪತ್ರೆ ಕಾಯುವ ಸಮಯಗಳು",
-    "north-bangalore": "ಉತ್ತರ ಬೆಂಗಳೂರು",
-    "central-bangalore": "ಕೇಂದ್ರ ಬೆಂಗಳೂರು",
-    "south-bangalore": "ದಕ್ಷಿಣ ಬೆಂಗಳೂರು",
-    "east-bangalore": "ಪೂರ್ವ ಬೆಂಗಳೂರು",
-    "west-bangalore": "ಪಶ್ಚಿಮ ಬೆಂಗಳೂರು",
-    "available-beds": "ಲಭ್ಯವಿರುವ ಹಾಸಿಗೆಗಳು",
-    "total-beds": "ಒಟ್ಟು ಹಾಸಿಗೆಗಳು",
-    "network-connection-issues": "ನೆಟ್‌ವರ್ಕ್ ಸಂಪರ್ಕ ಸಮಸ್ಯೆಗಳು",
-    "partial-network-connection": "ಭಾಗಶಃ ನೆಟ್‌ವರ್ಕ್ ಸಂಪರ್ಕ",
-    "medical-response-analytics": "ವೈದ್ಯಕೀಯ ಪ್ರತಿಕ್ರಿಯೆ ವಿಶ್ಲೇಷಣೆ",
-    "patient-survival-rate": "ಆಸ್ಪತ್ರೆಯ ಮೂಲಕ ರೋಗಿಯ ಬದುಕುಳಿಯುವ ದರ",
-    "emergency-response-time": "ತುರ್ತು ಪ್ರತಿಕ್ರಿಯೆ ಸಮಯ",
-    "incidents-by-category": "ವರ್ಗದ ಪ್ರಕಾರ ಘಟನೆಗಳು",
-    "icu-occupancy-forecast": "ಐಸಿಯು ಆಕ್ರಮಣ ಮುನ್ಸೂಚನೆ",
-    "receive-live-traffic": "ಲೈವ್ ಟ್ರಾಫಿಕ್ ಸ್ವೀಕರಿಸಿ",
-  },
-  
-  tamil: {
-    // Same as 'ta'
-    "ai-smart-ambulance-routing": "AI ஸ்மார்ட் ஆம்புலன்ஸ் வழிசெலுத்தல்",
-    "emergency-route": "அவசர வழித்தட உகப்பாக்க அமைப்பு",
-    "geographic-incident-distribution": "புவியியல் சம்பவ விநியோகம்",
-    "icu-bed-occupancy": "ICU படுக்கை ஆக்கிரமிப்பு",
-    "hospital-wait-times": "மருத்துவமனை காத்திருப்பு நேரங்கள்",
-    "north-bangalore": "வடக்கு பெங்களூர்",
-    "central-bangalore": "மத்திய பெங்களூர்",
-    "south-bangalore": "தெற்கு பெங்களூர்",
-    "east-bangalore": "கிழக்கு பெங்களூர்",
-    "west-bangalore": "மேற்கு பெங்களூர்",
-    "available-beds": "கிடைக்கும் படுக்கைகள்",
-    "total-beds": "மொத்த படுக்கைகள்",
-    "network-connection-issues": "நெட்வொர்க் இணைப்பு சிக்கல்கள்",
-    "partial-network-connection": "பகுதி நெட்வொர்க் இணைப்பு",
-    "medical-response-analytics": "மருத்துவ பதில் பகுப்பாய்வு",
-    "patient-survival-rate": "மருத்துவமனையால் நோயாளி உயிர்வாழ்வு விகிதம்",
-    "emergency-response-time": "அவசர பதில் நேரம்",
-    "incidents-by-category": "வகை வாரியாக சம்பவங்கள்",
-    "icu-occupancy-forecast": "ICU ஆக்கிரமிப்பு முன்னறிவிப்பு",
-    "receive-live-traffic": "நேரடி ட்ராஃபிக்கைப் பெறுக",
-  },
-  
-  telugu: {
-    // Same as 'te'
-    "ai-smart-ambulance-routing": "AI స్మార్ట్ అంబులెన్స్ రూటింగ్",
-    "emergency-route": "అత్యవసర మార్గం ఆప్టిమైజేషన్ సిస్టమ్",
-    "geographic-incident-distribution": "భౌగోళిక సంఘటన పంపిణీ",
-    "icu-bed-occupancy": "ICU బెడ్ ఆక్రమణ",
-    "hospital-wait-times": "ఆసుపత్రి వేచి ఉండే సమయాలు",
-    "north-bangalore": "ఉత్తర బెంగళూరు",
-    "central-bangalore": "సెంట్రల్ బెంగళూరు",
-    "south-bangalore": "దక్షిణ బెంగళూరు",
-    "east-bangalore": "తూర్పు బెంగళూరు",
-    "west-bangalore": "పశ్చిమ బెంగళూరు",
-    "available-beds": "అందుబాటులో ఉన్న పడకలు",
-    "total-beds": "మొత్తం పడకలు",
-    "network-connection-issues": "నెట్‌వర్క్ కనెక్షన్ సమస్యలు",
-    "partial-network-connection": "పాక్షిక నెట్‌వర్క్ కనెక్షన్",
-    "medical-response-analytics": "వైద్య స్పందన విశ్లేషణ",
-    "patient-survival-rate": "ఆసుపత్రి ద్వారా రోగి మనుగడ రేటు",
-    "emergency-response-time": "అత్యవసర స్పందన సమయం",
-    "incidents-by-category": "వర్గం వారీగా సంఘటనలు",
-    "icu-occupancy-forecast": "ICU ఆక్రమణ ఫోర్‌కాస్ట్",
-    "receive-live-traffic": "ప్రత్యక్ష ట్రాఫిక్‌ను స్వీకరించండి",
-  }
-};
-
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
-
-export const LanguageProvider = ({ 
-  children,
-  defaultLanguage = 'en'
-}: { 
-  children: React.ReactNode;
-  defaultLanguage?: Language;
-}) => {
-  
-  const [language, setLanguage] = useState<Language>(() => {
-    // Try to get the language from localStorage
-    const savedLanguage = localStorage.getItem('language') as Language;
-    return savedLanguage || defaultLanguage;
-  });
-
-  useEffect(() => {
-    localStorage.setItem('language', language);
-  }, [language]);
-
-  const t = (key: string): string => {
-    return translations[language][key] || key;
-  };
-
-  const value = {
-    language,
-    setLanguage,
-    t
-  };
-
-  return (
-    <LanguageContext.Provider value={value}>
-      {children}
-    </LanguageContext.Provider>
-  );
-};
-
-export const useLanguage = () => {
-  const context = useContext(LanguageContext);
-  
-  if (context === undefined) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
-  }
-
-  return context;
-};
+    "partial-

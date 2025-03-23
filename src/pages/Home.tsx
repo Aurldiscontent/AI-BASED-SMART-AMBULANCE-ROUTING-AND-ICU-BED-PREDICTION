@@ -26,6 +26,7 @@ const Home = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const isDark = theme === 'dark';
+  
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [systemStatus, setSystemStatus] = useState<'normal' | 'warning' | 'critical'>('normal');
   const [transportMode, setTransportMode] = useState<'ground' | 'air'>('ground');
@@ -287,11 +288,11 @@ const Home = () => {
             isDark ? 'bg-gray-800/50' : 'bg-white/50'
           } backdrop-blur-sm rounded-lg mt-2`}>
             {[
-              { label: "Dashboard", onClick: () => navigate("/home") },
-              { label: "Search Hospitals", onClick: () => navigate("/search") },
-              { label: "Patient Entry", onClick: () => navigate("/profile") },
-              { label: "Map View", onClick: () => navigate("/map") },
-              { label: "Analysis", onClick: () => setShowAnalysis(true) },
+              { label: t("dashboard"), onClick: () => navigate("/home") },
+              { label: t("search-hospitals"), onClick: () => navigate("/search") },
+              { label: t("patient-entry"), onClick: () => navigate("/profile") },
+              { label: t("map-view"), onClick: () => navigate("/map") },
+              { label: t("analysis"), onClick: () => setShowAnalysis(true) },
             ].map((item, index) => (
               <Button 
                 key={index} 
@@ -318,7 +319,7 @@ const Home = () => {
                 <div className={`${
                   isDark ? 'bg-gray-800/70 border border-blue-900/30' : 'bg-white/80 border border-blue-100'
                 } rounded-xl p-4 space-y-4 shadow-md`}>
-                  <h2 className={`text-lg font-bold ${isDark ? 'text-blue-400' : 'text-blue-700'} mb-3`}>Nearby ICU Availability</h2>
+                  <h2 className={`text-lg font-bold ${isDark ? 'text-blue-400' : 'text-blue-700'} mb-3`}>{t('nearby-icu')}</h2>
                   
                   <div className="space-y-4 max-h-96 overflow-y-auto scrollbar-none pr-2">
                     {hospitals.map(hospital => (
@@ -388,7 +389,7 @@ const Home = () => {
                     ))}
                   </div>
                   
-                  <h2 className={`text-lg font-bold ${isDark ? 'text-blue-400' : 'text-blue-700'} mt-6 mb-3`}>Emergency Alerts</h2>
+                  <h2 className={`text-lg font-bold ${isDark ? 'text-blue-400' : 'text-blue-700'} mt-6 mb-3`}>{t('emergency-alerts')}</h2>
                   
                   <div className="space-y-2 max-h-60 overflow-y-auto scrollbar-none pr-2">
                     {alerts.map(alert => (
@@ -435,7 +436,7 @@ const Home = () => {
                 <div className={`${
                   isDark ? 'bg-gray-800/70 border border-blue-900/30' : 'bg-white/80 border border-blue-100'
                 } rounded-xl p-4 shadow-md h-full`}>
-                  <h2 className={`text-lg font-bold ${isDark ? 'text-blue-400' : 'text-blue-700'} mb-3`}>Live Route Mapping</h2>
+                  <h2 className={`text-lg font-bold ${isDark ? 'text-blue-400' : 'text-blue-700'} mb-3`}>{t('live-route')}</h2>
                   
                   <EnhancedMapView 
                     destinations={destinations}
@@ -448,25 +449,25 @@ const Home = () => {
                   <div className="mt-4 mb-6">
                     <Tabs defaultValue="icu" onValueChange={setSelectedAnalyticView}>
                       <div className="flex justify-between items-center mb-3">
-                        <h2 className={`text-lg font-bold ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>Real-Time Analytics</h2>
+                        <h2 className={`text-lg font-bold ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>{t('real-time-analytics')}</h2>
                         <TabsList className={isDark ? "bg-gray-700/50" : "bg-gray-200"}>
                           <TabsTrigger 
                             value="icu" 
                             className={isDark ? "data-[state=active]:bg-blue-900/50" : "data-[state=active]:bg-blue-100"}
                           >
-                            ICU Status
+                            {t('icu-status')}
                           </TabsTrigger>
                           <TabsTrigger 
                             value="response" 
                             className={isDark ? "data-[state=active]:bg-blue-900/50" : "data-[state=active]:bg-blue-100"}
                           >
-                            Response Time
+                            {t('response-time')}
                           </TabsTrigger>
                           <TabsTrigger 
                             value="cases" 
                             className={isDark ? "data-[state=active]:bg-blue-900/50" : "data-[state=active]:bg-blue-100"}
                           >
-                            Cases
+                            {t('cases')}
                           </TabsTrigger>
                         </TabsList>
                       </div>
@@ -509,11 +510,11 @@ const Home = () => {
                 <div className={`${
                   isDark ? 'bg-gray-800/70 border border-blue-900/30' : 'bg-white/80 border border-blue-100'
                 } rounded-xl p-4 space-y-4 shadow-md`}>
-                  <h2 className={`text-lg font-bold ${isDark ? 'text-blue-400' : 'text-blue-700'} mb-3`}>Patient & Emergency Details</h2>
+                  <h2 className={`text-lg font-bold ${isDark ? 'text-blue-400' : 'text-blue-700'} mb-3`}>{t('patient-emergency')}</h2>
                   
                   <div className="space-y-4">
                     <div>
-                      <label className={`block text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-1`}>Patient Location</label>
+                      <label className={`block text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-1`}>{t('patient-location')}</label>
                       <div className="flex gap-2">
                         <input 
                           type="text" 
@@ -538,7 +539,7 @@ const Home = () => {
                     </div>
                     
                     <div>
-                      <label className={`block text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-1`}>Selected Hospital</label>
+                      <label className={`block text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-1`}>{t('selected-hospital')}</label>
                       <select 
                         className={`w-full ${
                           isDark 
@@ -585,7 +586,7 @@ const Home = () => {
                     
                     <div>
                       <div className="flex justify-between mb-1">
-                        <label className={`block text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Transport Mode</label>
+                        <label className={`block text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{t('transport-mode')}</label>
                         <div className="grid grid-cols-2 gap-3">
                           <button
                             className={`flex items-center justify-center gap-2 py-2 px-3 rounded-lg border ${
@@ -605,7 +606,7 @@ const Home = () => {
                               <path d="M9 17h6"></path>
                               <circle cx="17" cy="17" r="2"></circle>
                             </svg>
-                            Ground
+                            {t('ground')}
                           </button>
                           <button
                             className={`flex items-center justify-center gap-2 py-2 px-3 rounded-lg border ${
@@ -624,7 +625,7 @@ const Home = () => {
                               <path d="M17 5.5v13a1 1 0 0 0 1.6.8l2.7-2.7"></path>
                               <path d="M13 1.1l-5.9 5.3a1 1 0 0 0-.3.7v2.9l-3.8 3.4a1 1 0 0 0 .7 1.7h7.5"></path>
                             </svg>
-                            Air
+                            {t('air')}
                           </button>
                         </div>
                       </div>
@@ -652,7 +653,7 @@ const Home = () => {
                         }}
                       >
                         <Zap size={16} />
-                        Dispatch Emergency Response
+                        {t('dispatch')}
                       </button>
                     </div>
                   </div>
@@ -683,4 +684,3 @@ const Home = () => {
 };
 
 export default Home;
-
