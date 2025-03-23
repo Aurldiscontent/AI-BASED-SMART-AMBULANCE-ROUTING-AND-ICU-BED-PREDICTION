@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Define available languages
@@ -290,4 +291,106 @@ const translations: Record<Language, Record<string, string>> = {
     "available-beds": "ലഭ്യമായ കിടക്കകൾ",
     "total-beds": "ആകെ കിടക്കകൾ",
     "network-connection-issues": "നെറ്റ്‌വർക്ക് കണക്ഷൻ പ്രശ്നങ്ങൾ",
-    "partial-
+    "partial-network-connection": "ഭാഗിക നെറ്റ്‌വർക്ക് കണക്ഷൻ",
+    "medical-response-analytics": "മെഡിക്കൽ പ്രതികരണ അനലിറ്റിക്സ്",
+    "patient-survival-rate": "ആശുപത്രി അടിസ്ഥാനമാക്കിയുള്ള രോഗി അതിജീവന നിരക്ക്",
+    "emergency-response-time": "അടിയന്തിര പ്രതികരണ സമയം",
+    "incidents-by-category": "വിഭാഗം അനുസരിച്ചുള്ള സംഭവങ്ങൾ",
+    "icu-occupancy-forecast": "ICU ഒക്യുപൻസി ഫോർകാസ്റ്റ്",
+    "receive-live-traffic": "ലൈവ് ട്രാഫിക് സ്വീകരിക്കുക",
+    "rapid": "റാപ്പിഡ്",
+    "aid": "എയ്ഡ്",
+    "innovators": "ഇന്നോവേറ്റേഴ്‌സ്",
+    "smart-routing": "ജീവൻ രക്ഷിക്കുന്ന പ്രതികരണത്തിനായുള്ള സ്മാർട്ട് AI ആംബുലൻസ് റൂട്ടിംഗ്!",
+    "what-we-do": "ഞങ്ങൾ എന്താണ് ചെയ്യുന്നത്",
+    "ai-route-finding": "AI-പവർ ചെയ്ത സിസ്റ്റം ആംബുലൻസുകൾക്ക് ട്രാഫിക്കിലൂടെ വേഗതയേറിയ റൂട്ടുകൾ കണ്ടെത്തുന്നു",
+    "bed-availability": "റിയൽ-ടൈം ആശുപത്രി കിടക്ക ലഭ്യത ട്രാക്കിംഗ്",
+    "save-minutes": "അടിയന്തിര സാഹചര്യങ്ങളിൽ വിലപ്പെട്ട മിനിറ്റുകൾ സംരക്ഷിക്കാൻ സഹായിക്കുന്നു",
+    "every-second-counts": "ജീവൻ രക്ഷിക്കുമ്പോൾ ഓരോ സെക്കൻഡും പ്രധാനമാണ്!",
+    "get-started": "ആരംഭിക്കുക",
+    "dashboard": "ഡാഷ്‌ബോർഡ്",
+    "search-hospitals": "ആശുപത്രികൾ തിരയുക",
+    "patient-entry": "രോഗി എൻട്രി",
+    "map-view": "മാപ്പ് വ്യൂ",
+    "analysis": "വിശകലനം",
+    "nearby-icu": "സമീപത്തുള്ള ICU ലഭ്യത",
+    "emergency-alerts": "അടിയന്തിര അലേർട്ടുകൾ",
+    "live-route": "തത്സമയ റൂട്ട് മാപ്പിംഗ്",
+    "real-time-analytics": "റിയൽ-ടൈം അനലിറ്റിക്‌സ്",
+    "icu-status": "ICU സ്റ്റാറ്റസ്",
+    "response-time": "പ്രതികരണ സമയം",
+    "cases": "കേസുകൾ",
+    "patient-emergency": "രോഗി & അടിയന്തിര വിശദാംശങ്ങൾ",
+    "patient-location": "രോഗിയുടെ സ്ഥാനം",
+    "selected-hospital": "തിരഞ്ഞെടുത്ത ആശുപത്രി",
+    "transport-mode": "ഗതാഗത മോഡ്",
+    "ground": "ഭൂമി",
+    "air": "വായു",
+    "dispatch": "അടിയന്തിര പ്രതികരണം അയയ്‌ക്കുക",
+    "network-active": "നെറ്റ്‌വർക്ക് സജീവമാണ്"
+  }
+};
+
+// Create language context
+const LanguageContext = createContext<LanguageContextType>({
+  language: 'english',
+  setLanguage: () => {},
+  t: (key) => key,
+});
+
+// Map legacy language codes to new ones
+const legacyLanguageMap: Record<string, Language> = {
+  en: 'english',
+  hi: 'hindi',
+  kn: 'kannada',
+  ta: 'tamil',
+  te: 'telugu'
+};
+
+export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [language, setLanguageState] = useState<Language>(() => {
+    const savedLanguage = localStorage.getItem('language');
+    if (savedLanguage) {
+      // Handle legacy language codes
+      if (savedLanguage in legacyLanguageMap) {
+        return legacyLanguageMap[savedLanguage as keyof typeof legacyLanguageMap];
+      }
+      return savedLanguage as Language;
+    }
+    return 'english';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('language', language);
+  }, [language]);
+
+  const setLanguage = (lang: Language) => {
+    setLanguageState(lang);
+  };
+
+  const t = (key: string): string => {
+    // First try to get translation for the current language
+    const translation = translations[language]?.[key];
+    
+    // If not found, fall back to English
+    if (!translation && language !== 'english' && language !== 'en') {
+      return translations.english[key] || translations.en?.[key] || key;
+    }
+    
+    return translation || key;
+  };
+
+  return (
+    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+};
+
+export const useLanguage = () => {
+  const context = useContext(LanguageContext);
+  if (context === undefined) {
+    throw new Error("useLanguage must be used within a LanguageProvider");
+  }
+  return context;
+};
