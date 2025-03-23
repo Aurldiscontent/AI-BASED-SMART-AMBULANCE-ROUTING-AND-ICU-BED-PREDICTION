@@ -1,9 +1,11 @@
 
 import React, { useState } from 'react';
 import { useTheme } from '@/hooks/use-theme';
-import { MapPin, Clock, Building, Phone, ArrowRight, Ambulance, AlertCircle, Info } from 'lucide-react';
+import { MapPin, Clock, Building, Phone, ArrowRight, Ambulance, AlertCircle, Info, Star, QrCode } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import QRCode from 'qrcode.react';
 
 export interface Hospital {
   id: string;
@@ -15,6 +17,9 @@ export interface Hospital {
   icuAvailable: number;
   icuTotal: number;
   waitTime: number;
+  rating?: number;
+  specialties?: string[];
+  operatingHours?: string;
   emergencyFacilities: string[];
   location: {
     lat: number;
@@ -28,6 +33,7 @@ interface HospitalSearchResultsProps {
   selectedHospitalId: string | null;
   isLoading?: boolean;
   patientLocation?: { lat: number; lng: number };
+  onQrCodeShow?: (hospital: Hospital) => void;
 }
 
 const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
@@ -35,11 +41,14 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
   onSelectHospital,
   selectedHospitalId,
   isLoading = false,
-  patientLocation
+  patientLocation,
+  onQrCodeShow
 }) => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const [expandedHospitalId, setExpandedHospitalId] = useState<string | null>(null);
+  const [qrDialogOpen, setQrDialogOpen] = useState(false);
+  const [selectedHospital, setSelectedHospital] = useState<Hospital | null>(null);
 
   // Toggle expanded view for a hospital
   const toggleExpand = (id: string) => {
@@ -54,6 +63,27 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
     if (ratio < 0.2) return { text: "Critical Availability", color: isDark ? "text-red-400" : "text-red-600" };
     if (ratio < 0.5) return { text: "Limited Availability", color: isDark ? "text-amber-400" : "text-amber-600" };
     return { text: "Beds Available", color: isDark ? "text-green-400" : "text-green-600" };
+  };
+  
+  const handleQrCode = (e: React.MouseEvent, hospital: Hospital) => {
+    e.stopPropagation();
+    if (onQrCodeShow) {
+      onQrCodeShow(hospital);
+    } else {
+      setSelectedHospital(hospital);
+      setQrDialogOpen(true);
+    }
+  };
+  
+  const generateQrCodeData = (hospital: Hospital) => {
+    return JSON.stringify({
+      name: hospital.name,
+      address: hospital.address,
+      phone: hospital.phone,
+      specialties: hospital.specialties?.join(', ') || '',
+      operatingHours: hospital.operatingHours || 'Not specified',
+      emergencyFacilities: hospital.emergencyFacilities.join(', ')
+    });
   };
 
   if (isLoading) {
@@ -115,7 +145,15 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
               >
                 <div className="flex justify-between items-start">
                   <div>
-                    <h3 className={`font-bold ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>{hospital.name}</h3>
+                    <div className="flex items-center">
+                      <h3 className={`font-bold ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>{hospital.name}</h3>
+                      {hospital.rating && (
+                        <div className="flex items-center ml-2">
+                          <Star size={14} className="text-yellow-500" />
+                          <span className="text-xs ml-1 text-gray-600 dark:text-gray-400">{hospital.rating}</span>
+                        </div>
+                      )}
+                    </div>
                     <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mt-1">
                       <MapPin size={14} className="mr-1" />
                       <span>{hospital.distance}</span>
@@ -125,7 +163,15 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
                     </div>
                   </div>
                   
-                  <div className="flex items-center">
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8"
+                      onClick={(e) => handleQrCode(e, hospital)}
+                    >
+                      <QrCode size={16} className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
+                    </Button>
                     <span className={`text-xs px-2 py-1 rounded-full font-medium ${
                       isSelected 
                         ? isDark ? 'bg-blue-900/50 text-blue-300' : 'bg-blue-100 text-blue-700'
@@ -216,6 +262,33 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
                         {hospital.phone}
                       </p>
                       
+                      {hospital.operatingHours && (
+                        <p className={`${isDark ? 'text-gray-300' : 'text-gray-700'} flex items-center mt-2`}>
+                          <Clock size={14} className="mr-2 flex-shrink-0" />
+                          {hospital.operatingHours}
+                        </p>
+                      )}
+                      
+                      {hospital.specialties && hospital.specialties.length > 0 && (
+                        <div className="mt-2">
+                          <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'} text-xs mb-1`}>Specialties:</p>
+                          <div className="flex flex-wrap gap-1">
+                            {hospital.specialties.map(specialty => (
+                              <span 
+                                key={specialty}
+                                className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+                                  isDark 
+                                    ? 'bg-blue-900/30 text-blue-300 border border-blue-800/50' 
+                                    : 'bg-blue-100 text-blue-700 border border-blue-200'
+                                }`}
+                              >
+                                {specialty}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      
                       <div className="mt-2">
                         <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'} text-xs mb-1`}>Emergency Facilities:</p>
                         <div className="flex flex-wrap gap-1">
@@ -241,6 +314,48 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
           })}
         </AnimatePresence>
       </div>
+      
+      {/* QR Code Dialog */}
+      <Dialog open={qrDialogOpen} onOpenChange={setQrDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-center">Hospital Information QR Code</DialogTitle>
+          </DialogHeader>
+          
+          {selectedHospital && (
+            <div className="flex flex-col items-center">
+              <div className="bg-white p-4 rounded-lg mb-4">
+                <QRCode 
+                  value={generateQrCodeData(selectedHospital)}
+                  size={200}
+                  level="H"
+                  includeMargin={true}
+                  renderAs="svg"
+                />
+              </div>
+              
+              <p className="text-sm text-center text-gray-500">
+                Scan this QR code to get detailed information about {selectedHospital.name}
+              </p>
+              
+              <div className="mt-4 space-y-2 w-full text-sm">
+                <div className="flex items-start">
+                  <Building className="mr-2 h-4 w-4 text-gray-500 mt-0.5" />
+                  <span className="text-gray-700 dark:text-gray-300">{selectedHospital.name}</span>
+                </div>
+                <div className="flex items-start">
+                  <MapPin className="mr-2 h-4 w-4 text-gray-500 mt-0.5" />
+                  <span className="text-gray-700 dark:text-gray-300">{selectedHospital.address}</span>
+                </div>
+                <div className="flex items-start">
+                  <Phone className="mr-2 h-4 w-4 text-gray-500 mt-0.5" />
+                  <span className="text-gray-700 dark:text-gray-300">{selectedHospital.phone}</span>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
