@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { useTheme } from '@/hooks/use-theme';
-import { MapPin, Clock, Building, Phone, ArrowRight, Ambulance, AlertCircle, Info, Star, QrCode } from 'lucide-react';
+import { MapPin, Clock, Building, Phone, ArrowRight, Ambulance, AlertCircle, Info, Star, QrCode, Navigation } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -65,12 +64,10 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
   const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
   const [mapDialogOpen, setMapDialogOpen] = useState(false);
 
-  // Toggle expanded view for a hospital
   const toggleExpand = (id: string) => {
     setExpandedHospitalId(expandedHospitalId === id ? null : id);
   };
 
-  // Get availability status text and color
   const getAvailabilityStatus = (available: number, total: number) => {
     const ratio = available / total;
     
@@ -107,7 +104,6 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
     e.stopPropagation();
     setIsEmergencyCallActive(true);
     
-    // Simulate emergency call
     setTimeout(() => {
       setIsEmergencyCallActive(false);
       alert(`Emergency call connected to ${hospital.name}. An ambulance has been dispatched to your location. Estimated arrival time: ${Math.floor(parseInt(hospital.travelTime) * 0.7)} minutes.`);
@@ -504,7 +500,6 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
         </AnimatePresence>
       </div>
       
-      {/* QR Code Dialog */}
       <Dialog open={qrDialogOpen} onOpenChange={setQrDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -552,7 +547,6 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
                 <Button 
                   className="w-full"
                   onClick={() => {
-                    // In a real app, this would save the QR code to gallery
                     alert('QR code saved to gallery!');
                   }}
                 >
@@ -564,7 +558,6 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
         </DialogContent>
       </Dialog>
       
-      {/* Reviews Dialog */}
       <Dialog open={reviewDialogOpen} onOpenChange={setReviewDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -617,7 +610,6 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
         </DialogContent>
       </Dialog>
       
-      {/* Map Dialog */}
       <Dialog open={mapDialogOpen} onOpenChange={setMapDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -629,7 +621,6 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
           {selectedHospital && (
             <div className="space-y-4">
               <div className="aspect-video bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden relative">
-                {/* This would be a real map in a production app */}
                 <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800">
                   <img
                     src="/lovable-uploads/e088e765-bcfc-42bc-82f1-62c5a627499c.png"
@@ -661,7 +652,6 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
                   className="bg-medical-500 hover:bg-medical-600 text-white"
                   onClick={() => {
                     setMapDialogOpen(false);
-                    // This would open navigation in a real app
                     window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(selectedHospital.address)}`);
                   }}
                 >
