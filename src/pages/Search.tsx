@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useTheme } from '@/hooks/use-theme';
 import { useLanguage } from '@/hooks/use-language';
@@ -30,7 +29,6 @@ const Search = () => {
   const [qrDialogOpen, setQrDialogOpen] = useState(false);
   const [selectedHospital, setSelectedHospital] = useState<Hospital | null>(null);
   
-  // Mock hospitals data (enhanced with more details)
   const mockHospitals: Hospital[] = [
     { 
       id: '1', 
@@ -130,9 +128,7 @@ const Search = () => {
     
     setSearching(true);
     
-    // Simulate search delay
     setTimeout(() => {
-      // Filter hospitals based on search criteria
       let results = [...mockHospitals];
       
       if (searchTerm.trim()) {
@@ -147,7 +143,7 @@ const Search = () => {
         );
       }
       
-      if (specialty) {
+      if (specialty && specialty !== 'all') {
         results = results.filter(hospital => 
           hospital.specialties.some(s => s.toLowerCase() === specialty.toLowerCase())
         );
@@ -210,7 +206,6 @@ const Search = () => {
           ? 'bg-gradient-to-br from-gray-900/90 via-purple-900/70 to-gray-900/90' 
           : 'bg-gradient-to-br from-blue-50/90 via-purple-100/70 to-blue-50/90'
       }`}>
-        {/* Top Header */}
         <TopHeader />
         
         <div className="container mx-auto px-4 pt-4 pb-20">
@@ -227,7 +222,6 @@ const Search = () => {
               Find hospitals nearby, check availability and services
             </p>
             
-            {/* Search Form */}
             <motion.div 
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -272,7 +266,7 @@ const Search = () => {
                       <SelectValue placeholder="Select specialty (optional)" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Specialties</SelectItem>
+                      <SelectItem value="all">All Specialties</SelectItem>
                       {specialties.map((specialty) => (
                         <SelectItem key={specialty} value={specialty}>
                           {specialty}
@@ -298,7 +292,6 @@ const Search = () => {
               </form>
             </motion.div>
             
-            {/* Search Results */}
             {searchPerformed && (
               <motion.div 
                 initial={{ y: 20, opacity: 0 }}
@@ -425,7 +418,6 @@ const Search = () => {
           </motion.div>
         </div>
         
-        {/* QR Code Dialog */}
         <Dialog open={qrDialogOpen} onOpenChange={setQrDialogOpen}>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
@@ -467,7 +459,6 @@ const Search = () => {
           </DialogContent>
         </Dialog>
         
-        {/* Bottom Navigation */}
         <Navbar />
       </div>
     </div>
