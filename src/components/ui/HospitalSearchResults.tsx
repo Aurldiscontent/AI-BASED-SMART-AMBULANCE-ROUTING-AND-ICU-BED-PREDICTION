@@ -8,6 +8,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import QRCode from 'qrcode.react';
 import { Switch } from '@/components/ui/switch';
 
+interface Review {
+  id: string;
+  user: string;
+  rating: number;
+  comment: string;
+}
+
 export interface Hospital {
   id: string;
   name: string;
@@ -19,6 +26,7 @@ export interface Hospital {
   icuTotal: number;
   waitTime: number;
   rating?: number;
+  reviews?: Review[];
   specialties?: string[];
   operatingHours?: string;
   emergencyFacilities: string[];
@@ -26,6 +34,8 @@ export interface Hospital {
     lat: number;
     lng: number;
   };
+  insurance?: string[];
+  isOpen24Hours?: boolean;
 }
 
 interface HospitalSearchResultsProps {
@@ -52,6 +62,8 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
   const [selectedHospital, setSelectedHospital] = useState<Hospital | null>(null);
   const [showBedAvailability, setShowBedAvailability] = useState(true);
   const [isEmergencyCallActive, setIsEmergencyCallActive] = useState(false);
+  const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
+  const [mapDialogOpen, setMapDialogOpen] = useState(false);
 
   // Toggle expanded view for a hospital
   const toggleExpand = (id: string) => {
@@ -85,7 +97,9 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
       phone: hospital.phone,
       specialties: hospital.specialties?.join(', ') || '',
       operatingHours: hospital.operatingHours || 'Not specified',
-      emergencyFacilities: hospital.emergencyFacilities.join(', ')
+      emergencyFacilities: hospital.emergencyFacilities.join(', '),
+      insurance: hospital.insurance?.join(', ') || '',
+      rating: hospital.rating || 'No rating'
     });
   };
 
@@ -98,6 +112,43 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
       setIsEmergencyCallActive(false);
       alert(`Emergency call connected to ${hospital.name}. An ambulance has been dispatched to your location. Estimated arrival time: ${Math.floor(parseInt(hospital.travelTime) * 0.7)} minutes.`);
     }, 2000);
+  };
+
+  const handleShowReviews = (e: React.MouseEvent, hospital: Hospital) => {
+    e.stopPropagation();
+    setSelectedHospital(hospital);
+    setReviewDialogOpen(true);
+  };
+
+  const handleShowMap = (e: React.MouseEvent, hospital: Hospital) => {
+    e.stopPropagation();
+    setSelectedHospital(hospital);
+    setMapDialogOpen(true);
+  };
+
+  const renderStars = (rating: number) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    
+    for (let i = 0; i < 5; i++) {
+      if (i < fullStars) {
+        stars.push(<Star key={i} className="h-3 w-3 fill-yellow-500 text-yellow-500" />);
+      } else if (i === fullStars && hasHalfStar) {
+        stars.push(
+          <div key={i} className="relative">
+            <Star className="h-3 w-3 text-gray-300" />
+            <div className="absolute inset-0 overflow-hidden w-1/2">
+              <Star className="h-3 w-3 fill-yellow-500 text-yellow-500" />
+            </div>
+          </div>
+        );
+      } else {
+        stars.push(<Star key={i} className="h-3 w-3 text-gray-300" />);
+      }
+    }
+    
+    return stars;
   };
 
   if (isLoading) {
@@ -172,11 +223,10 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
                   <div>
                     <div className="flex items-center">
                       <h3 className={`font-bold ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>{hospital.name}</h3>
-                      {hospital.rating && (
-                        <div className="flex items-center ml-2">
-                          <Star size={14} className="text-yellow-500" />
-                          <span className="text-xs ml-1 text-gray-600 dark:text-gray-400">{hospital.rating}</span>
-                        </div>
+                      {hospital.isOpen24Hours && (
+                        <span className="ml-2 bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full dark:bg-green-900/30 dark:text-green-400">
+                          24/7
+                        </span>
                       )}
                       {showBedAvailability && (
                         <span className="ml-2 text-lg" title={availability.text}>
@@ -184,6 +234,26 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
                         </span>
                       )}
                     </div>
+                    
+                    <div className="flex items-center mt-1">
+                      {hospital.rating && (
+                        <div className="flex items-center mr-2">
+                          <div className="flex">{renderStars(hospital.rating)}</div>
+                          <span className="text-xs ml-1 text-gray-600 dark:text-gray-400">
+                            {hospital.rating.toFixed(1)}
+                          </span>
+                          {hospital.reviews && (
+                            <span 
+                              className="text-xs ml-1 text-blue-500 dark:text-blue-400 underline cursor-pointer"
+                              onClick={(e) => handleShowReviews(e, hospital)}
+                            >
+                              ({hospital.reviews.length})
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    
                     <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mt-1">
                       <MapPin size={14} className="mr-1" />
                       <span>{hospital.distance}</span>
@@ -266,6 +336,16 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
                   <div className="flex gap-2">
                     <Button 
                       size="sm" 
+                      variant="outline"
+                      className="text-xs"
+                      onClick={(e) => handleShowMap(e, hospital)}
+                    >
+                      <MapPin size={12} className="mr-1" />
+                      Map
+                    </Button>
+                    
+                    <Button 
+                      size="sm" 
                       className="text-xs bg-red-600 hover:bg-red-700 text-white"
                       onClick={(e) => handleEmergencyCall(e, hospital)}
                       disabled={isEmergencyCallActive}
@@ -325,6 +405,26 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
                         </p>
                       )}
                       
+                      {hospital.insurance && hospital.insurance.length > 0 && (
+                        <div className="mt-2">
+                          <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'} text-xs mb-1`}>Insurance Accepted:</p>
+                          <div className="flex flex-wrap gap-1">
+                            {hospital.insurance.map(ins => (
+                              <span 
+                                key={ins}
+                                className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+                                  isDark 
+                                    ? 'bg-green-900/30 text-green-300 border border-green-800/50' 
+                                    : 'bg-green-50 text-green-700 border border-green-200'
+                                }`}
+                              >
+                                {ins}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      
                       {hospital.specialties && hospital.specialties.length > 0 && (
                         <div className="mt-2">
                           <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'} text-xs mb-1`}>Specialties:</p>
@@ -362,6 +462,39 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
                           ))}
                         </div>
                       </div>
+                      
+                      {hospital.reviews && hospital.reviews.length > 0 && (
+                        <div className="mt-3">
+                          <div className="flex justify-between items-center">
+                            <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'} text-xs`}>
+                              Latest Review:
+                            </p>
+                            <Button 
+                              variant="link" 
+                              size="sm" 
+                              className="text-xs p-0 h-auto"
+                              onClick={(e) => handleShowReviews(e, hospital)}
+                            >
+                              View All
+                            </Button>
+                          </div>
+                          <div className={`mt-1 p-2 rounded ${
+                            isDark ? 'bg-gray-800/70' : 'bg-white/70'
+                          }`}>
+                            <div className="flex items-center">
+                              <div className="flex">
+                                {renderStars(hospital.reviews[0].rating)}
+                              </div>
+                              <span className="ml-2 text-xs font-medium">
+                                {hospital.reviews[0].user}
+                              </span>
+                            </div>
+                            <p className="mt-1 text-xs italic">
+                              "{hospital.reviews[0].comment}"
+                            </p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </motion.div>
                 )}
@@ -407,6 +540,12 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
                   <Phone className="mr-2 h-4 w-4 text-gray-500 mt-0.5" />
                   <span className="text-gray-700 dark:text-gray-300">{selectedHospital.phone}</span>
                 </div>
+                {selectedHospital.operatingHours && (
+                  <div className="flex items-start">
+                    <Clock className="mr-2 h-4 w-4 text-gray-500 mt-0.5" />
+                    <span className="text-gray-700 dark:text-gray-300">{selectedHospital.operatingHours}</span>
+                  </div>
+                )}
               </div>
               
               <div className="mt-4 w-full">
@@ -418,6 +557,116 @@ const HospitalSearchResults: React.FC<HospitalSearchResultsProps> = ({
                   }}
                 >
                   Save QR to Gallery
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+      
+      {/* Reviews Dialog */}
+      <Dialog open={reviewDialogOpen} onOpenChange={setReviewDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-center">
+              {selectedHospital?.name} - Patient Reviews
+            </DialogTitle>
+          </DialogHeader>
+          
+          {selectedHospital && selectedHospital.reviews && (
+            <div className="space-y-4 max-h-[400px] overflow-y-auto">
+              <div className="flex items-center justify-center mb-4">
+                <div className="bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full flex items-center">
+                  <div className="flex mr-2">
+                    {renderStars(selectedHospital.rating || 0)}
+                  </div>
+                  <span className="font-bold text-blue-700 dark:text-blue-300">
+                    {selectedHospital.rating?.toFixed(1)} 
+                  </span>
+                  <span className="text-gray-500 dark:text-gray-400 text-sm ml-1">
+                    ({selectedHospital.reviews.length} reviews)
+                  </span>
+                </div>
+              </div>
+              
+              {selectedHospital.reviews.map(review => (
+                <div 
+                  key={review.id} 
+                  className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg"
+                >
+                  <div className="flex justify-between items-start">
+                    <div className="flex items-center">
+                      <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 font-medium">
+                        {review.user.charAt(0)}
+                      </div>
+                      <div className="ml-2">
+                        <p className="font-medium text-gray-800 dark:text-gray-200">{review.user}</p>
+                        <div className="flex mt-0.5">
+                          {renderStars(review.rating)}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="mt-2 text-gray-600 dark:text-gray-400 text-sm">
+                    {review.comment}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+      
+      {/* Map Dialog */}
+      <Dialog open={mapDialogOpen} onOpenChange={setMapDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-center">
+              {selectedHospital?.name} - Location
+            </DialogTitle>
+          </DialogHeader>
+          
+          {selectedHospital && (
+            <div className="space-y-4">
+              <div className="aspect-video bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden relative">
+                {/* This would be a real map in a production app */}
+                <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800">
+                  <img
+                    src="/lovable-uploads/e088e765-bcfc-42bc-82f1-62c5a627499c.png"
+                    alt="Map"
+                    className="w-full h-full object-cover opacity-70"
+                  />
+                  <div className="absolute">
+                    <MapPin size={36} className="text-red-500" />
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <p className="flex items-start">
+                  <MapPin className="mr-2 h-4 w-4 text-gray-500 mt-0.5" />
+                  <span className="text-gray-700 dark:text-gray-300">{selectedHospital.address}</span>
+                </p>
+                <p className="flex items-start">
+                  <Clock className="mr-2 h-4 w-4 text-gray-500 mt-0.5" />
+                  <span className="text-gray-700 dark:text-gray-300">ETA: {selectedHospital.travelTime}</span>
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3">
+                <Button variant="outline" onClick={() => setMapDialogOpen(false)}>
+                  Close
+                </Button>
+                <Button 
+                  className="bg-medical-500 hover:bg-medical-600 text-white"
+                  onClick={() => {
+                    setMapDialogOpen(false);
+                    // This would open navigation in a real app
+                    window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(selectedHospital.address)}`);
+                  }}
+                >
+                  <Navigation size={14} className="mr-2" />
+                  Navigate
                 </Button>
               </div>
             </div>
