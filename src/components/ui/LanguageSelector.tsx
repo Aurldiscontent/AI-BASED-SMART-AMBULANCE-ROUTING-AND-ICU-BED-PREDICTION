@@ -12,6 +12,7 @@ const languages: { code: Language; label: string }[] = [
   { code: "kannada", label: "ಕನ್ನಡ" },
   { code: "tamil", label: "தமிழ்" },
   { code: "telugu", label: "తెలుగు" },
+  { code: "ml", label: "മലയാളം" }
 ];
 
 const LanguageSelector = () => {
