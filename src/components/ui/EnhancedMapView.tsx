@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { MapPin, Navigation, Clock, Map, Zap, AlertTriangle, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -36,7 +35,7 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
   onHospitalClick,
   transportMode = 'ground',
   theme = 'light',
-  mapImagePath = '/lovable-uploads/c26b6999-d1cf-40dd-b57c-d2b5cce67cd0.png',
+  mapImagePath = '/lovable-uploads/e088e765-bcfc-42bc-82f1-62c5a627499c.png',
   onNavigate,
   showPathFromUser = true,
   userLocation = { lat: 40.7128, lng: -74.0060 },
@@ -50,7 +49,6 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
   const [multiSelectMode, setMultiSelectMode] = useState(enableMultiSelect);
   const [initialLoad, setInitialLoad] = useState(true);
   
-  // Force center on initial load
   useEffect(() => {
     if (initialLoad) {
       setTimeout(() => {
@@ -85,7 +83,6 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
         description: `Navigating to ${selectedDestination?.name || 'hospital'}. ETA: ${transportMode === 'air' ? '2' : '3'} minutes.`,
       });
       
-      // Simulate navigation completion
       setTimeout(() => {
         setActiveNavigation(false);
       }, 5000);
@@ -107,12 +104,10 @@ const EnhancedMapView: React.FC<EnhancedMapViewProps> = ({
       description: `Optimizing route to ${ids.length} hospitals: ${selectedNames}`,
     });
     
-    // If there's a primary handler, call it with the first ID
     if (onNavigate && ids.length > 0) {
       onNavigate(ids[0]);
     }
     
-    // Simulate navigation completion
     setTimeout(() => {
       setActiveNavigation(false);
     }, 5000);

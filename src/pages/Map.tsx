@@ -231,7 +231,7 @@ const Map = () => {
               onHospitalClick={handleHospitalClick}
               theme={theme}
               transportMode={transportMode}
-              mapImagePath="/lovable-uploads/c26b6999-d1cf-40dd-b57c-d2b5cce67cd0.png"
+              mapImagePath="/lovable-uploads/e088e765-bcfc-42bc-82f1-62c5a627499c.png"
               showPathFromUser={hasSetLocation}
               userLocation={userCoordinates}
               centerMapOnSelection={true}

@@ -42,7 +42,7 @@ const MapView: React.FC<MapViewProps> = ({
   onNavigate,
   onTrafficClick,
   onPathClick,
-  customMapImage = '/lovable-uploads/c26b6999-d1cf-40dd-b57c-d2b5cce67cd0.png',
+  customMapImage = '/lovable-uploads/e088e765-bcfc-42bc-82f1-62c5a627499c.png',
   userLocation = { lat: 40.7128, lng: -74.0060 },
   centerMapOnSelection = true,
   forceInitialCenter = false,
@@ -408,7 +408,7 @@ const MapView: React.FC<MapViewProps> = ({
         style={{ 
           backgroundImage: `url('${customMapImage}')`,
           transition: 'background-position 0.5s ease-out',
-          backgroundPosition: `${mapCenter.x * 0.5}px ${mapCenter.y * 0.5}px`,
+          backgroundPosition: 'center',
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
         }}
@@ -556,4 +556,3 @@ const MapView: React.FC<MapViewProps> = ({
 };
 
 export default MapView;
-
