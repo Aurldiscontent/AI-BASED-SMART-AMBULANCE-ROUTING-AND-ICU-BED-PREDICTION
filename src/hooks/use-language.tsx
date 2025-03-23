@@ -529,4 +529,4 @@ const translations: Record<Language, Record<string, string>> = {
     "icu-status": "ICU நிலை",
     "response-time": "பதிலளிப்பு நேரம்",
     "cases": "வழக்குகள்",
-    "patient-emergency":
+    "patient
