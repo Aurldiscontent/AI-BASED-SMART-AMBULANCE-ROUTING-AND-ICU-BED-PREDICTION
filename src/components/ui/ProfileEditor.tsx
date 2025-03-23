@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useTheme } from '@/hooks/use-theme';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
@@ -7,7 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { motion } from 'framer-motion';
-import { User, Phone, Mail, Heart, Plus, X, Save, UserPlus, Building, MapPin } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { User, Phone, Mail, Heart, Plus, X, Save, UserPlus, Building, MapPin, Camera } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,6 +22,8 @@ const profileFormSchema = z.object({
   location: z.string().optional(),
   department: z.string().optional(),
   medicalHistory: z.string().optional(),
+  address: z.string().optional(),
+  avatarUrl: z.string().optional(),
   emergencyContacts: z.array(
     z.object({
       name: z.string().min(2, { message: "Contact name must be at least 2 characters." }),
@@ -47,6 +50,8 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({
     location: localStorage.getItem('userLocation') || '',
     department: localStorage.getItem('userDepartment') || '',
     medicalHistory: '',
+    address: '',
+    avatarUrl: localStorage.getItem('userAvatar') || '',
     emergencyContacts: [],
   },
   onSave,
@@ -56,6 +61,8 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({
   const { toast } = useToast();
   const isDark = theme === 'dark';
   const [isLoading, setIsLoading] = useState(false);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(initialData.avatarUrl || null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Initialize form
   const form = useForm<ProfileFormValues>({
@@ -80,6 +87,25 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({
     );
   };
 
+  // Handle avatar upload
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        setAvatarPreview(base64String);
+        form.setValue('avatarUrl', base64String);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Open file dialog
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
   // Handle form submission
   const handleSubmit = (values: ProfileFormValues) => {
     setIsLoading(true);
@@ -101,6 +127,9 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({
       }
       if (values.department) {
         localStorage.setItem('userDepartment', values.department);
+      }
+      if (values.address) {
+        localStorage.setItem('userAddress', values.address);
       }
       
       setIsLoading(false);
@@ -124,6 +153,35 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({
     }`}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-5 p-4">
+          {/* Avatar Upload */}
+          <div className="flex justify-center mb-4">
+            <div className="relative group cursor-pointer" onClick={handleAvatarClick}>
+              <Avatar className="w-24 h-24 border-2 border-white dark:border-gray-800 shadow-md">
+                {avatarPreview ? (
+                  <AvatarImage src={avatarPreview} alt="Profile" className="object-cover" />
+                ) : (
+                  <AvatarFallback className={`text-3xl font-bold ${
+                    isDark ? 'bg-purple-900/50 text-purple-100' : 'bg-purple-100 text-purple-900'
+                  }`}>
+                    {form.getValues('name')?.charAt(0) || '?'}
+                  </AvatarFallback>
+                )}
+              </Avatar>
+              
+              <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                <Camera className="text-white" size={24} />
+              </div>
+              
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                ref={fileInputRef}
+                onChange={handleAvatarChange}
+              />
+            </div>
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
@@ -231,6 +289,27 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({
               )}
             />
           </div>
+          
+          <FormField
+            control={form.control}
+            name="address"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="flex items-center">
+                  <MapPin size={14} className="mr-1" />
+                  Address
+                </FormLabel>
+                <FormControl>
+                  <Textarea 
+                    placeholder="Your full address"
+                    className="resize-none"
+                    {...field} 
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           
           <FormField
             control={form.control}

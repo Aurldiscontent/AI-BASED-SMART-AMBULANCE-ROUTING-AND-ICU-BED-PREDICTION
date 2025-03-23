@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '@/hooks/use-theme';
 import { useLanguage } from '@/hooks/use-language';
@@ -9,9 +8,12 @@ import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 import DataUploadDialog from '@/components/DataUploadDialog';
 import ProfileEditor from '@/components/ui/ProfileEditor';
-import { User, Settings, Upload, FileCheck, LogOut, Mail, Phone, MapPin, Calendar, Shield, Edit, ChevronRight, UserCog } from 'lucide-react';
+import ProfileVerificationBadge from '@/components/ui/ProfileVerificationBadge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { User, Settings, Upload, FileCheck, LogOut, Mail, Phone, MapPin, Calendar, Shield, Edit, ChevronRight, UserCog, Camera } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
 
 const Profile = () => {
   const { theme } = useTheme();
@@ -22,6 +24,8 @@ const Profile = () => {
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [activeTab, setActiveTab] = useState('profile');
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [verificationStatus, setVerificationStatus] = useState<'verified' | 'pending' | 'unverified'>('unverified');
   
   const [profileData, setProfileData] = useState({
     name: 'SREEJITH S',
@@ -32,6 +36,7 @@ const Profile = () => {
     department: 'Emergency Medical Services',
     joinDate: '15 Jan 2021',
     medicalHistory: '',
+    address: '',
     emergencyContacts: []
   });
   
@@ -49,8 +54,25 @@ const Profile = () => {
         department: localStorage.getItem('userDepartment') || 'Emergency Medical Services',
         joinDate: localStorage.getItem('userJoinDate') || '15 Jan 2021',
         medicalHistory: localStorage.getItem('userMedicalHistory') || '',
+        address: localStorage.getItem('userAddress') || '',
         emergencyContacts: JSON.parse(localStorage.getItem('userEmergencyContacts') || '[]')
       });
+      
+      // Get profile image if exists
+      const savedAvatar = localStorage.getItem('userAvatar');
+      if (savedAvatar) {
+        setAvatarUrl(savedAvatar);
+      }
+      
+      // Check verification status
+      const savedVerificationStatus = localStorage.getItem('userVerificationStatus');
+      if (savedVerificationStatus) {
+        setVerificationStatus(savedVerificationStatus as 'verified' | 'pending' | 'unverified');
+      } else if (localStorage.getItem('userEmail')?.includes('@medresponse.org')) {
+        // Auto-verify users with medresponse.org emails
+        setVerificationStatus('verified');
+        localStorage.setItem('userVerificationStatus', 'verified');
+      }
     } else {
       // Initialize default data
       localStorage.setItem('userName', 'SREEJITH S');
@@ -60,6 +82,10 @@ const Profile = () => {
       localStorage.setItem('userPhone', '+91 9876543210');
       localStorage.setItem('userDepartment', 'Emergency Medical Services');
       localStorage.setItem('userJoinDate', '15 Jan 2021');
+      
+      // Auto-verify users with medresponse.org emails
+      setVerificationStatus('verified');
+      localStorage.setItem('userVerificationStatus', 'verified');
     }
   }, []);
   
@@ -99,7 +125,27 @@ const Profile = () => {
     localStorage.setItem('userLocation', data.location || 'Bangalore, Central EMS');
     localStorage.setItem('userDepartment', data.department || 'Emergency Medical Services');
     localStorage.setItem('userMedicalHistory', data.medicalHistory || '');
+    localStorage.setItem('userAddress', data.address || '');
     localStorage.setItem('userEmergencyContacts', JSON.stringify(data.emergencyContacts || []));
+    
+    if (data.avatarUrl) {
+      localStorage.setItem('userAvatar', data.avatarUrl);
+      setAvatarUrl(data.avatarUrl);
+    }
+    
+    // Update verification status based on email domain
+    if (data.email.includes('@medresponse.org')) {
+      setVerificationStatus('verified');
+      localStorage.setItem('userVerificationStatus', 'verified');
+    } else if (data.email.includes('@gmail.com') || data.email.includes('@yahoo.com') || data.email.includes('@outlook.com')) {
+      // Common public domains are treated as unverified
+      setVerificationStatus('unverified');
+      localStorage.setItem('userVerificationStatus', 'unverified');
+    } else {
+      // Other domains are pending verification
+      setVerificationStatus('pending');
+      localStorage.setItem('userVerificationStatus', 'pending');
+    }
     
     // Update state
     setProfileData(data);
@@ -127,6 +173,24 @@ const Profile = () => {
     
     // Redirect to auth page
     navigate('/auth');
+  };
+
+  const handleUploadAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        setAvatarUrl(base64String);
+        localStorage.setItem('userAvatar', base64String);
+        
+        toast({
+          title: "Profile Picture Updated",
+          description: "Your profile picture has been updated successfully.",
+        });
+      };
+      reader.readAsDataURL(file);
+    }
   };
   
   return (
@@ -204,27 +268,56 @@ const Profile = () => {
                   } rounded-xl p-6 shadow-md relative overflow-hidden`}>
                     <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-bl-full" />
                     
-                    <div className="flex items-center gap-6">
-                      <div className={`w-24 h-24 rounded-full flex items-center justify-center text-3xl font-bold ${
-                        isDark ? 'bg-purple-900/50 text-purple-100' : 'bg-purple-100 text-purple-900'
-                      }`}>
-                        {profileData.name.charAt(0)}
+                    <div className="flex items-start gap-6">
+                      <div className="relative group">
+                        <Avatar className="w-24 h-24 border-2 border-white dark:border-gray-800 shadow-md">
+                          {avatarUrl ? (
+                            <AvatarImage src={avatarUrl} alt={profileData.name} className="object-cover" />
+                          ) : (
+                            <AvatarFallback className={`text-3xl font-bold ${
+                              isDark ? 'bg-purple-900/50 text-purple-100' : 'bg-purple-100 text-purple-900'
+                            }`}>
+                              {profileData.name.charAt(0)}
+                            </AvatarFallback>
+                          )}
+                        </Avatar>
+                        
+                        <Button 
+                          variant="secondary" 
+                          size="icon" 
+                          className="absolute bottom-0 right-0 h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                          onClick={() => document.getElementById('avatar-upload')?.click()}
+                        >
+                          <Camera size={14} />
+                        </Button>
+                        <input 
+                          id="avatar-upload" 
+                          type="file" 
+                          accept="image/*" 
+                          className="hidden" 
+                          onChange={handleUploadAvatar}
+                        />
                       </div>
                       
-                      <div>
-                        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{profileData.name}</h2>
-                        <div className="flex items-center gap-1 mt-1">
-                          <span className={`inline-block px-2 py-1 rounded-full text-xs ${
-                            isDark ? 'bg-blue-900/30 text-blue-300' : 'bg-blue-100 text-blue-800'
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{profileData.name}</h2>
+                          <ProfileVerificationBadge status={verificationStatus} />
+                        </div>
+                        
+                        <div className="flex flex-wrap items-center gap-1 mt-1">
+                          <Badge className={`${
+                            isDark ? 'bg-blue-900/30 text-blue-300 hover:bg-blue-900/50' : 'bg-blue-100 text-blue-800 hover:bg-blue-200'
                           }`}>
                             {profileData.role}
-                          </span>
-                          <span className={`inline-block px-2 py-1 rounded-full text-xs ${
-                            isDark ? 'bg-purple-900/30 text-purple-300' : 'bg-purple-100 text-purple-800'
+                          </Badge>
+                          <Badge className={`${
+                            isDark ? 'bg-purple-900/30 text-purple-300 hover:bg-purple-900/50' : 'bg-purple-100 text-purple-800 hover:bg-purple-200'
                           }`}>
                             {profileData.department}
-                          </span>
+                          </Badge>
                         </div>
+                        
                         <p className="text-gray-500 dark:text-gray-400 text-sm mt-2 flex items-center">
                           <MapPin size={14} className="mr-1 text-gray-400 dark:text-gray-500" />
                           {profileData.location}
@@ -260,6 +353,20 @@ const Profile = () => {
                               <p className="text-sm text-gray-700 dark:text-gray-200">{profileData.phone}</p>
                             </div>
                           </div>
+                          
+                          {profileData.address && (
+                            <div className="flex items-center gap-3">
+                              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                                isDark ? 'bg-gray-600/70' : 'bg-white'
+                              }`}>
+                                <MapPin size={16} className="text-purple-500" />
+                              </div>
+                              <div>
+                                <p className="text-xs text-gray-500 dark:text-gray-400">Address</p>
+                                <p className="text-sm text-gray-700 dark:text-gray-200">{profileData.address}</p>
+                              </div>
+                            </div>
+                          )}
                           
                           <div className="flex items-center gap-3">
                             <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
@@ -411,7 +518,7 @@ const Profile = () => {
                   </h2>
                   
                   <ProfileEditor 
-                    initialData={profileData}
+                    initialData={{...profileData, avatarUrl}}
                     onSave={handleSaveProfile}
                     onCancel={() => setEditMode(false)}
                   />

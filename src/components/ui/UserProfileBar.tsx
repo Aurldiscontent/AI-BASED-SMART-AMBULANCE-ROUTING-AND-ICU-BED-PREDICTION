@@ -4,15 +4,20 @@ import { User, Pencil } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useLanguage } from '@/hooks/use-language';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
+import ProfileVerificationBadge from './ProfileVerificationBadge';
 
 const UserProfileBar = () => {
   const { t, language, setLanguage } = useLanguage();
   const { toast } = useToast();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [verificationStatus, setVerificationStatus] = useState<'verified' | 'pending' | 'unverified'>('unverified');
+  
   const [userData, setUserData] = useState({
     name: 'SREEJITH',
     email: 'sreejith@example.com',
@@ -42,6 +47,22 @@ const UserProfileBar = () => {
       role: role || 'First Responder',
       location: location || 'Bangalore',
     });
+    
+    // Get verification status
+    const savedVerificationStatus = localStorage.getItem('userVerificationStatus');
+    if (savedVerificationStatus) {
+      setVerificationStatus(savedVerificationStatus as 'verified' | 'pending' | 'unverified');
+    } else if (email && email.includes('@medresponse.org')) {
+      // Auto-verify users with medresponse.org emails
+      setVerificationStatus('verified');
+      localStorage.setItem('userVerificationStatus', 'verified');
+    }
+    
+    // Load avatar if exists
+    const savedAvatar = localStorage.getItem('userAvatar');
+    if (savedAvatar) {
+      setAvatarUrl(savedAvatar);
+    }
   }, []);
   
   const handleSignOut = () => {
@@ -88,12 +109,24 @@ const UserProfileBar = () => {
         transition={{ duration: 0.5 }}
         className="flex items-center gap-3"
       >
-        <div className="h-10 w-10 rounded-full bg-medical-500 flex items-center justify-center text-white">
-          <User size={20} />
-        </div>
-        <div className="text-left">
-          <h3 className="font-medium text-sm dark:text-gray-200">{userData.name}</h3>
-          <p className="text-xs text-gray-500 dark:text-gray-400">{userData.role} • {userData.location}</p>
+        <Avatar className="h-10 w-10 rounded-full">
+          {avatarUrl ? (
+            <AvatarImage src={avatarUrl} alt={userData.name} className="object-cover" />
+          ) : (
+            <AvatarFallback className="bg-medical-500 text-white">
+              {userData.name.charAt(0)}
+            </AvatarFallback>
+          )}
+        </Avatar>
+        
+        <div className="text-left flex items-center gap-1.5">
+          <div>
+            <h3 className="font-medium text-sm dark:text-gray-200">{userData.name}</h3>
+            <p className="text-xs text-gray-500 dark:text-gray-400">{userData.role} • {userData.location}</p>
+          </div>
+          {verificationStatus === 'verified' && (
+            <ProfileVerificationBadge status="verified" size="sm" />
+          )}
         </div>
       </motion.div>
       
@@ -109,10 +142,21 @@ const UserProfileBar = () => {
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="flex flex-col space-y-4">
-              <div className="flex justify-center">
-                <div className="h-24 w-24 rounded-full bg-medical-500 flex items-center justify-center text-white">
-                  <User size={48} />
-                </div>
+              <div className="flex justify-center relative">
+                <Avatar className="h-24 w-24">
+                  {avatarUrl ? (
+                    <AvatarImage src={avatarUrl} alt={userData.name} className="object-cover" />
+                  ) : (
+                    <AvatarFallback className="bg-medical-500 text-white text-xl">
+                      {userData.name.charAt(0)}
+                    </AvatarFallback>
+                  )}
+                </Avatar>
+                {verificationStatus === 'verified' && (
+                  <div className="absolute -bottom-1 -right-1">
+                    <ProfileVerificationBadge status="verified" size="md" />
+                  </div>
+                )}
               </div>
               
               <div className="space-y-2">
