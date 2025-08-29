@@ -1,0 +1,574 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 40% 98%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 211 100% 54%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.8rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    background: rgba(100, 116, 139, 0.5);
+    border-radius: 5px;
+    outline: none;
+    --range-color: #3b82f6;
+  }
+  
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--range-color);
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1), 0 0 0 0 var(--range-color);
+    transition: all 0.2s ease;
+  }
+  
+  input[type="range"]::-webkit-slider-thumb:hover {
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1), 0 0 0 4px var(--range-color);
+  }
+  
+  input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: var(--range-color);
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1), 0 0 0 0 var(--range-color);
+    transition: all 0.2s ease;
+  }
+  
+  input[type="range"]::-moz-range-thumb:hover {
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1), 0 0 0 4px var(--range-color);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  .glass-panel {
+    @apply bg-white/80 backdrop-blur-lg border border-white/40 shadow-md dark:bg-gray-900/60 dark:border-gray-800/40;
+  }
+  
+  .glass-card {
+    @apply bg-white/60 backdrop-blur-lg border border-white/20 shadow-md dark:bg-gray-900/40 dark:border-gray-800/30;
+  }
+
+  .glass-card-dark {
+    @apply bg-gray-900/60 backdrop-blur-lg border border-gray-800/50 shadow-md;
+  }
+  
+  .neo-button {
+    @apply bg-gradient-to-b from-white/90 to-white/70 shadow-md border border-white/30 hover:from-white hover:to-white/80 active:from-white/90 active:to-white/70 transition-all duration-300 dark:from-gray-800 dark:to-gray-900 dark:border-gray-700/30;
+  }
+
+  .emergency-button {
+    @apply bg-gradient-to-b from-emergency-500 to-emergency-600 text-white shadow-md border border-emergency-500/50 hover:from-emergency-600 hover:to-emergency-500 active:from-emergency-500 active:to-emergency-600 transition-all duration-300;
+  }
+
+  .medical-button {
+    @apply bg-gradient-to-b from-medical-500 to-medical-600 text-white shadow-md border border-medical-500/50 hover:from-medical-600 hover:to-medical-500 active:from-medical-500 active:to-medical-600 transition-all duration-300;
+  }
+  
+  .input-field {
+    @apply bg-white/70 backdrop-blur-sm border border-gray-200 focus:border-medical-400 focus:ring-1 focus:ring-medical-400 rounded-xl px-4 py-3 outline-none transition duration-300 dark:bg-gray-800/70 dark:border-gray-700 dark:focus:border-medical-500 dark:focus:ring-medical-500;
+  }
+
+  .emoji {
+    font-size: 1.8rem;
+    display: inline-block;
+    line-height: 1;
+    vertical-align: middle;
+    font-family: "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Symbol", sans-serif;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .emoji-simple {
+    font-size: 2.2rem;
+    display: inline-flex;
+    line-height: 1;
+    vertical-align: middle;
+    font-family: "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Symbol", sans-serif;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    margin: 0 0.1rem;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .emoji-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.8rem;
+    height: 2.8rem;
+    border-radius: 0.7rem;
+    background-color: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    margin: 0 0.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    overflow: visible;
+  }
+
+  .dark .emoji-container {
+    background-color: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* New custom utilities */
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+  
+  .status-badge {
+    @apply inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-medium;
+  }
+  
+  .status-badge-success {
+    @apply status-badge bg-success-100 text-success-800 dark:bg-success-900/30 dark:text-success-400;
+  }
+  
+  .status-badge-error {
+    @apply status-badge bg-emergency-100 text-emergency-800 dark:bg-emergency-900/30 dark:text-emergency-400;
+  }
+  
+  .status-badge-warning {
+    @apply status-badge bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-400;
+  }
+  
+  .status-badge-info {
+    @apply status-badge bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-400;
+  }
+  
+  .icu-available {
+    @apply status-badge-success;
+  }
+  
+  .icu-low {
+    @apply status-badge-warning;
+  }
+  
+  .icu-unavailable {
+    @apply status-badge-error;
+  }
+  
+  .location-distance {
+    @apply text-xs text-gray-500 dark:text-gray-400 flex items-center;
+  }
+  
+  .hospital-row {
+    @apply flex justify-between items-center border-b border-gray-200 dark:border-gray-700 py-3 px-2 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-lg transition-colors cursor-pointer;
+  }
+  
+  .nav-tab {
+    @apply px-3 py-2 text-sm font-medium rounded-md transition transform hover:scale-105;
+  }
+  
+  .nav-tab-active {
+    @apply bg-white dark:bg-gray-800 shadow-sm text-medical-800 dark:text-medical-300;
+  }
+  
+  .nav-tab-inactive {
+    @apply text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100;
+  }
+  
+  .pulse-dot {
+    @apply relative;
+  }
+  
+  .pulse-dot::before {
+    content: '';
+    @apply absolute w-2 h-2 rounded-full bg-emergency-500;
+    top: -2px;
+    right: -2px;
+    animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+}
+
+#root {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  overflow-x: hidden;
+}
+
+.page-transition-enter {
+  opacity: 0;
+  transform: scale(0.98);
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.page-transition-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transform: scale(0.98);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.button-hover-elevation {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.button-hover-elevation:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+}
+
+.button-hover-elevation:active {
+  transform: translateY(0px);
+  box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+}
+
+.text-shadow-sm {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.text-shadow-md {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Map styling */
+.map-container {
+  @apply relative overflow-hidden rounded-xl shadow-lg;
+  transition: all 0.3s ease;
+}
+
+.map-container:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
+}
+
+.map-marker {
+  width: 25px;
+  height: 25px;
+  background-color: white;
+  border: 3px solid #3b82f6;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.map-marker:hover {
+  transform: scale(1.2);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.map-marker.selected {
+  background-color: #3b82f6;
+  border-color: white;
+}
+
+.map-marker.user {
+  background-color: #ef4444;
+  border-color: white;
+}
+
+.map-info-window {
+  padding: 10px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  font-size: 12px;
+  max-width: 200px;
+}
+
+.route-path {
+  stroke: #3b82f6;
+  stroke-width: 4;
+  stroke-dasharray: 10, 5;
+  stroke-linecap: round;
+  fill: none;
+  animation: dash 1s linear infinite;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -15;
+  }
+}
+
+/* Status indicator dots */
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.status-dot-success {
+  background-color: #22c55e;
+  box-shadow: 0 0 5px rgba(34, 197, 94, 0.5);
+}
+
+.status-dot-warning {
+  background-color: #f59e0b;
+  box-shadow: 0 0 5px rgba(245, 158, 11, 0.5);
+}
+
+.status-dot-error {
+  background-color: #ef4444;
+  box-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+}
+
+/* Heat map for traffic */
+.traffic-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.traffic-light {
+  background: linear-gradient(to right, rgba(34, 197, 94, 0.3), rgba(34, 197, 94, 0.1));
+}
+
+.traffic-moderate {
+  background: linear-gradient(to right, rgba(245, 158, 11, 0.3), rgba(245, 158, 11, 0.1));
+}
+
+.traffic-heavy {
+  background: linear-gradient(to right, rgba(239, 68, 68, 0.3), rgba(239, 68, 68, 0.1));
+}
+
+/* Toggle button styles */
+.react-toggle {
+  touch-action: pan-x;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  background-color: transparent;
+  border: 0;
+  padding: 0;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.react-toggle-screenreader-only {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.react-toggle--disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  -webkit-transition: opacity 0.25s;
+  transition: opacity 0.25s;
+}
+
+.react-toggle-track {
+  width: 50px;
+  height: 24px;
+  padding: 0;
+  border-radius: 30px;
+  background-color: #4D4D4D;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.react-toggle:hover:not(.react-toggle--disabled) .react-toggle-track {
+  background-color: #000000;
+}
+
+.react-toggle--checked .react-toggle-track {
+  background-color: #3b82f6;
+}
+
+.react-toggle--checked:hover:not(.react-toggle--disabled) .react-toggle-track {
+  background-color: #2563eb;
+}
+
+.react-toggle-track-check {
+  position: absolute;
+  width: 14px;
+  height: 10px;
+  top: 0px;
+  bottom: 0px;
+  margin-top: auto;
+  margin-bottom: auto;
+  line-height: 0;
+  left: 8px;
+  opacity: 0;
+  -webkit-transition: opacity 0.25s ease;
+  -moz-transition: opacity 0.25s ease;
+  transition: opacity 0.25s ease;
+}
+
+.react-toggle--checked .react-toggle-track-check {
+  opacity: 1;
+  -webkit-transition: opacity 0.25s ease;
+  -moz-transition: opacity 0.25s ease;
+  transition: opacity 0.25s ease;
+}
+
+.react-toggle-track-x {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: 0px;
+  bottom: 0px;
+  margin-top: auto;
+  margin-bottom: auto;
+  line-height: 0;
+  right: 10px;
+  opacity: 1;
+  -webkit-transition: opacity 0.25s ease;
+  -moz-transition: opacity 0.25s ease;
+  transition: opacity 0.25s ease;
+}
+
+.react-toggle--checked .react-toggle-track-x {
+  opacity: 0;
+}
+
+.react-toggle-thumb {
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 22px;
+  height: 22px;
+  border: 1px solid #4D4D4D;
+  border-radius: 50%;
+  background-color: #FAFAFA;
+
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+
+  -webkit-transition: all 0.25s ease;
+  -moz-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+}
+
+.react-toggle--checked .react-toggle-thumb {
+  left: 27px;
+  border-color: #3b82f6;
+}
+
