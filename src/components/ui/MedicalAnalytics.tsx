@@ -16,11 +16,11 @@ const MedicalAnalytics: React.FC<MedicalAnalyticsProps> = ({ theme: propTheme })
   
   // Sample data for patient survival rate by hospital
   const survivalRateData = [
-    { name: 'City General', rate: 92 },
-    { name: 'Memorial', rate: 88 },
-    { name: 'Community', rate: 85 },
-    { name: 'St. Mary\'s', rate: 90 },
-    { name: 'Lakeside', rate: 83 },
+    { name: 'Manipal', rate: 92 },
+    { name: 'Fortis', rate: 88 },
+    { name: 'Sakra', rate: 85 },
+    { name: 'Apollo', rate: 90 },
+    { name: 'Narayana', rate: 83 },
   ];
   
   // Sample data for emergency response time trend

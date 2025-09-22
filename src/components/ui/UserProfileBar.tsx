@@ -19,9 +19,9 @@ const UserProfileBar = () => {
   const [verificationStatus, setVerificationStatus] = useState<'verified' | 'pending' | 'unverified'>('unverified');
   
   const [userData, setUserData] = useState({
-    name: 'SREEJITH',
-    email: 'sreejith@example.com',
-    role: 'First Responder',
+    name: 'SREEJITH S',
+    email: 'sreejithsunitha@gmail.com',
+    role: 'Ml Engineer',
     location: 'Bangalore',
   });
   

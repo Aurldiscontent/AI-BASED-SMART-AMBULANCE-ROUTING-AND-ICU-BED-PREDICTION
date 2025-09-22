@@ -20,7 +20,7 @@ import 'react-toggle/style.css';
 const hospitals = [
   {
     id: 'hospital-1',
-    name: 'City General Hospital',
+    name: 'Sakra Hospital',
     distance: '3.2 km',
     address: '123 Healthcare Avenue, Bangalore',
     icuBeds: 5,
@@ -52,7 +52,7 @@ const hospitals = [
   },
   {
     id: 'hospital-3',
-    name: 'Apollo Specialty',
+    name: 'Apollo Hospital',
     distance: '6.5 km',
     address: '78 Health Street, Koramangala',
     icuBeds: 0,
@@ -68,7 +68,7 @@ const hospitals = [
   },
   {
     id: 'hospital-4',
-    name: 'Fortis Healthcare',
+    name: 'Fortis Hospital',
     distance: '7.2 km',
     address: '42 Wellness Road, HSR Layout',
     icuBeds: 7,

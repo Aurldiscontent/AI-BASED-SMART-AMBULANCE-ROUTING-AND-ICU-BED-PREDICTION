@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '@/hooks/use-theme';
 import { useLanguage } from '@/hooks/use-language';
@@ -28,7 +27,8 @@ const Search = () => {
   const [searching, setSearching] = useState(false);
   const [searchPerformed, setSearchPerformed] = useState(false);
   const [searchResults, setSearchResults] = useState<Hospital[]>([]);
-  const [location, setLocation] = useState('');
+  // ✅ default to Bangalore so it's accepted by the filter
+  const [location, setLocation] = useState('Bangalore');
   const [specialty, setSpecialty] = useState('all');
   const [qrDialogOpen, setQrDialogOpen] = useState(false);
   const [selectedHospital, setSelectedHospital] = useState<Hospital | null>(null);
@@ -40,22 +40,118 @@ const Search = () => {
   const [showOnlyOpen24Hours, setShowOnlyOpen24Hours] = useState(false);
   const [minRating, setMinRating] = useState('0');
   const [chatbotDialogOpen, setChatbotDialogOpen] = useState(false);
-  const [chatbotMessages, setChatbotMessages] = useState<{text: string, isUser: boolean}[]>([
-    {text: "Hello! I'm MediBot. How can I help you find the right hospital today?", isUser: false}
+
+  // ✅ Start chatbot with only greeting
+  const [chatbotMessages, setChatbotMessages] = useState<
+    { text: string; isUser: boolean }[]
+  >([
+    {
+      text: "Hello! I'm MediBot 👩‍⚕️. I can help with hospital info, ambulances, and emergency guidance. How can I assist you?",
+      isUser: false
+    }
   ]);
+
   const [chatbotInput, setChatbotInput] = useState('');
-  
+
+  // ✅ Q&A Knowledge Base (map of canonical question/keyword → answer)
+  // Keep this list updated with other common phrasings you expect.
+  const botKnowledge: Record<string, string> = {
+    "which hospitals have icu availability right now": "Apollo Hospital (8/15 beds free) and Manipal Hospital (5/20 beds free) currently have ICU capacity.",
+    "icu availability": "Apollo Hospital (8/15 beds free) and Manipal Hospital (5/20 beds free) currently have ICU capacity.",
+    "ambulance time to mg road": "Ground ambulances usually take 7–10 minutes to reach MG Road depending on traffic. Air ambulances are available for severe cases.",
+    "ambulance": "Ground ambulances usually take 7–10 minutes depending on traffic. Air ambulances are available for severe cases.",
+    "24/7 hospitals nearby": "Yes, Apollo Hospital and MS Ramaiah Hospital operate 24/7 with emergency facilities.",
+    "pediatric care": "Narayana Healthcare specializes in pediatrics with a dedicated children's department.",
+    "burn unit": "Victoria Hospital has a specialized burn unit available 24/7.",
+    "cardiac emergency center": "Fortis Hospital and Jayadeva Institute have dedicated cardiac emergency departments.",
+    "emergency helpline number in india": "You can dial 112 for all emergencies, 108 for medical ambulance services, and 102 for maternal/child health transport.",
+    "air ambulance rural": "Air ambulances can be dispatched to rural areas within 30–45 minutes depending on weather and logistics.",
+    "heart attack": "Call emergency services immediately. Keep the patient calm, loosen tight clothing, and if available, give 325 mg aspirin (unless allergic).",
+    "dialysis facilities": "Aster CMI and Apollo Hospitals both have round-the-clock dialysis facilities.",
+    "unconscious after road accident": "Check breathing and pulse. If absent, begin CPR (30 compressions : 2 breaths). Call an ambulance immediately.",
+    "trauma care center": "Manipal Hospital and NIMHANS have advanced trauma care units.",
+    "blood availability": "You can contact hospital blood banks directly or use the National Blood Transfusion Portal to check availability."
+  };
+
+  // Utility: normalize text for matching
+  const normalize = (s: string) => {
+    if (!s) return '';
+    // convert smart quotes to regular, lowercase, remove punctuation except / hyphen, keep words
+    const smart = s.replace(/[‘’‚‛“”„‟]/g, '"').replace(/[”“]/g, '"');
+    const lower = smart.toLowerCase();
+    // remove punctuation
+    const cleaned = lower.replace(/[^\w\s]/g, ' ').replace(/\s+/g, ' ').trim();
+    return cleaned;
+  };
+
+  // improved matching: exact normalized, contains, token keywords
+  const findBestAnswer = (userText: string): string | null => {
+    const n = normalize(userText);
+    if (!n) return null;
+
+    // 1) Exact normalized match
+    for (const key of Object.keys(botKnowledge)) {
+      if (normalize(key) === n) {
+        return botKnowledge[key];
+      }
+    }
+
+    // 2) "Contains" match: if key phrase appears inside user input or vice versa
+    for (const key of Object.keys(botKnowledge)) {
+      const nk = normalize(key);
+      if (n.includes(nk) || nk.includes(n)) {
+        return botKnowledge[key];
+      }
+    }
+
+    // 3) Keyword token match: split user input into tokens and see if any key token matches a key
+    const tokens = n.split(' ').filter(Boolean);
+    if (tokens.length > 0) {
+      for (const key of Object.keys(botKnowledge)) {
+        const nk = normalize(key);
+        for (const token of tokens) {
+          if (nk.includes(token) && token.length >= 3) { // require token length >=3 to reduce false positives
+            return botKnowledge[key];
+          }
+        }
+      }
+    }
+
+    // no match
+    return null;
+  };
+
+  // ✅ Handle sending user message + bot response (used by chat UI)
+  const handleUserMessage = (userText: string) => {
+    if (!userText || !userText.trim()) return;
+
+    // Add user message to chat
+    setChatbotMessages(prev => [...prev, { text: userText, isUser: true }]);
+
+    // attempt to find best answer
+    const reply = findBestAnswer(userText) ?? "I'm not sure about that. For urgent issues call emergency services (112). You can ask about ICUs, ambulances, 24/7 hospitals, pediatric care, trauma, dialysis, blood availability, etc.";
+
+    // simulate slight typing delay so UX feels natural
+    setTimeout(() => {
+      setChatbotMessages(prev => [...prev, { text: reply, isUser: false }]);
+    }, 500);
+
+    // clear input field in UI
+    setChatbotInput('');
+  };
+
+  // Keep your existing search data and behavior...
   const mockHospitals: Hospital[] = [
     { 
       id: '1', 
-      name: 'City General Hospital', 
-      address: '123 Medical Ave, Cityville, CA 90210',
-      distance: '2.5 km', 
+      name: 'Manipal Hospital', 
+      address: 'Kodihalli Main Road, Bangalore, 560017',
+      distance: '1.5 km', 
       travelTime: '8 min', 
       icuAvailable: 5, 
       icuTotal: 20, 
       waitTime: 10,
-      phone: '(555) 123-4567',
+      phone: '112',
       rating: 4.5,
       reviews: [
         { id: '1', user: 'John D.', rating: 5, comment: 'Excellent care and friendly staff!' },
@@ -70,14 +166,14 @@ const Search = () => {
     },
     { 
       id: '2', 
-      name: 'Memorial Medical Center', 
-      address: '456 Health Blvd, Wellness City, CA 90211',
-      distance: '4.2 km', 
+      name: 'Apollo Hospital', 
+      address: 'Marthalli Brigde Towards Kadubeeshanahalli, Bangalore',
+      distance: '6.2 km', 
       travelTime: '12 min', 
       icuAvailable: 8, 
       icuTotal: 15, 
       waitTime: 5,
-      phone: '(555) 987-6543',
+      phone: '112',
       rating: 4.8,
       reviews: [
         { id: '3', user: 'Robert J.', rating: 5, comment: 'Top-notch medical care and excellent doctors!' },
@@ -93,14 +189,14 @@ const Search = () => {
     },
     { 
       id: '3', 
-      name: 'Community Hospital', 
-      address: '789 Care Lane, Healthtown, CA 90212',
-      distance: '3.8 km', 
+      name: 'Fortis Hospital', 
+      address: 'Trinity Circle , MG Road, Bangalore-56102',
+      distance: '7.8 km', 
       travelTime: '14 min', 
       icuAvailable: 2, 
       icuTotal: 10, 
       waitTime: 15,
-      phone: '(555) 456-7890',
+      phone: '112',
       rating: 4.2,
       reviews: [
         { id: '6', user: 'Emily K.', rating: 4, comment: 'Good neighborhood hospital, friendly nurses.' },
@@ -115,14 +211,14 @@ const Search = () => {
     },
     { 
       id: '4', 
-      name: 'St. Mary\'s Medical', 
-      address: '101 Healing Road, Careville, CA 90213',
-      distance: '5.1 km', 
+      name: 'MS Ramaiah Hospital', 
+      address: 'Basvanagudi, Bangalore-560015',
+      distance: '3.1 km', 
       travelTime: '18 min', 
       icuAvailable: 10, 
       icuTotal: 25, 
       waitTime: 8,
-      phone: '(555) 321-7654',
+      phone: '112',
       rating: 4.7,
       reviews: [
         { id: '8', user: 'Thomas G.', rating: 5, comment: 'Exceptional emergency care, saved my life!' },
@@ -137,14 +233,14 @@ const Search = () => {
     },
     { 
       id: '5', 
-      name: 'Riverside Health Center', 
-      address: '222 Riverside Drive, Rivercity, CA 90214',
-      distance: '6.3 km', 
+      name: 'Narayana Healthcare', 
+      address: 'Murugeshpalaya Kr Garden Bangalore- 560013',
+      distance: '4.3 km', 
       travelTime: '20 min', 
       icuAvailable: 3, 
       icuTotal: 12, 
       waitTime: 12,
-      phone: '(555) 789-0123',
+      phone: '112',
       rating: 4.0,
       reviews: [
         { id: '10', user: 'Jennifer B.', rating: 4, comment: 'Good pediatric care, child-friendly environment.' },
@@ -158,14 +254,25 @@ const Search = () => {
       isOpen24Hours: false
     },
   ];
-  
+
   const specialties = [...new Set(mockHospitals.flatMap(h => h.specialties || []))].sort();
   const insuranceProviders = [...new Set(mockHospitals.flatMap(h => h.insurance || []))].sort();
-  
+
+  // 🔎 helper to find an exact hospital name match (case-insensitive, trimmed)
+  const findExactHospitalByName = (name: string) => {
+    const target = name.trim().toLowerCase();
+    if (!target) return null;
+    return mockHospitals.find(h => h.name.trim().toLowerCase() === target) || null;
+  };
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!searchTerm.trim() && !location.trim() && specialty === 'all' && !showOnlyOpen24Hours && minRating === '0') {
+
+    // ✅ auto-accept Bangalore if user leaves it blank
+    const effectiveLocation = location.trim() ? location : 'Bangalore';
+    if (!location.trim()) setLocation('Bangalore');
+
+    if (!searchTerm.trim() && !effectiveLocation.trim() && specialty === 'all' && !showOnlyOpen24Hours && minRating === '0') {
       toast({
         title: "Input Required",
         description: "Please enter a hospital name, location, or select some filters to search.",
@@ -173,40 +280,56 @@ const Search = () => {
       });
       return;
     }
-    
+
     setSearching(true);
-    
+
     setTimeout(() => {
+      // ✅ if exact hospital name provided, return that hospital with details
+      const exact = findExactHospitalByName(searchTerm);
+      if (exact) {
+        setSearchResults([exact]);
+        setSelectedHospital(exact);
+        setSearchPerformed(true);
+        setSearching(false);
+        toast({
+          title: "Hospital Found",
+          description: `Showing details for ${exact.name}.`,
+        });
+        return;
+      }
+
+      // fallback: regular filtered search
       let results = [...mockHospitals];
-      
+
       if (searchTerm.trim()) {
-        results = results.filter(hospital => 
+        results = results.filter(hospital =>
           hospital.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
       }
-      
-      if (location.trim()) {
-        results = results.filter(hospital => 
-          hospital.address.toLowerCase().includes(location.toLowerCase())
+
+      if (effectiveLocation.trim()) {
+        results = results.filter(hospital =>
+          hospital.address.toLowerCase().includes(effectiveLocation.toLowerCase())
         );
       }
-      
+
       if (specialty && specialty !== 'all') {
-        results = results.filter(hospital => 
+        results = results.filter(hospital =>
           hospital.specialties?.some(s => s.toLowerCase() === specialty.toLowerCase())
         );
       }
-      
+
       if (showOnlyOpen24Hours) {
         results = results.filter(hospital => hospital.isOpen24Hours);
       }
-      
+
       if (minRating !== '0') {
         const minRatingValue = parseFloat(minRating);
         results = results.filter(hospital => (hospital.rating || 0) >= minRatingValue);
       }
-      
+
       setSearchResults(results.length > 0 ? results : []);
+      setSelectedHospital(results.length === 1 ? results[0] : null);
       setSearchPerformed(true);
       setSearching(false);
 
@@ -224,39 +347,43 @@ const Search = () => {
       }
     }, 800);
   };
-  
+
   const handleVoiceSearch = () => {
     setIsVoiceActive(true);
-    
+
     toast({
       title: "Voice Search Activated",
       description: "Please speak your hospital search query...",
     });
-    
+
     // Simulate voice recognition completion after 3 seconds
     setTimeout(() => {
       setIsVoiceActive(false);
-      
+
       // Simulate voice search results
       const voiceQuery = "hospitals with cardiology department";
       setSearchTerm("cardiology");
       setSpecialty("Cardiology");
-      
+      // ✅ make sure location is Bangalore for voice too
+      if (!location.trim()) setLocation('Bangalore');
+
       toast({
         title: "Voice Search Completed",
         description: `Searching for: "${voiceQuery}"`,
       });
-      
+
       // Trigger search with the voice query
-      const filteredResults = mockHospitals.filter(hospital => 
-        hospital.specialties?.some(s => s.toLowerCase() === "cardiology")
+      const filteredResults = mockHospitals.filter(hospital =>
+        hospital.specialties?.some(s => s.toLowerCase() === "cardiology") &&
+        hospital.address.toLowerCase().includes('bangalore')
       );
-      
+
       setSearchResults(filteredResults);
+      setSelectedHospital(filteredResults.length === 1 ? filteredResults[0] : null);
       setSearchPerformed(true);
     }, 3000);
   };
-  
+
   const handleNavigateToHospital = (hospitalId: string) => {
     toast({
       title: "Navigation Started",
@@ -264,12 +391,12 @@ const Search = () => {
     });
     navigate(`/map?hospital=${hospitalId}`);
   };
-  
+
   const openQrCode = (hospital: Hospital) => {
     setSelectedHospital(hospital);
     setQrDialogOpen(true);
   };
-  
+
   const generateQrCodeData = (hospital: Hospital) => {
     return JSON.stringify({
       name: hospital.name,
@@ -290,20 +417,20 @@ const Search = () => {
 
   const confirmEmergencyCall = () => {
     if (!selectedHospital) return;
-    
+
     setEmergencyCallActive(true);
     setShowEmergencyCallDialog(false);
-    
+
     toast({
       title: "Emergency Call Initiated",
       description: `Connecting to ${selectedHospital.name}...`,
       variant: "destructive"
     });
-    
+
     // Simulate emergency response after 2 seconds
     setTimeout(() => {
       setEmergencyCallActive(false);
-      
+
       toast({
         title: "Emergency Response Confirmed",
         description: `Ambulance dispatched from ${selectedHospital.name}. ETA: ${Math.floor(parseInt(selectedHospital.travelTime) * 0.7)} minutes.`,
@@ -311,72 +438,42 @@ const Search = () => {
     }, 2000);
   };
 
+  // Handler used by the chat UI submit button
   const handleChatbotSend = () => {
-    if (!chatbotInput.trim()) return;
-    
-    // Add user message
-    setChatbotMessages([...chatbotMessages, {text: chatbotInput, isUser: true}]);
-    
-    // Clear input
-    const userQuery = chatbotInput;
-    setChatbotInput('');
-    
-    // Simulate bot thinking
-    setTimeout(() => {
-      let botResponse = "I'm not sure how to help with that. Can you try asking about hospital locations, specialties, or emergency services?";
-      
-      // Simulate AI responses based on keywords
-      if (userQuery.toLowerCase().includes('emergency') || userQuery.toLowerCase().includes('urgent')) {
-        botResponse = "For emergency care, I recommend St. Mary's Medical or Memorial Medical Center. Both have 24/7 emergency rooms and trauma centers. Would you like me to show these options?";
-        
-        // After bot responds, simulate showing these hospitals
-        setTimeout(() => {
-          const emergencyHospitals = mockHospitals.filter(h => 
-            h.emergencyFacilities.includes('Emergency Room') && h.isOpen24Hours
-          );
-          setSearchResults(emergencyHospitals);
-          setSearchPerformed(true);
-        }, 1000);
-      } 
-      else if (userQuery.toLowerCase().includes('pediatric') || userQuery.toLowerCase().includes('children')) {
-        botResponse = "For pediatric care, City General Hospital and Riverside Health Center have excellent children's departments. Would you like to see more details?";
-      }
-      else if (userQuery.toLowerCase().includes('cardio') || userQuery.toLowerCase().includes('heart')) {
-        botResponse = "For cardiac care, I recommend City General Hospital and St. Mary's Medical. Both have specialized cardiology departments with experienced staff.";
-      }
-      
-      // Add bot response
-      setChatbotMessages(prev => [...prev, {text: botResponse, isUser: false}]);
-    }, 1500);
+    // If user typed something, process it through the MediBot matcher
+    const userText = chatbotInput;
+    if (!userText.trim()) return;
+
+    handleUserMessage(userText);
   };
-  
+
   const getAvailabilityStatus = (available: number, total: number) => {
     const ratio = available / total;
-    
+
     if (ratio === 0) return { text: "Full", indicator: "🔴" };
     if (ratio < 0.2) return { text: "Critical", indicator: "🔴" };
     if (ratio < 0.5) return { text: "Limited", indicator: "🟡" };
     return { text: "Available", indicator: "🟢" };
   };
-  
+
   return (
-    <div 
+    <div
       className="min-h-screen w-full bg-cover bg-center transition-all duration-500"
-      style={{ 
+      style={{
         backgroundImage: `url('/lovable-uploads/7c8af1f3-722f-4ce8-a1f9-aa995983760e.png')`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat'
       }}
     >
       <div className={`min-h-screen w-full backdrop-blur-sm transition-all duration-500 pb-20 ${
-        isDark 
-          ? 'bg-gradient-to-br from-gray-900/90 via-purple-900/70 to-gray-900/90' 
+        isDark
+          ? 'bg-gradient-to-br from-gray-900/90 via-purple-900/70 to-gray-900/90'
           : 'bg-gradient-to-br from-blue-50/90 via-purple-100/70 to-blue-50/90'
       }`}>
         <TopHeader />
-        
+
         <div className="container mx-auto px-4 pt-4 pb-20">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
@@ -386,20 +483,20 @@ const Search = () => {
               <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
                 {t("search-hospitals")}
               </h1>
-              
+
               <div className="flex items-center space-x-2">
-                <Button 
-                  variant="outline" 
-                  size="icon" 
+                <Button
+                  variant="outline"
+                  size="icon"
                   onClick={() => setTheme(isDark ? 'light' : 'dark')}
                   className="bg-white/20 dark:bg-gray-800/40 backdrop-blur-sm"
                 >
                   {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
                 </Button>
-                
-                <Button 
-                  variant="outline" 
-                  size="sm" 
+
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={() => setChatbotDialogOpen(true)}
                   className="flex items-center gap-1 bg-white/20 dark:bg-gray-800/40 backdrop-blur-sm"
                 >
@@ -408,12 +505,12 @@ const Search = () => {
                 </Button>
               </div>
             </div>
-            
+
             <p className="text-center text-gray-600 dark:text-gray-400 mb-6">
               Find hospitals nearby, check availability and services
             </p>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.1 }}
@@ -435,9 +532,9 @@ const Search = () => {
                           <SearchIcon className="h-5 w-5 text-gray-400" />
                         </div>
                       </div>
-                      <Button 
-                        type="button" 
-                        variant="ghost" 
+                      <Button
+                        type="button"
+                        variant="ghost"
                         size="icon"
                         onClick={handleVoiceSearch}
                         className={`ml-2 ${isVoiceActive ? 'bg-red-100 text-red-500 animate-pulse dark:bg-red-900/50 dark:text-red-400' : ''}`}
@@ -446,11 +543,11 @@ const Search = () => {
                       </Button>
                     </div>
                   </div>
-                  
+
                   <div className="relative">
                     <Input
                       type="text"
-                      placeholder="Enter your location"
+                      placeholder="Enter your location (default: Bangalore)"
                       className="pl-10 pr-4 py-3 rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm"
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
@@ -460,7 +557,7 @@ const Search = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="relative">
                     <Select
@@ -483,7 +580,7 @@ const Search = () => {
                       <Filter className="h-5 w-5 text-gray-400" />
                     </div>
                   </div>
-                  
+
                   <div className="relative">
                     <Select
                       value={minRating}
@@ -504,51 +601,51 @@ const Search = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="flex items-center space-x-2">
-                    <Switch 
+                    <Switch
                       id="open24"
-                      checked={showOnlyOpen24Hours} 
+                      checked={showOnlyOpen24Hours}
                       onCheckedChange={setShowOnlyOpen24Hours}
                     />
                     <label htmlFor="open24" className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
                       24/7 Open Only
                     </label>
                   </div>
-                  
+
                   <div className="flex items-center space-x-2">
-                    <Switch 
+                    <Switch
                       id="showBeds"
-                      checked={showBedAvailability} 
+                      checked={showBedAvailability}
                       onCheckedChange={setShowBedAvailability}
                     />
                     <label htmlFor="showBeds" className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
                       Show Bed Availability
                     </label>
                   </div>
-                  
-                  <TransportOptions 
+
+                  <TransportOptions
                     currentMode={transportMode}
                     onModeChange={(mode) => setTransportMode(mode)}
                     isAirRecommended={false}
                   />
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Button 
-                    type="submit" 
+                  <Button
+                    type="submit"
                     className="py-5 rounded-lg bg-medical-500 hover:bg-medical-600 shadow-md"
                     disabled={searching}
                   >
-                    {searching ? 
-                      <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div> : 
+                    {searching ?
+                      <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div> :
                       <SearchIcon className="mr-2 h-4 w-4" />}
                     {searching ? "Searching..." : t("search-hospitals").split('...')[0]}
                   </Button>
-                  
-                  <Button 
-                    type="button" 
+
+                  <Button
+                    type="button"
                     className="py-5 rounded-lg bg-red-500 hover:bg-red-600 shadow-md"
                     onClick={() => {
                       if (mockHospitals.length > 0) {
@@ -557,24 +654,24 @@ const Search = () => {
                     }}
                     disabled={emergencyCallActive}
                   >
-                    {emergencyCallActive ? 
-                      <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div> : 
+                    {emergencyCallActive ?
+                      <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div> :
                       <Ambulance className="mr-2 h-4 w-4" />}
                     {emergencyCallActive ? "Connecting..." : "Emergency SOS"}
                   </Button>
                 </div>
               </form>
             </motion.div>
-            
+
             {searchPerformed && (
-              <motion.div 
+              <motion.div
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.5 }}
                 className="space-y-4"
               >
                 {searchResults.length > 0 ? (
-                  <HospitalSearchResults 
+                  <HospitalSearchResults
                     hospitals={searchResults}
                     onSelectHospital={(hospital) => setSelectedHospital(hospital)}
                     selectedHospitalId={selectedHospital?.id || null}
@@ -592,18 +689,18 @@ const Search = () => {
             )}
           </motion.div>
         </div>
-        
+
         {/* QR Code Dialog */}
         <Dialog open={qrDialogOpen} onOpenChange={setQrDialogOpen}>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
               <DialogTitle className="text-center">Hospital Information QR Code</DialogTitle>
             </DialogHeader>
-            
+
             {selectedHospital && (
               <div className="flex flex-col items-center">
                 <div className="bg-white p-4 rounded-lg mb-4">
-                  <QRCode 
+                  <QRCode
                     value={generateQrCodeData(selectedHospital)}
                     size={200}
                     level="H"
@@ -611,11 +708,11 @@ const Search = () => {
                     renderAs="svg"
                   />
                 </div>
-                
+
                 <p className="text-sm text-center text-gray-500">
                   Scan this QR code to get detailed information about {selectedHospital.name}
                 </p>
-                
+
                 <div className="mt-4 space-y-2 w-full text-sm">
                   <div className="flex items-start">
                     <Building className="mr-2 h-4 w-4 text-gray-500 mt-0.5" />
@@ -634,9 +731,9 @@ const Search = () => {
                     <span className="text-gray-700 dark:text-gray-300">{selectedHospital.operatingHours}</span>
                   </div>
                 </div>
-                
+
                 <div className="mt-4 w-full">
-                  <Button 
+                  <Button
                     className="w-full"
                     onClick={() => {
                       // In a real app, this would save the QR code to gallery
@@ -654,14 +751,14 @@ const Search = () => {
             )}
           </DialogContent>
         </Dialog>
-        
+
         {/* Emergency Call Dialog */}
         <Dialog open={showEmergencyCallDialog} onOpenChange={setShowEmergencyCallDialog}>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
               <DialogTitle className="text-center text-red-600 dark:text-red-500">Emergency Call Confirmation</DialogTitle>
             </DialogHeader>
-            
+
             {selectedHospital && (
               <div className="space-y-4">
                 <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border border-red-200 dark:border-red-800">
@@ -675,20 +772,20 @@ const Search = () => {
                     {selectedHospital.phone}
                   </p>
                 </div>
-                
+
                 <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
                   This will request immediate emergency assistance. Only proceed if this is a genuine emergency.
                 </p>
-                
+
                 <div className="flex gap-3 mt-4">
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     className="flex-1"
                     onClick={() => setShowEmergencyCallDialog(false)}
                   >
                     Cancel
                   </Button>
-                  <Button 
+                  <Button
                     className="flex-1 bg-red-600 hover:bg-red-700 text-white"
                     onClick={confirmEmergencyCall}
                   >
@@ -699,7 +796,7 @@ const Search = () => {
             )}
           </DialogContent>
         </Dialog>
-        
+
         {/* AI Chatbot Dialog */}
         <Dialog open={chatbotDialogOpen} onOpenChange={setChatbotDialogOpen}>
           <DialogContent className="sm:max-w-md">
@@ -708,17 +805,17 @@ const Search = () => {
                 <span className="text-blue-500">🤖</span> MediBot Assistant
               </DialogTitle>
             </DialogHeader>
-            
+
             <div className="h-80 overflow-y-auto border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-4">
               {chatbotMessages.map((message, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className={`mb-3 ${message.isUser ? 'text-right' : 'text-left'}`}
                 >
-                  <div 
+                  <div
                     className={`inline-block px-4 py-2 rounded-lg ${
-                      message.isUser 
-                        ? 'bg-blue-500 text-white dark:bg-blue-600' 
+                      message.isUser
+                        ? 'bg-blue-500 text-white dark:bg-blue-600'
                         : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
                     } max-w-[80%]`}
                   >
@@ -727,7 +824,7 @@ const Search = () => {
                 </div>
               ))}
             </div>
-            
+
             <div className="flex gap-2">
               <Input
                 type="text"
@@ -736,6 +833,7 @@ const Search = () => {
                 onChange={(e) => setChatbotInput(e.target.value)}
                 onKeyPress={(e) => {
                   if (e.key === 'Enter') {
+                    e.preventDefault();
                     handleChatbotSend();
                   }
                 }}
@@ -747,7 +845,7 @@ const Search = () => {
             </div>
           </DialogContent>
         </Dialog>
-        
+
         <Navbar />
       </div>
     </div>

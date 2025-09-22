@@ -1,19 +1,18 @@
-
 import React from 'react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area } from 'recharts';
 
 type ICUData = {
   time: string;
-  cityGeneral: number;
-  memorial: number;
-  community: number;
-  stMarys: number;
-  lakeside: number;
-  universityMed: number;
-  centralHospital: number;
-  eastside: number;
-  northGeneral: number;
-  westValley: number;
+  Manipal: number;
+  Fortis: number;
+  Sakra: number;
+  Apollo: number;
+  Aster: number;
+  Ramaiah: number;
+  Johns: number;
+  Rainbow: number;
+  Sparsh: number;
+  Narayana: number;
 };
 
 type ResponseData = {
@@ -89,16 +88,17 @@ const EmergencyDashboard: React.FC<EmergencyDashboardProps> = ({ data, view, the
             align="center"
             verticalAlign="bottom"
           />
-          <Line type="monotone" dataKey="cityGeneral" stroke="#2196F3" name="City General" strokeWidth={2} dot={{ r: 2 }} activeDot={{ r: 4 }} />
-          <Line type="monotone" dataKey="memorial" stroke="#4CAF50" name="Memorial" strokeWidth={2} dot={{ r: 2 }} activeDot={{ r: 4 }} />
-          <Line type="monotone" dataKey="community" stroke="#FF5722" name="Community" strokeWidth={2} dot={{ r: 2 }} activeDot={{ r: 4 }} />
-          <Line type="monotone" dataKey="stMarys" stroke="#FFC107" name="St. Mary's" strokeWidth={2} dot={{ r: 2 }} activeDot={{ r: 4 }} />
-          <Line type="monotone" dataKey="lakeside" stroke="#9C27B0" name="Lakeside" strokeWidth={2} dot={{ r: 2 }} activeDot={{ r: 4 }} />
-          <Line type="monotone" dataKey="universityMed" stroke="#E91E63" name="University Med" strokeWidth={2} dot={{ r: 2 }} activeDot={{ r: 4 }} />
-          <Line type="monotone" dataKey="centralHospital" stroke="#00BCD4" name="Central" strokeWidth={2} dot={{ r: 2 }} activeDot={{ r: 4 }} />
-          <Line type="monotone" dataKey="eastside" stroke="#FF9800" name="Eastside" strokeWidth={2} dot={{ r: 2 }} activeDot={{ r: 4 }} />
-          <Line type="monotone" dataKey="northGeneral" stroke="#8BC34A" name="North Gen" strokeWidth={2} dot={{ r: 2 }} activeDot={{ r: 4 }} />
-          <Line type="monotone" dataKey="westValley" stroke="#3F51B5" name="West Valley" strokeWidth={2} dot={{ r: 2 }} activeDot={{ r: 4 }} />
+          {/* Increased line thickness here */}
+          <Line type="monotone" dataKey="Manipal" stroke="#2196F3" strokeWidth={2.5} name="Manipal" />
+          <Line type="monotone" dataKey="Fortis" stroke="#4CAF50" strokeWidth={2.5} name="Fortis" />
+          <Line type="monotone" dataKey="Sakra" stroke="#FF5722" strokeWidth={2.5} name="Sakra" />
+          <Line type="monotone" dataKey="Apollo" stroke="#FFC107" strokeWidth={2.5} name="Apollo" />
+          <Line type="monotone" dataKey="Aster" stroke="#9C27B0" strokeWidth={2.5} name="Aster" />
+          <Line type="monotone" dataKey="Ramaiah" stroke="#E91E63" strokeWidth={2.5} name="Ramaiah" />
+          <Line type="monotone" dataKey="Johns" stroke="#00BCD4" strokeWidth={2.5} name="St. Johns" />
+          <Line type="monotone" dataKey="Rainbow" stroke="#FF9800" strokeWidth={2.5} name="Rainbow" />
+          <Line type="monotone" dataKey="Sparsh" stroke="#8BC34A" strokeWidth={2.5} name="Sparsh" />
+          <Line type="monotone" dataKey="Narayana" stroke="#3F51B5" strokeWidth={2.5} name="Narayana" />
         </LineChart>
       </ResponsiveContainer>
     );

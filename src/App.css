@@ -1,4 +1,4 @@
-
+/* ------------------ Root ------------------ */
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -6,15 +6,18 @@
   text-align: center;
 }
 
+/* ------------------ Logo ------------------ */
 .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #9b87f5aa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #9b87f5aa);
 }
@@ -34,6 +37,7 @@
   }
 }
 
+/* ------------------ Card ------------------ */
 .card {
   padding: 2em;
   border-radius: 1em;
@@ -52,7 +56,7 @@
   color: #888;
 }
 
-/* Purple theme specific styles */
+/* ------------------ Purple Theme ------------------ */
 .purple-theme {
   --primary-color: #9b87f5;
   --secondary-color: #7E69AB;
@@ -61,7 +65,7 @@
   --light-color: #D6BCFA;
 }
 
-/* Glassmorphism components */
+/* Glassmorphism Components */
 .purple-glass {
   background: rgba(155, 135, 245, 0.1);
   backdrop-filter: blur(8px);
@@ -87,7 +91,7 @@
   border: 1px solid rgba(155, 135, 245, 0.2);
 }
 
-/* Gradient text */
+/* Gradient Text */
 .purple-gradient-text {
   background: linear-gradient(90deg, #9b87f5, #d6bcfa);
   -webkit-background-clip: text;
@@ -96,7 +100,7 @@
   text-fill-color: transparent;
 }
 
-/* Data Card Styles */
+/* ------------------ Data Card ------------------ */
 .data-card {
   backdrop-filter: blur(16px);
   border-radius: 16px;
@@ -120,7 +124,7 @@
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
-/* Custom Button Animation */
+/* ------------------ Button Animations ------------------ */
 .pulse-button {
   animation: pulse 2s infinite;
 }
@@ -137,7 +141,7 @@
   }
 }
 
-/* Loading Animation */
+/* ------------------ Loading Dots ------------------ */
 .loading-dots {
   display: inline-flex;
 }
@@ -168,7 +172,7 @@
   }
 }
 
-/* Hover effect for interactive elements */
+/* ------------------ Hover for Interactive Elements ------------------ */
 .interactive-hover {
   transition: all 0.3s ease;
 }
@@ -176,4 +180,23 @@
 .interactive-hover:hover {
   transform: translateY(-3px) scale(1.02);
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* ------------------ Language Selector ------------------ */
+.language-select {
+  padding: 8px 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid rgba(155, 135, 245, 0.5);
+  background: rgba(155, 135, 245, 0.1);
+  color: #1a1f2c;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.language-select:hover {
+  background: rgba(155, 135, 245, 0.2);
+  border: 1px solid rgba(155, 135, 245, 0.8);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }

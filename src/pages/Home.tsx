@@ -35,57 +35,106 @@ const Home = () => {
   const [sourceLocation, setSourceLocation] = useState('');
   
   const [hospitals] = useState([
-    { id: '1', name: 'City General Hospital', icuBeds: 12, totalBeds: 20, aiSurvivalRate: 92, distance: '2.3 km', waitTime: '5 min', specialties: ['Trauma', 'Cardiac'] },
-    { id: '2', name: 'Memorial Care', icuBeds: 8, totalBeds: 15, aiSurvivalRate: 88, distance: '3.6 km', waitTime: '8 min', specialties: ['Pediatric'] },
-    { id: '3', name: 'Community Medical', icuBeds: 5, totalBeds: 12, aiSurvivalRate: 85, distance: '4.1 km', waitTime: '15 min', specialties: ['Cardiac', 'Neuro'] },
-    { id: '4', name: 'St. Mary\'s Hospital', icuBeds: 10, totalBeds: 18, aiSurvivalRate: 90, distance: '5.8 km', waitTime: '10 min', specialties: ['Trauma', 'Burns'] },
-    { id: '5', name: 'Lakeside Health', icuBeds: 7, totalBeds: 15, aiSurvivalRate: 83, distance: '7.2 km', waitTime: '12 min', specialties: ['Cardiac'] },
-    { id: '6', name: 'University Medical', icuBeds: 15, totalBeds: 25, aiSurvivalRate: 94, distance: '6.5 km', waitTime: '7 min', specialties: ['Pediatric', 'Trauma', 'Research'] },
-    { id: '7', name: 'Central Hospital', icuBeds: 9, totalBeds: 16, aiSurvivalRate: 87, distance: '8.3 km', waitTime: '13 min', specialties: ['General', 'Orthopedic'] },
-    { id: '8', name: 'Eastside Medical', icuBeds: 6, totalBeds: 14, aiSurvivalRate: 82, distance: '9.7 km', waitTime: '18 min', specialties: ['Maternity', 'Geriatric'] },
-    { id: '9', name: 'North General', icuBeds: 11, totalBeds: 22, aiSurvivalRate: 89, distance: '10.1 km', waitTime: '14 min', specialties: ['Oncology', 'Cardiac'] },
-    { id: '10', name: 'West Valley Medical', icuBeds: 8, totalBeds: 17, aiSurvivalRate: 86, distance: '11.5 km', waitTime: '16 min', specialties: ['Neuro', 'Respiratory'] },
+    { id: '1', name: 'Manipal Hospital', icuBeds: 12, totalBeds: 20, aiSurvivalRate: 92, distance: '2.3 km', waitTime: '5 min', specialties: ['Trauma', 'Cardiac'] },
+    { id: '2', name: 'Fortis Hospital', icuBeds: 8, totalBeds: 15, aiSurvivalRate: 88, distance: '3.6 km', waitTime: '8 min', specialties: ['Pediatric'] },
+    { id: '3', name: 'Sakra Hospital', icuBeds: 5, totalBeds: 12, aiSurvivalRate: 85, distance: '4.1 km', waitTime: '15 min', specialties: ['Cardiac', 'Neuro'] },
+    { id: '4', name: 'Apollo Hospital', icuBeds: 10, totalBeds: 18, aiSurvivalRate: 90, distance: '5.8 km', waitTime: '10 min', specialties: ['Trauma', 'Burns'] },
+    { id: '5', name: 'Aster CMI Hospital', icuBeds: 7, totalBeds: 15, aiSurvivalRate: 83, distance: '7.2 km', waitTime: '12 min', specialties: ['Cardiac'] },
+    { id: '6', name: 'MS Ramaiah Hospital', icuBeds: 15, totalBeds: 25, aiSurvivalRate: 94, distance: '6.5 km', waitTime: '7 min', specialties: ['Pediatric', 'Trauma', 'Research'] },
+    { id: '7', name: 'St Johns Hospital', icuBeds: 9, totalBeds: 16, aiSurvivalRate: 87, distance: '8.3 km', waitTime: '13 min', specialties: ['General', 'Orthopedic'] },
+    { id: '8', name: 'Rainbow Hospital', icuBeds: 6, totalBeds: 14, aiSurvivalRate: 82, distance: '9.7 km', waitTime: '18 min', specialties: ['Maternity', 'Geriatric'] },
+    { id: '9', name: 'Sparsh Hospital', icuBeds: 11, totalBeds: 22, aiSurvivalRate: 89, distance: '10.1 km', waitTime: '14 min', specialties: ['Oncology', 'Cardiac'] },
+    { id: '10', name: 'Narayana Health', icuBeds: 8, totalBeds: 17, aiSurvivalRate: 86, distance: '11.5 km', waitTime: '16 min', specialties: ['Neuro', 'Respiratory'] },
   ]);
   
-  const [alerts] = useState([
-    { id: '1', type: 'critical', message: 'Traffic accident on Main St. - Multiple casualties', timestamp: '3 min ago' },
-    { id: '2', type: 'warning', message: 'Heavy traffic on Highway 101 - Potential delays', timestamp: '12 min ago' },
-    { id: '3', name: 'St. Mary\'s Hospital ICU capacity reduced to 60%', timestamp: '27 min ago' },
-    { id: '4', type: 'info', message: 'Air ambulance availability: 2 units on standby', timestamp: '45 min ago' },
-    { id: '5', type: 'warning', message: 'Potential mass casualty incident reported downtown', timestamp: '8 min ago' },
-    { id: '6', type: 'critical', message: 'Ambulance #243 breakdown - Rerouting required', timestamp: '1 min ago' },
-    { id: '7', type: 'info', message: 'System maintenance scheduled for 02:00 AM', timestamp: '1 hr ago' },
-  ]);
+  // --- ALERTS SECTION --- //
+
+// Define alert type
+type Alert = {
+  id: string;
+  type: "critical" | "warning" | "info";
+  message: string;
+  timestamp: string;
+};
+
+// Synthetic generator
+const generateSyntheticAlert = (): Alert => {
+  const types: Alert["type"][] = ["critical", "warning", "info"];
+  const messages = [
+    "Traffic accident reported near Central Blvd.",
+    "ICU capacity dropped to 70% at Apollo Hospital.",
+    "New trauma case admitted at Fortis Hospital.",
+    "Ambulance dispatched to MG Road.",
+    "Air ambulance deployed for cardiac emergency.",
+    "Heavy congestion on Outer Ring Road.",
+    "Ambulance #112 rerouted due to road closure.",
+    "Emergency drill in progress at Manipal Hospital.",
+    "Fire outbreak near City Mall - Fire units alerted.",
+    "Severe weather warning: Heavy rainfall expected.",
+    "Power outage affecting Manipal Hospital ICU.",
+    "Multiple casualties reported at industrial site.",
+    "Pediatric ICU nearing full capacity at Sakra.",
+    "Bridge collapse reported - emergency teams rushing.",
+    "Critical patient transfer requested by Apollo Hospital.",
+  ];
+
+  const type = types[Math.floor(Math.random() * types.length)];
+  const message = messages[Math.floor(Math.random() * messages.length)];
+
+  return {
+    id: Date.now().toString(),
+    type,
+    message,
+    timestamp: "just now",
+  };
+};
+
+const [alerts, setAlerts] = useState<Alert[]>([
+  { id: "1", type: "critical", message: "Traffic accident on Main St. - Multiple casualties", timestamp: "3 min ago" },
+  { id: "2", type: "warning", message: "Heavy traffic on Highway 101 - Potential delays", timestamp: "12 min ago" },
+  { id: "3", type: "info", message: "Air ambulance availability: 2 units on standby", timestamp: "45 min ago" },
+]);
+
+// Auto-update alerts every 10 seconds
+useEffect(() => {
+  const interval = setInterval(() => {
+    const newAlert = generateSyntheticAlert();
+    setAlerts(prev => [newAlert, ...prev].slice(0, 10)); // keep last 10
+  }, 10000);
+
+  return () => clearInterval(interval);
+}, []);
+
   
-  const [analyticData] = useState({
-    icu: [
-      { time: '00:00', cityGeneral: 75, memorial: 60, community: 80, stMarys: 65, lakeside: 70, universityMed: 82, centralHospital: 68, eastside: 55, northGeneral: 78, westValley: 63 },
-      { time: '04:00', cityGeneral: 78, memorial: 65, community: 83, stMarys: 68, lakeside: 73, universityMed: 80, centralHospital: 70, eastside: 58, northGeneral: 76, westValley: 65 },
-      { time: '08:00', cityGeneral: 85, memorial: 72, community: 88, stMarys: 75, lakeside: 78, universityMed: 85, centralHospital: 75, eastside: 65, northGeneral: 80, westValley: 70 },
-      { time: '12:00', cityGeneral: 90, memorial: 80, community: 92, stMarys: 83, lakeside: 85, universityMed: 90, centralHospital: 82, eastside: 72, northGeneral: 85, westValley: 78 },
-      { time: '16:00', cityGeneral: 95, memorial: 85, community: 95, stMarys: 88, lakeside: 90, universityMed: 93, centralHospital: 87, eastside: 80, northGeneral: 90, westValley: 83 },
-      { time: '20:00', cityGeneral: 88, memorial: 78, community: 90, stMarys: 80, lakeside: 82, universityMed: 87, centralHospital: 80, eastside: 73, northGeneral: 83, westValley: 75 },
-      { time: 'Now', cityGeneral: 82, memorial: 73, community: 85, stMarys: 76, lakeside: 78, universityMed: 84, centralHospital: 75, eastside: 68, northGeneral: 80, westValley: 70 },
-    ],
-    response: [
-      { time: '00:00', avg: 7.5 },
-      { time: '04:00', avg: 6.8 },
-      { time: '08:00', avg: 8.2 },
-      { time: '12:00', avg: 9.5 },
-      { time: '16:00', avg: 12.3 },
-      { time: '20:00', avg: 10.8 },
-      { time: 'Now', avg: 9.2 },
-    ],
-    cases: [
-      { time: '00:00', trauma: 3, cardiac: 2, general: 6 },
-      { time: '04:00', trauma: 2, cardiac: 1, general: 4 },
-      { time: '08:00', trauma: 5, cardiac: 3, general: 8 },
-      { time: '12:00', trauma: 7, cardiac: 4, general: 10 },
-      { time: '16:00', trauma: 12, cardiac: 8, general: 15 },
-      { time: '20:00', trauma: 10, cardiac: 5, general: 12 },
-      { time: 'Now', trauma: 8, cardiac: 6, general: 9 },
-    ],
-  });
+const [analyticData] = useState({
+  icu: [
+    { time: '00:00', Manipal: 75, Fortis: 60, Sakra: 80, Apollo: 65, Aster: 70, Ramaiah: 82, Johns: 68, Rainbow: 55, Sparsh: 78, Narayana: 63 },
+    { time: '04:00', Manipal: 78, Fortis: 65, Sakra: 83, Apollo: 68, Aster: 73, Ramaiah: 80, Johns: 70, Rainbow: 58, Sparsh: 76, Narayana: 65 },
+    { time: '08:00', Manipal: 85, Fortis: 72, Sakra: 88, Apollo: 75, Aster: 78, Ramaiah: 85, Johns: 75, Rainbow: 65, Sparsh: 80, Narayana: 70 },
+    { time: '12:00', Manipal: 90, Fortis: 80, Sakra: 92, Apollo: 83, Aster: 85, Ramaiah: 90, Johns: 82, Rainbow: 72, Sparsh: 85, Narayana: 78 },
+    { time: '16:00', Manipal: 95, Fortis: 85, Sakra: 95, Apollo: 88, Aster: 90, Ramaiah: 93, Johns: 87, Rainbow: 80, Sparsh: 90, Narayana: 83 },
+    { time: '20:00', Manipal: 88, Fortis: 78, Sakra: 90, Apollo: 80, Aster: 82, Ramaiah: 87, Johns: 80, Rainbow: 73, Sparsh: 83, Narayana: 75 },
+    { time: 'Now',  Manipal: 82, Fortis: 73, Sakra: 85, Apollo: 76, Aster: 78, Ramaiah: 84, Johns: 75, Rainbow: 68, Sparsh: 80, Narayana: 70 },
+  ],
+  response: [
+    { time: '00:00', avg: 7.5 },
+    { time: '04:00', avg: 6.8 },
+    { time: '08:00', avg: 8.2 },
+    { time: '12:00', avg: 9.5 },
+    { time: '16:00', avg: 12.3 },
+    { time: '20:00', avg: 10.8 },
+    { time: 'Now', avg: 9.2 },
+  ],
+  cases: [
+    { time: '00:00', trauma: 3, cardiac: 2, general: 6 },
+    { time: '04:00', trauma: 2, cardiac: 1, general: 4 },
+    { time: '08:00', trauma: 5, cardiac: 3, general: 8 },
+    { time: '12:00', trauma: 7, cardiac: 4, general: 10 },
+    { time: '16:00', trauma: 12, cardiac: 8, general: 15 },
+    { time: '20:00', trauma: 10, cardiac: 5, general: 12 },
+    { time: 'Now', trauma: 8, cardiac: 6, general: 9 },
+  ],
+});
   
   const [geoDistributionData] = useState({
     regions: [
@@ -98,16 +147,16 @@ const Home = () => {
   });
   
   const [icuBedData] = useState([
-    { hospital: 'City General', available: 12, total: 20, waitTime: 15, occupancyRate: 65 },
-    { hospital: 'Memorial', available: 8, total: 15, waitTime: 22, occupancyRate: 78 },
-    { hospital: 'Community', available: 5, total: 12, waitTime: 30, occupancyRate: 82 },
-    { hospital: 'St. Mary\'s', available: 10, total: 18, waitTime: 18, occupancyRate: 70 },
-    { hospital: 'Lakeside', available: 7, total: 15, waitTime: 25, occupancyRate: 75 },
-    { hospital: 'University', available: 15, total: 25, waitTime: 12, occupancyRate: 60 },
-    { hospital: 'Central', available: 9, total: 16, waitTime: 20, occupancyRate: 72 },
-    { hospital: 'Eastside', available: 6, total: 14, waitTime: 28, occupancyRate: 80 },
-    { hospital: 'North Gen', available: 11, total: 22, waitTime: 16, occupancyRate: 68 },
-    { hospital: 'West Valley', available: 8, total: 17, waitTime: 24, occupancyRate: 76 },
+    { hospital: 'Manipal Hospital', available: 12, total: 20, waitTime: 15, occupancyRate: 65 },
+    { hospital: 'Fortis Hospital', available: 8, total: 15, waitTime: 22, occupancyRate: 78 },
+    { hospital: 'Sakra Hospital', available: 5, total: 12, waitTime: 30, occupancyRate: 82 },
+    { hospital: 'Apollo Hospital', available: 10, total: 18, waitTime: 18, occupancyRate: 70 },
+    { hospital: 'Aster CMI Hospital', available: 7, total: 15, waitTime: 25, occupancyRate: 75 },
+    { hospital: 'MS Ramaiah Hospital', available: 15, total: 25, waitTime: 12, occupancyRate: 60 },
+    { hospital: 'St Johns Hospital', available: 9, total: 16, waitTime: 20, occupancyRate: 72 },
+    { hospital: 'Rainbow Hospital', available: 6, total: 14, waitTime: 28, occupancyRate: 80 },
+    { hospital: 'Sparsh Hospital', available: 11, total: 22, waitTime: 16, occupancyRate: 68 },
+    { hospital: 'Narayana Health', available: 8, total: 17, waitTime: 24, occupancyRate: 76 },
   ]);
   
   const [patientData] = useState({
@@ -231,12 +280,12 @@ const Home = () => {
             isDark ? 'border-blue-900/30' : 'border-blue-200/80'
           }`}>
             <div className="text-left mb-3 sm:mb-0">
-              <h1 className={`text-2xl font-bold ${
+              <h1 className={`text-xl font-bold ${
                 isDark 
                   ? 'bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent' 
                   : 'text-blue-700'
               }`}>
-                {t('ai-smart-ambulance-routing')}
+                {t('AI-BASED-SMART-AMBULANCE-ROUTING')}
               </h1>
               <p className={isDark ? 'text-sm text-blue-300/80' : 'text-sm text-blue-600/80'}>
                 {t('emergency-route')}
@@ -292,7 +341,7 @@ const Home = () => {
               { label: t("search-hospitals"), onClick: () => navigate("/search") },
               { label: t("patient-entry"), onClick: () => navigate("/profile") },
               { label: t("map-view"), onClick: () => navigate("/map") },
-              { label: t("analysis"), onClick: () => setShowAnalysis(true) },
+
             ].map((item, index) => (
               <Button 
                 key={index} 

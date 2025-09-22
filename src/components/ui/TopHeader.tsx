@@ -9,8 +9,8 @@ const TopHeader: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const { toast } = useToast();
-  const userName = "SREEJITH S, 3rd YEAR STUDENT";
-  const userRole = localStorage.getItem('userRole') || 'First Responder';
+  const userName = "SREEJITH S";
+  const userRole = localStorage.getItem('userRole') || 'ML Engineer';
   
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);

@@ -1,4 +1,4 @@
-
+import './App.css'; // Make sure App.css is imported here
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -22,10 +22,10 @@ import NotFound from "./pages/NotFound";
 // Initialize mock user data for demo purposes
 const initializeUserData = () => {
   if (!localStorage.getItem('userName')) {
-    localStorage.setItem('userName', 'SREEJITH S, 3rd YEAR STUDENT');
-    localStorage.setItem('userEmail', 'sreejith.s@medresponse.org');
-    localStorage.setItem('userRole', 'First Responder');
-    localStorage.setItem('userLocation', 'Central EMS');
+    localStorage.setItem('userName', 'SREEJITH S');
+    localStorage.setItem('userEmail', 'sreejithsssss04@gmail.com');
+    localStorage.setItem('userRole', 'Ml Engineer');
+    localStorage.setItem('userLocation', 'MIT Bangalore');
   }
 };
 
@@ -35,13 +35,10 @@ const RouteGuard = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   
   useEffect(() => {
-    // For demo purposes, we're checking if the user is on a protected route
-    // In a real app, you would check if the user is authenticated
     const protectedRoutes = ['/home', '/search', '/map', '/profile', '/settings'];
     const isProtectedRoute = protectedRoutes.includes(location.pathname);
     
     if (isProtectedRoute && !localStorage.getItem('userName')) {
-      // Redirect to auth page if not logged in
       navigate('/auth');
     }
   }, [navigate, location]);
@@ -52,7 +49,6 @@ const RouteGuard = ({ children }: { children: React.ReactNode }) => {
 const queryClient = new QueryClient();
 
 const App = () => {
-  // Initialize mock user data for demo
   useEffect(() => {
     initializeUserData();
   }, []);
@@ -60,7 +56,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="system">
-        <LanguageProvider>
+        <LanguageProvider> {/* Ensures all child components can access language state */}
           <UnitsProvider defaultUnitSystem="metric">
             <SettingsProvider>
               <TooltipProvider>

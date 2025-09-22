@@ -46,62 +46,62 @@ const Map = () => {
   const mockHospitals: Hospital[] = [
     { 
       id: '1', 
-      name: 'Spring Street Medical Center', 
+      name: 'Manipal Hospital', 
       location: { lat: 40.7128, lng: -74.0060 }, 
       icuAvailable: 5, 
       icuTotal: 20, 
       waitTime: 10,
-      distance: '1.5 km',
+      distance: '2.5 km',
       travelTime: '8 min',
-      phone: '+1 212-555-1234',
+      phone: '112',
       specialties: ['Emergency', 'Trauma', 'ICU']
     },
     { 
       id: '2', 
-      name: 'Little Italy Hospital', 
+      name: 'Apollo Hospital', 
       location: { lat: 40.7228, lng: -74.0090 }, 
       icuAvailable: 8, 
       icuTotal: 15, 
       waitTime: 5,
-      distance: '2.2 km',
+      distance: '2.1 km',
       travelTime: '12 min',
-      phone: '+1 212-555-2345',
+      phone: '112',
       specialties: ['Pediatric', 'Emergency', 'Surgery']
     },
     { 
       id: '3', 
-      name: 'Canal Street Medical', 
+      name: 'Sakra Hospital', 
       location: { lat: 40.7158, lng: -74.0030 }, 
       icuAvailable: 2, 
       icuTotal: 10, 
       waitTime: 15,
-      distance: '0.8 km',
+      distance: '1.8 km',
       travelTime: '6 min',
-      phone: '+1 212-555-3456',
+      phone: '112',
       specialties: ['Cardiac', 'Surgery', 'ICU']
     },
     { 
       id: '4', 
-      name: 'Tribeca Health Center', 
+      name: 'Fortis Hospital', 
       location: { lat: 40.7208, lng: -74.0120 }, 
       icuAvailable: 10, 
       icuTotal: 25, 
       waitTime: 8,
-      distance: '1.7 km',
+      distance: '0.7 km',
       travelTime: '10 min',
-      phone: '+1 212-555-4567',
+      phone: '112',
       specialties: ['Trauma', 'Emergency', 'Pediatric']
     },
     { 
       id: '5', 
-      name: 'Lower Manhattan Hospital', 
+      name: 'Aster CMI Hospital', 
       location: { lat: 40.7148, lng: -74.0070 }, 
       icuAvailable: 3, 
       icuTotal: 12, 
       waitTime: 12,
       distance: '1.2 km',
       travelTime: '7 min',
-      phone: '+1 212-555-5678',
+      phone: '112',
       specialties: ['Cardiac', 'ICU', 'Surgery']
     },
   ];
@@ -306,7 +306,7 @@ const Map = () => {
                   <div className="mt-1 flex items-center">
                     <AlertCircle size={14} className={isDark ? "text-blue-400" : "text-blue-600"} />
                     <span className={`text-xs ${isDark ? 'text-blue-300' : 'text-blue-600'} ml-1`}>
-                      AI recommended: Spring Street Medical Center
+                      AI recommended: Apollo Hospital
                     </span>
                   </div>
                 </div>
