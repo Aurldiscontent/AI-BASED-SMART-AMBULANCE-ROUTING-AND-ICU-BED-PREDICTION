@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Welcome to your Lovable project
 
 ## Project info
@@ -67,8 +66,7 @@ Simply open [Lovable](https://lovable.dev/projects/03d68d6a-54b9-4eb0-8020-8f88e
 
 ## I want to use a custom domain - is that possible?
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
-=======
+We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/
 # AI-BASED-SMART-AMBULANCE-ROUTING-AND-ICU-BED-PREDICTION
 This is a model which is used to find the shortest path to reach the hospital..
 >>>>>>> 490348209334421540bd5218c04111143f321c58
